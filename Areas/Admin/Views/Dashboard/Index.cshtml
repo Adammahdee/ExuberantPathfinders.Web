@@ -1,0 +1,151 @@
+@model dynamic
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3">Admin Dashboard</h1>
+            <p class="text-muted">Welcome back! Here's an overview of your platform.</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards Row -->
+    <div class="row">
+        <!-- Total Applications Card -->
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small mb-1">Total Applications</p>
+                            <h3 class="mb-0">@Model.TotalApplications</h3>
+                        </div>
+                        <span class="badge bg-primary">📋</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Applications Card -->
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small mb-1">Under Review</p>
+                            <h3 class="mb-0">@Model.PendingApplications</h3>
+                        </div>
+                        <span class="badge bg-warning">⏳</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top">
+                    <a href="@Url.Action("Applications")" class="small text-decoration-none">View all →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Donations Card -->
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small mb-1">Total Donations</p>
+                            <h3 class="mb-0">₦@Model.TotalDonations.ToString("N2")</h3>
+                        </div>
+                        <span class="badge bg-success">💰</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Users Card -->
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small mb-1">Total Users</p>
+                            <h3 class="mb-0">@Model.TotalUsers</h3>
+                        </div>
+                        <span class="badge bg-info">👥</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top">
+                    <a href="@Url.Action("Users")" class="small text-decoration-none">Manage users →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Campaigns Card -->
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small mb-1">Active Campaigns</p>
+                            <h3 class="mb-0">@Model.ActiveCampaigns</h3>
+                        </div>
+                        <span class="badge bg-danger">🎯</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h5 class="mb-3">Quick Actions</h5>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="@Url.Action("Applications")" class="btn btn-primary btn-block w-100">
+                <i class="fas fa-file-alt"></i> Review Applications
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="@Url.Action("Users")" class="btn btn-info btn-block w-100">
+                <i class="fas fa-users"></i> Manage Users
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="@Url.Action("Reports")" class="btn btn-warning btn-block w-100">
+                <i class="fas fa-chart-bar"></i> View Reports
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="@Url.Action("Logout", "Account")" class="btn btn-secondary btn-block w-100">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Info Box -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <strong>Information:</strong> This is your admin dashboard. Use the quick actions above to manage the platform.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    }
+    
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
+</style>

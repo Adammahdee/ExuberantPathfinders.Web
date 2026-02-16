@@ -1,0 +1,26 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="exploreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Circle background -->
+  <circle cx="100" cy="100" r="90" fill="url(#exploreGrad)" opacity="0.1"/>
+  
+  <!-- Magnifying glass -->
+  <circle cx="80" cy="60" r="35" fill="none" stroke="#667eea" stroke-width="4"/>
+  <line x1="110" y1="90" x2="145" y2="125" stroke="#667eea" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Documents/papers inside lens -->
+  <rect x="65" y="45" width="15" height="20" fill="#667eea" rx="2" opacity="0.6"/>
+  <rect x="85" y="50" width="15" height="20" fill="#667eea" rx="2" opacity="0.8"/>
+  
+  <!-- Lines on documents -->
+  <line x1="68" y1="55" x2="78" y2="55" stroke="white" stroke-width="1" opacity="0.7"/>
+  <line x1="68" y1="60" x2="78" y2="60" stroke="white" stroke-width="1" opacity="0.7"/>
+  
+  <line x1="88" y1="58" x2="98" y2="58" stroke="white" stroke-width="1" opacity="0.7"/>
+  <line x1="88" y1="63" x2="98" y2="63" stroke="white" stroke-width="1" opacity="0.7"/>
+</svg>

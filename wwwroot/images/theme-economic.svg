@@ -1,0 +1,35 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Briefcase -->
+  <rect x="50" y="60" width="100" height="70" fill="white" opacity="0.9" rx="5"/>
+  <rect x="50" y="55" width="100" height="8" fill="white" opacity="0.8" rx="4"/>
+  
+  <!-- Handle -->
+  <path d="M 75 55 Q 75 35 100 35 Q 125 35 125 55" stroke="white" stroke-width="3" fill="none" opacity="0.7" stroke-linecap="round"/>
+  
+  <!-- Lock -->
+  <circle cx="100" cy="72" r="5" fill="none" stroke="white" stroke-width="2" opacity="0.7"/>
+  <rect x="97" y="77" width="6" height="8" fill="white" opacity="0.6"/>
+  
+  <!-- Coins/stacks -->
+  <g opacity="0.8">
+    <ellipse cx="70" cy="105" rx="8" ry="3" fill="white"/>
+    <ellipse cx="70" cy="108" rx="8" ry="3" fill="white"/>
+    <ellipse cx="70" cy="111" rx="8" ry="3" fill="white"/>
+  </g>
+  
+  <g opacity="0.8">
+    <ellipse cx="100" cy="100" rx="8" ry="3" fill="white"/>
+    <ellipse cx="100" cy="103" rx="8" ry="3" fill="white"/>
+    <ellipse cx="100" cy="106" rx="8" ry="3" fill="white"/>
+    <ellipse cx="100" cy="109" rx="8" ry="3" fill="white"/>
+  </g>
+  
+  <g opacity="0.8">
+    <ellipse cx="130" cy="107" rx="8" ry="3" fill="white"/>
+    <ellipse cx="130" cy="110" rx="8" ry="3" fill="white"/>
+  </g>
+  
+  <!-- Growth arrow -->
+  <polyline points="80,130 90,120 100,125 110,115" fill="none" stroke="white" stroke-width="2" opacity="0.7" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="110,115 115,120 108,125" fill="white" opacity="0.7"/>
+</svg>

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\ExuberantPathfinders.Web.props" />
+</Project>

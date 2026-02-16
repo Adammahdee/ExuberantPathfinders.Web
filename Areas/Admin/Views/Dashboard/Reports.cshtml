@@ -1,0 +1,133 @@
+@model List<MonthlyDonationReportViewModel>
+
+@using ExuberantPathfinders.Web.Areas.Admin.ViewModels
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3">Reports</h1>
+            <p class="text-muted">View platform analytics and reports.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Monthly Donation Report</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model?.Any() ?? false)
+                    {
+                        <table class="table table-striped">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Month</th>
+                                    <th class="text-end">Total Amount</th>
+                                    <th class="text-end">Donation Count</th>
+                                    <th class="text-end">Avg Per Donation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var report in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@report.MonthName</strong>
+                                        </td>
+                                        <td class="text-end">
+                                            <strong class="text-success">₦@report.TotalAmount.ToString("N2")</strong>
+                                        </td>
+                                        <td class="text-end">
+                                            <span class="badge bg-info">@report.DonationCount</span>
+                                        </td>
+                                        <td class="text-end">
+                                            ₦@(report.DonationCount > 0 ? (report.TotalAmount / report.DonationCount).ToString("N2") : "0.00")
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="table-light">
+                                <tr>
+                                    <th>Total</th>
+                                    <th class="text-end">
+                                        <strong class="text-success">₦@Model.Sum(m => m.TotalAmount).ToString("N2")</strong>
+                                    </th>
+                                    <th class="text-end">
+                                        <strong>@Model.Sum(m => m.DonationCount)</strong>
+                                    </th>
+                                    <th class="text-end">
+                                        <strong>₦@(Model.Sum(m => m.DonationCount) > 0 ? (Model.Sum(m => m.TotalAmount) / Model.Sum(m => m.DonationCount)).ToString("N2") : "0.00")</strong>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            No completed donation data available yet.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Summary</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model?.Any() ?? false)
+                    {
+                        <div class="mb-3">
+                            <p class="text-muted mb-1">Total Donations</p>
+                            <h3 class="text-primary">@Model.Sum(m => m.DonationCount)</h3>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-muted mb-1">Total Amount Raised</p>
+                            <h3 class="text-success">₦@Model.Sum(m => m.TotalAmount).ToString("N2")</h3>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-muted mb-1">Average Donation</p>
+                            <h3 class="text-info">₦@(Model.Sum(m => m.DonationCount) > 0 ? (Model.Sum(m => m.TotalAmount) / Model.Sum(m => m.DonationCount)).ToString("N2") : "0.00")</h3>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-1">Active Months</p>
+                            <h3 class="text-warning">@Model.Count()</h3>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No data to display</p>
+                    }
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Report Info</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><i class="fas fa-chart-line text-primary"></i> Monthly donation trends</li>
+                        <li class="mb-2"><i class="fas fa-calculator text-success"></i> Aggregated statistics</li>
+                        <li class="mb-2"><i class="fas fa-calendar text-info"></i> Completed donations only</li>
+                        <li><i class="fas fa-info-circle text-muted"></i> Updated daily</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="@Url.Action("Index")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+

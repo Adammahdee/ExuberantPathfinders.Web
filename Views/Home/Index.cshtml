@@ -1,0 +1,476 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Exuberant Pathfinders - Youth Advancement Initiative";
+}
+
+<!-- Header/Navigation -->
+<div class="bg-white border-bottom sticky-top" style="z-index: 900;">
+    <div class="container py-2">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="h3 mb-0" style="color: #667eea; font-weight: 700;">
+                    <i class="fas fa-lightbulb me-2"></i>EXUBERANT PATHFINDERS
+                </h1>
+                <p class="text-muted small mb-0">Youth Advancement Initiative</p>
+            </div>
+            <div class="col-md-4 text-end">
+                @if (!SignInManager.IsSignedIn(User))
+                {
+                    <a href="@Url.Action("Login", "Account")" class="btn btn-sm btn-outline-primary me-2">Sign In</a>
+                    <a href="@Url.Action("Register", "Account")" class="btn btn-sm btn-primary">Register</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<section class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-6">
+                <h2 class="display-4 fw-bold mb-4" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                    Empowering Youth Through Strategic Grants & Community Support
+                </h2>
+                <p class="lead mb-4" style="font-size: 1.125rem;">
+                    We focus on improving livelihoods and promoting socioeconomic development of local communities across Nigeria through education, entrepreneurship, and strategic partnerships.
+                </p>
+                <div class="d-flex gap-2 flex-wrap">
+                    @if (!SignInManager.IsSignedIn(User))
+                    {
+                        <a href="@Url.Action("Register", "Account")" class="btn btn-light btn-lg fw-bold">
+                            <i class="fas fa-user-plus me-2"></i>Get Started
+                        </a>
+                        <a href="#donation-section" class="btn btn-outline-light btn-lg fw-bold">
+                            <i class="fas fa-heart me-2"></i>Support Us
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Index", "Applications")" class="btn btn-light btn-lg fw-bold">
+                            <i class="fas fa-file-alt me-2"></i>My Applications
+                        </a>
+                        <a href="@Url.Action("Index", "Donations")" class="btn btn-outline-light btn-lg fw-bold">
+                            <i class="fas fa-heart me-2"></i>Donate
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 10px; backdrop-filter: blur(10px);">
+                    <img src="/images/hero-grants.svg" alt="Grants & Donations" style="width: 100%; max-width: 400px; height: auto; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission & Vision Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">OUR KEY AREAS OF INTERVENTIONS</h2>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="d-flex gap-3 mb-3">
+                            <div style="flex-shrink: 0; color: #667eea;">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5>Socioeconomic Development</h5>
+                                <p class="text-muted mb-0">Promoting livelihood opportunities through entrepreneurship development and capacity building in rural communities.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex gap-3 mb-3">
+                            <div style="flex-shrink: 0; color: #667eea;">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5>Education & Skills</h5>
+                                <p class="text-muted mb-0">Building skilled and innovative workforce through research, training and educational opportunities.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex gap-3 mb-3">
+                            <div style="flex-shrink: 0; color: #667eea;">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5>Social Protection</h5>
+                                <p class="text-muted mb-0">Promoting policies that support youth, education, agriculture and agro-allied skills development.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex gap-3 mb-3">
+                            <div style="flex-shrink: 0; color: #667eea;">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5>Leadership Development</h5>
+                                <p class="text-muted mb-0">Building leadership capacity and enabling environment for young people across Nigeria.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- What We Do Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">WHAT WE DO</h2>
+        
+        <p class="lead mb-4">
+            Exuberant Pathfinders focuses on <strong>SEVEN (7) THEMATIC AREAS</strong> to provide service delivery and improve livelihoods of local communities across Nigeria:
+        </p>
+        
+        <div class="row g-3 mb-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 p-3 border-0 shadow-sm">
+                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                        <img src="/images/theme-education.svg" alt="Education" style="width: 50px; height: 50px;">
+                    </div>
+                    <h5 class="card-title fw-bold">Education</h5>
+                    <p class="card-text text-muted small">Quality education and skill acquisition programs for youth development.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 p-3 border-0 shadow-sm">
+                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                        <img src="/images/theme-healthcare.svg" alt="Healthcare" style="width: 50px; height: 50px;">
+                    </div>
+                    <h5 class="card-title fw-bold">Healthcare</h5>
+                    <p class="card-text text-muted small">Community wellness and health improvement initiatives.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 p-3 border-0 shadow-sm">
+                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                        <img src="/images/theme-environment.svg" alt="Environment" style="width: 50px; height: 50px;">
+                    </div>
+                    <h5 class="card-title fw-bold">Climate Change</h5>
+                    <p class="card-text text-muted small">Sustainable and eco-friendly environmental initiatives.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 p-3 border-0 shadow-sm">
+                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                        <i class="fas fa-gavel fa-2x" style="color: #667eea;"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Conflict & Justice</h5>
+                    <p class="card-text text-muted small">Peace, security and justice promotion programs.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 p-3 border-0 shadow-sm">
+                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                        <i class="fas fa-city fa-2x" style="color: #667eea;"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Local Governance</h5>
+                    <p class="card-text text-muted small">Community engagement and policy advocacy.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 p-3 border-0 shadow-sm">
+                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                        <img src="/images/theme-economic.svg" alt="Economic" style="width: 50px; height: 50px;">
+                    </div>
+                    <h5 class="card-title fw-bold">Economic Development</h5>
+                    <p class="card-text text-muted small">Entrepreneurship and social enterprise support.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">TESTIMONIALS</h2>
+        
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 p-4 border-0 shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 24px; margin-right: 15px;">
+                            MA
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold">Mohammed Ahmed</h5>
+                            <p class="text-muted small mb-0">Local Community Leader</p>
+                        </div>
+                    </div>
+                    <p class="card-text">
+                        <i class="fas fa-quote-left text-muted me-2"></i>
+                        Exuberant Pathfinders transformed our community by educating people on the dangers of drug abuse and providing alternative livelihood opportunities. Their commitment to youth development is remarkable.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 p-4 border-0 shadow-sm">
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 24px; margin-right: 15px;">
+                            AS
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold">Amina Sanusi</h5>
+                            <p class="text-muted small mb-0">Youth Entrepreneur</p>
+                        </div>
+                    </div>
+                    <p class="card-text">
+                        <i class="fas fa-quote-left text-muted me-2"></i>
+                        Through their skills acquisition program, I was able to start my own business. The support system and network provided has been invaluable to my success.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Donation & Sponsorship Section -->
+<section id="donation-section" class="py-5">
+    <div class="container">
+        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">DONATION AND SPONSORSHIP</h2>
+        
+        <div class="row g-4 mb-5">
+            <div class="col-lg-8">
+                <div class="alert alert-info d-flex align-items-center" role="alert">
+                    <i class="fas fa-heart me-3 fa-lg" style="color: #dc3545;"></i>
+                    <div>
+                        <strong>We are grateful for your support!</strong>
+                        <p class="mb-0">Your donation or sponsorship will help us achieve our mission and vision. Your contribution will make a significant impact on all seven thematic areas. <strong>No amount is too small or too big!</strong></p>
+                    </div>
+                </div>
+                
+                <h5 class="fw-bold mt-4 mb-3">Bank Transfer Details:</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card p-3 border-1">
+                            <p class="small text-muted mb-1">Dollar Account</p>
+                            <p class="mb-1"><strong>Account Name:</strong> Exuberant Pathfinders Youth</p>
+                            <p class="mb-1"><strong>Account Number:</strong> 0884139996</p>
+                            <p class="mb-0"><strong>Bank:</strong> Guaranty Trust Bank Ltd</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card p-3 border-1">
+                            <p class="small text-muted mb-1">Naira Account</p>
+                            <p class="mb-1"><strong>Account Name:</strong> Exuberant Pathfinders Youth</p>
+                            <p class="mb-1"><strong>Account Number:</strong> 0734047266</p>
+                            <p class="mb-0"><strong>Bank:</strong> Guaranty Trust Bank Ltd</p>
+                        </div>
+                    </div>
+                </div>
+                
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a href="@Url.Action("CreateDonation", "Donations")" class="btn btn-primary btn-lg mt-4">
+                        <i class="fas fa-donate me-2"></i>DONATE NOW
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg mt-4">
+                        <i class="fas fa-donate me-2"></i>DONATE NOW
+                    </a>
+                }
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm p-4 bg-light text-center">
+                    <h1 class="display-5 fw-bold" style="color: #667eea;">₦0</h1>
+                    <p class="text-muted mb-3">Total Donations This Month</p>
+                    <p class="lead fw-bold mb-0">Make Your Impact Today</p>
+                    <p class="small text-muted">Every contribution helps us serve thousands of youth</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team/Leadership Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">OUR LEADERSHIP TEAM</h2>
+        
+        <p class="lead mb-4">Exuberant Pathfinders is led by dedicated professionals committed to youth empowerment:</p>
+        
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px;">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h5 class="fw-bold">Dr. Nabila Yusuf Ahmad</h5>
+                    <p class="text-muted small">National Team Lead</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px;">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h5 class="fw-bold">Emmanuel Adam</h5>
+                    <p class="text-muted small">Deputy Team Lead</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px;">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h5 class="fw-bold">Yusuf Amoke & Shehu Idris</h5>
+                    <p class="text-muted small">Secretary General</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">CONTACT US</h2>
+        
+        <div class="row g-4">
+            <div class="col-md-4 mb-3">
+                <div class="d-flex gap-3">
+                    <div style="flex-shrink: 0;">
+                        <i class="fas fa-map-marker-alt fa-2x" style="color: #667eea;"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-2">Offices</h5>
+                        <p class="text-muted mb-1"><strong>Abuja:</strong> Ground Floor Wing D, Reinsurance Building Central Area, Abuja (F.C.T.), Nigeria</p>
+                        <p class="text-muted"><strong>Kano:</strong> No 1430 Naibawa Gabas, Kano State</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="d-flex gap-3">
+                    <div style="flex-shrink: 0;">
+                        <i class="fas fa-phone fa-2x" style="color: #667eea;"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-2">Phone</h5>
+                        <p class="text-muted mb-1"><a href="tel:+234-09078511868" class="text-decoration-none">+234-09078511868</a></p>
+                        <p class="text-muted"><a href="tel:+234-07063439845" class="text-decoration-none">+234-07063439845</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="d-flex gap-3">
+                    <div style="flex-shrink: 0;">
+                        <i class="fas fa-envelope fa-2x" style="color: #667eea;"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-2">Email</h5>
+                        <p class="text-muted mb-0">
+                            <a href="mailto:Exuberantinitiative@gmail.com" class="text-decoration-none">Exuberantinitiative@gmail.com</a>
+                        </p>
+                        <p class="small text-muted">Mon-Sat / 24 Hours</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .hero-section {
+        min-height: 500px;
+    }
+
+    .min-vh-50 {
+        min-height: 50vh;
+    }
+
+    .stat-box {
+        padding: 30px 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-10px);
+    }
+
+    .feature-card {
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: #667eea !important;
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.1);
+    }
+
+    .feature-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .topic-badge {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .topic-badge:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .bg-gradient {
+        background-size: 200% 200%;
+        animation: gradient 15s ease infinite;
+    }
+
+    @@keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* New styles for reference site layout */
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.15) !important;
+        transform: translateY(-2px);
+    }
+
+    section h2, section h5 {
+        letter-spacing: -0.5px;
+    }
+
+    a.text-decoration-none {
+        color: #667eea;
+        font-weight: 500;
+    }
+
+    a.text-decoration-none:hover {
+        color: #764ba2;
+    }
+
+    .alert-info {
+        background-color: #e7f3ff;
+        border-color: #667eea;
+    }
+
+    .alert-info strong {
+        color: #667eea;
+    }
+</style>
+

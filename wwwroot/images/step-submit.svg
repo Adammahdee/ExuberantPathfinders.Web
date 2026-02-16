@@ -1,0 +1,32 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="submitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1abc9c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16a085;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Circle background -->
+  <circle cx="100" cy="100" r="90" fill="url(#submitGrad)" opacity="0.1"/>
+  
+  <!-- Document -->
+  <rect x="50" y="40" width="80" height="110" fill="white" stroke="#1abc9c" stroke-width="3" rx="5"/>
+  
+  <!-- Header bar -->
+  <rect x="50" y="40" width="80" height="20" fill="#1abc9c" rx="5"/>
+  
+  <!-- Lines (text) -->
+  <line x1="60" y1="70" x2="120" y2="70" stroke="#1abc9c" stroke-width="2" stroke-linecap="round"/>
+  <line x1="60" y1="85" x2="130" y2="85" stroke="#1abc9c" stroke-width="1.5" opacity="0.7" stroke-linecap="round"/>
+  <line x1="60" y1="97" x2="130" y2="97" stroke="#1abc9c" stroke-width="1.5" opacity="0.7" stroke-linecap="round"/>
+  <line x1="60" y1="109" x2="115" y2="109" stroke="#1abc9c" stroke-width="1.5" opacity="0.7" stroke-linecap="round"/>
+  
+  <!-- Pen icon -->
+  <circle cx="140" cy="70" r="8" fill="#1abc9c"/>
+  <line x1="140" y1="78" x2="140" y2="95" stroke="#1abc9c" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="140,100 137,90 143,90" fill="#1abc9c"/>
+  
+  <!-- Checkmark at bottom -->
+  <circle cx="150" cy="135" r="25" fill="none" stroke="#1abc9c" stroke-width="3"/>
+  <polyline points="145,135 150,140 160,128" fill="none" stroke="#1abc9c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

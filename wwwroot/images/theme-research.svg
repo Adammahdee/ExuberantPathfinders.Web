@@ -1,0 +1,28 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Flask -->
+  <path d="M 80 50 L 85 90 Q 85 100 75 110 Q 65 115 65 125 L 135 125 Q 135 115 125 110 Q 115 100 115 90 L 120 50 Z" 
+        fill="none" stroke="white" stroke-width="2.5" opacity="0.9" stroke-linejoin="round"/>
+  
+  <!-- Flask stopper -->
+  <rect x="95" y="40" width="10" height="12" fill="white" opacity="0.8" rx="2"/>
+  
+  <!-- Liquid inside -->
+  <path d="M 85 95 Q 85 105 75 112 Q 70 115 70 123 L 130 123 Q 130 115 125 112 Q 115 105 115 95 Z" 
+        fill="white" opacity="0.3"/>
+  
+  <!-- Bubbles -->
+  <circle cx="85" cy="85" r="3" fill="white" opacity="0.6"/>
+  <circle cx="95" cy="100" r="2.5" fill="white" opacity="0.5"/>
+  <circle cx="110" cy="90" r="2" fill="white" opacity="0.4"/>
+  
+  <!-- Light bulb (idea) -->
+  <circle cx="140" cy="55" r="8" fill="white" opacity="0.7"/>
+  <rect x="137" y="63" width="6" height="8" fill="white" opacity="0.7"/>
+  <rect x="138" y="71" width="4" height="3" fill="white" opacity="0.7"/>
+  <rect x="136" y="74" width="8" height="2" fill="white" opacity="0.7"/>
+  
+  <!-- Glow rays -->
+  <line x1="140" y1="35" x2="140" y2="28" stroke="white" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+  <line x1="158" y1="48" x2="163" y2="44" stroke="white" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+  <line x1="162" y1="63" x2="170" y2="63" stroke="white" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,47 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fundingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f39c12;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e67e22;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Circle background -->
+  <circle cx="100" cy="100" r="90" fill="url(#fundingGrad)" opacity="0.1"/>
+  
+  <!-- Wallet/Card -->
+  <rect x="45" y="50" width="110" height="70" fill="white" stroke="#f39c12" stroke-width="3" rx="8"/>
+  
+  <!-- Card chip -->
+  <rect x="55" y="60" width="15" height="15" fill="#f39c12" rx="2" opacity="0.8"/>
+  <rect x="62" y="63" width="2" height="3" fill="white" opacity="0.6"/>
+  <rect x="62" y="68" width="2" height="3" fill="white" opacity="0.6"/>
+  <rect x="67" y="63" width="2" height="3" fill="white" opacity="0.6"/>
+  <rect x="67" y="68" width="2" height="3" fill="white" opacity="0.6"/>
+  
+  <!-- Card waves -->
+  <path d="M 75 65 Q 85 63 95 65" stroke="#f39c12" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M 75 75 Q 85 73 95 75" stroke="#f39c12" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Card number -->
+  <ellipse cx="85" cy="90" rx="20" ry="8" fill="#f39c12" opacity="0.3"/>
+  <circle cx="80" cy="90" r="3" fill="#f39c12"/>
+  <circle cx="87" cy="90" r="3" fill="#f39c12"/>
+  <circle cx="94" cy="90" r="3" fill="#f39c12"/>
+  
+  <!-- Coins falling -->
+  <g>
+    <circle cx="70" cy="125" r="10" fill="#f39c12"/>
+    <text x="70" y="132" font-size="14" text-anchor="middle" fill="white" font-weight="bold">₦</text>
+  </g>
+  
+  <g opacity="0.7">
+    <circle cx="100" cy="130" r="8" fill="#f39c12"/>
+    <text x="100" y="136" font-size="11" text-anchor="middle" fill="white" font-weight="bold">₦</text>
+  </g>
+  
+  <g opacity="0.5">
+    <circle cx="130" cy="125" r="6" fill="#f39c12"/>
+    <text x="130" y="130" font-size="9" text-anchor="middle" fill="white" font-weight="bold">₦</text>
+  </g>
+</svg>
