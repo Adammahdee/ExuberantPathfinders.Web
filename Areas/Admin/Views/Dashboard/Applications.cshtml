@@ -1,21 +1,45 @@
 @model List<ExuberantPathfinders.Web.Models.Application>
+@using ExuberantPathfinders.Web.Models
 
 @{
     ViewData["Title"] = "Manage Applications";
 }
 
 <div class="container-fluid mt-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="h3">Application Management</h1>
-            <p class="text-muted">Review and manage all submitted applications.</p>
+    @if (TempData["AdminSuccess"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["AdminSuccess"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+    }
+    @if (TempData["AdminError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["AdminError"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["AdminInfo"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @TempData["AdminInfo"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Application Management</h1>
+            <p class="text-muted mb-0">Review submissions and update statuses.</p>
+        </div>
+        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">Back to Dashboard</a>
     </div>
 
     @if (Model.Any())
     {
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
                         <th>Reference</th>
@@ -24,50 +48,74 @@
                         <th>Amount</th>
                         <th>Status</th>
                         <th>Submitted</th>
-                        <th>Actions</th>
+                        <th style="min-width: 340px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var app in Model)
                     {
+                        var statusClass = app.Status switch
+                        {
+                            ApplicationStatus.Draft => "secondary",
+                            ApplicationStatus.Submitted => "info",
+                            ApplicationStatus.UnderReview => "warning",
+                            ApplicationStatus.Approved => "success",
+                            ApplicationStatus.Rejected => "danger",
+                            ApplicationStatus.OnHold => "dark",
+                            _ => "light"
+                        };
+
                         <tr>
-                            <td>
-                                <code>@app.SubmissionReference</code>
-                            </td>
+                            <td><code>@(string.IsNullOrWhiteSpace(app.SubmissionReference) ? "-" : app.SubmissionReference)</code></td>
                             <td>
                                 <strong>@app.Applicant?.FirstName @app.Applicant?.LastName</strong><br />
                                 <small class="text-muted">@app.Applicant?.Email</small>
                             </td>
-                            <td>@app.Program?.Name ?? "N/A"</td>
-                            <td>₦@app.RequestedAmount.ToString("N2")</td>
-                            <td>
-                                @{
-                                    var statusClass = app.Status switch
-                                    {
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.Draft => "secondary",
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.Submitted => "info",
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.UnderReview => "warning",
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.Approved => "success",
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.Rejected => "danger",
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.OnHold => "warning",
-                                        _ => "light"
-                                    };
-                                    var statusText = app.Status switch
-                                    {
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.Draft => "Draft",
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.Submitted => "Submitted",
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.UnderReview => "Under Review",
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.Approved => "Approved",
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.Rejected => "Rejected",
-                                        ExuberantPathfinders.Web.Models.ApplicationStatus.OnHold => "On Hold",
-                                        _ => "Unknown"
-                                    };
-                                }
-                                <span class="badge bg-@statusClass">@statusText</span>
-                            </td>
+                            <td>@(app.Program?.Name ?? "N/A")</td>
+                            <td>&#8358;@app.RequestedAmount.ToString("N2")</td>
+                            <td><span class="badge bg-@statusClass">@app.Status</span></td>
                             <td>@(app.SubmittedAt?.ToString("dd MMM yyyy") ?? "Not Submitted")</td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                <div class="d-flex gap-1 mb-2">
+                                    <form asp-action="UpdateApplicationStatus" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@app.Id" />
+                                        <input type="hidden" name="status" value="@ApplicationStatus.Approved" />
+                                        <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                    </form>
+                                    <form asp-action="UpdateApplicationStatus" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@app.Id" />
+                                        <input type="hidden" name="status" value="@ApplicationStatus.Rejected" />
+                                        <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                                    </form>
+                                    <form asp-action="UpdateApplicationStatus" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@app.Id" />
+                                        <input type="hidden" name="status" value="@ApplicationStatus.UnderReview" />
+                                        <button type="submit" class="btn btn-sm btn-warning">Under Review</button>
+                                    </form>
+                                </div>
+                                <form asp-action="UpdateApplicationStatus" method="post" class="row g-1">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@app.Id" />
+                                    <div class="col-5">
+                                        <select name="status" class="form-select form-select-sm">
+                                            <option value="@ApplicationStatus.Draft">Draft</option>
+                                            <option value="@ApplicationStatus.Submitted">Submitted</option>
+                                            <option value="@ApplicationStatus.UnderReview">Under Review</option>
+                                            <option value="@ApplicationStatus.Approved">Approved</option>
+                                            <option value="@ApplicationStatus.Rejected">Rejected</option>
+                                            <option value="@ApplicationStatus.OnHold">On Hold</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-5">
+                                        <input type="text" name="reason" class="form-control form-control-sm" placeholder="Optional note" maxlength="300" />
+                                    </div>
+                                    <div class="col-2 d-grid">
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">Set</button>
+                                    </div>
+                                </form>
                             </td>
                         </tr>
                     }
@@ -77,12 +125,8 @@
     }
     else
     {
-        <div class="alert alert-info">
+        <div class="alert alert-info mb-0">
             No applications found.
         </div>
     }
-
-    <div class="mt-3">
-        <a href="@Url.Action("Index")" class="btn btn-secondary">Back to Dashboard</a>
-    </div>
 </div>

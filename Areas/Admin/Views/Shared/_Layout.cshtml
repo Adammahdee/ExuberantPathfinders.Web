@@ -88,6 +88,7 @@
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form asp-action="Logout" asp-controller="Account" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
                                     <button type="submit" class="dropdown-item">Logout</button>
                                 </form>
                             </li>

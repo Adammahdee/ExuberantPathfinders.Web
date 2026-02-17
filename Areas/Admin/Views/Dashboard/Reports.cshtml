@@ -1,5 +1,4 @@
 @model List<MonthlyDonationReportViewModel>
-
 @using ExuberantPathfinders.Web.Areas.Admin.ViewModels
 
 @{
@@ -36,17 +35,15 @@
                                 @foreach (var report in Model)
                                 {
                                     <tr>
-                                        <td>
-                                            <strong>@report.MonthName</strong>
-                                        </td>
+                                        <td><strong>@report.MonthName</strong></td>
                                         <td class="text-end">
-                                            <strong class="text-success">₦@report.TotalAmount.ToString("N2")</strong>
+                                            <strong class="text-success">&#8358;@report.TotalAmount.ToString("N2")</strong>
                                         </td>
                                         <td class="text-end">
                                             <span class="badge bg-info">@report.DonationCount</span>
                                         </td>
                                         <td class="text-end">
-                                            ₦@(report.DonationCount > 0 ? (report.TotalAmount / report.DonationCount).ToString("N2") : "0.00")
+                                            &#8358;@(report.DonationCount > 0 ? (report.TotalAmount / report.DonationCount).ToString("N2") : "0.00")
                                         </td>
                                     </tr>
                                 }
@@ -55,13 +52,13 @@
                                 <tr>
                                     <th>Total</th>
                                     <th class="text-end">
-                                        <strong class="text-success">₦@Model.Sum(m => m.TotalAmount).ToString("N2")</strong>
+                                        <strong class="text-success">&#8358;@Model.Sum(m => m.TotalAmount).ToString("N2")</strong>
                                     </th>
                                     <th class="text-end">
                                         <strong>@Model.Sum(m => m.DonationCount)</strong>
                                     </th>
                                     <th class="text-end">
-                                        <strong>₦@(Model.Sum(m => m.DonationCount) > 0 ? (Model.Sum(m => m.TotalAmount) / Model.Sum(m => m.DonationCount)).ToString("N2") : "0.00")</strong>
+                                        <strong>&#8358;@(Model.Sum(m => m.DonationCount) > 0 ? (Model.Sum(m => m.TotalAmount) / Model.Sum(m => m.DonationCount)).ToString("N2") : "0.00")</strong>
                                     </th>
                                 </tr>
                             </tfoot>
@@ -92,11 +89,11 @@
                         </div>
                         <div class="mb-3">
                             <p class="text-muted mb-1">Total Amount Raised</p>
-                            <h3 class="text-success">₦@Model.Sum(m => m.TotalAmount).ToString("N2")</h3>
+                            <h3 class="text-success">&#8358;@Model.Sum(m => m.TotalAmount).ToString("N2")</h3>
                         </div>
                         <div class="mb-3">
                             <p class="text-muted mb-1">Average Donation</p>
-                            <h3 class="text-info">₦@(Model.Sum(m => m.DonationCount) > 0 ? (Model.Sum(m => m.TotalAmount) / Model.Sum(m => m.DonationCount)).ToString("N2") : "0.00")</h3>
+                            <h3 class="text-info">&#8358;@(Model.Sum(m => m.DonationCount) > 0 ? (Model.Sum(m => m.TotalAmount) / Model.Sum(m => m.DonationCount)).ToString("N2") : "0.00")</h3>
                         </div>
                         <div>
                             <p class="text-muted mb-1">Active Months</p>
@@ -130,4 +127,3 @@
         </a>
     </div>
 </div>
-

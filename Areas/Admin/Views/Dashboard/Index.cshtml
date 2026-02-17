@@ -1,151 +1,204 @@
-@model dynamic
+@model ExuberantPathfinders.Web.Areas.Admin.ViewModels.AdminDashboardViewModel
 
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="container-fluid mt-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="h3">Admin Dashboard</h1>
-            <p class="text-muted">Welcome back! Here's an overview of your platform.</p>
+<div class="container-fluid mt-4 admin-dashboard">
+    @if (TempData["AdminSuccess"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["AdminSuccess"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    </div>
+    }
+    @if (TempData["AdminError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["AdminError"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["AdminInfo"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @TempData["AdminInfo"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
-    <!-- Stats Cards Row -->
-    <div class="row">
-        <!-- Total Applications Card -->
-        <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="text-muted small mb-1">Total Applications</p>
-                            <h3 class="mb-0">@Model.TotalApplications</h3>
-                        </div>
-                        <span class="badge bg-primary">📋</span>
-                    </div>
-                </div>
+    <div class="dash-hero p-4 p-lg-5 mb-4">
+        <div class="row align-items-center g-3">
+            <div class="col-lg-8">
+                <p class="dash-kicker mb-2">Admin Center</p>
+                <h1 class="h2 mb-2">Platform Operations Dashboard</h1>
+                <p class="mb-0 text-light-emphasis">Monitor applications, manage users, and act on platform workflows from one place.</p>
             </div>
-        </div>
-
-        <!-- Pending Applications Card -->
-        <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="text-muted small mb-1">Under Review</p>
-                            <h3 class="mb-0">@Model.PendingApplications</h3>
-                        </div>
-                        <span class="badge bg-warning">⏳</span>
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent border-top">
-                    <a href="@Url.Action("Applications")" class="small text-decoration-none">View all →</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Donations Card -->
-        <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="text-muted small mb-1">Total Donations</p>
-                            <h3 class="mb-0">₦@Model.TotalDonations.ToString("N2")</h3>
-                        </div>
-                        <span class="badge bg-success">💰</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Users Card -->
-        <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="text-muted small mb-1">Total Users</p>
-                            <h3 class="mb-0">@Model.TotalUsers</h3>
-                        </div>
-                        <span class="badge bg-info">👥</span>
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent border-top">
-                    <a href="@Url.Action("Users")" class="small text-decoration-none">Manage users →</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Campaigns Card -->
-        <div class="col-md-6 col-lg-3 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="text-muted small mb-1">Active Campaigns</p>
-                            <h3 class="mb-0">@Model.ActiveCampaigns</h3>
-                        </div>
-                        <span class="badge bg-danger">🎯</span>
-                    </div>
-                </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="@Url.Action("Applications")" class="btn btn-light rounded-pill px-4 me-2 mb-2 mb-lg-0">Review Queue</a>
+                <a href="@Url.Action("Reports")" class="btn btn-outline-light rounded-pill px-4">Reports</a>
             </div>
         </div>
     </div>
 
-    <!-- Quick Actions Section -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <h5 class="mb-3">Quick Actions</h5>
+    <div class="row g-3 mb-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-primary-subtle text-primary"><i class="fas fa-file-alt"></i></div>
+                <p class="text-muted small mb-1">Total Applications</p>
+                <h3 class="mb-0">@Model.TotalApplications</h3>
+            </div>
         </div>
-        <div class="col-md-6 col-lg-3 mb-3">
-            <a href="@Url.Action("Applications")" class="btn btn-primary btn-block w-100">
-                <i class="fas fa-file-alt"></i> Review Applications
-            </a>
+        <div class="col-md-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-warning-subtle text-warning"><i class="fas fa-hourglass-half"></i></div>
+                <p class="text-muted small mb-1">Under Review</p>
+                <h3 class="mb-0">@Model.PendingApplications</h3>
+            </div>
         </div>
-        <div class="col-md-6 col-lg-3 mb-3">
-            <a href="@Url.Action("Users")" class="btn btn-info btn-block w-100">
-                <i class="fas fa-users"></i> Manage Users
-            </a>
+        <div class="col-md-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-success-subtle text-success"><i class="fas fa-donate"></i></div>
+                <p class="text-muted small mb-1">Completed Donations</p>
+                <h3 class="mb-0">&#8358;@Model.TotalDonations.ToString("N2")</h3>
+            </div>
         </div>
-        <div class="col-md-6 col-lg-3 mb-3">
-            <a href="@Url.Action("Reports")" class="btn btn-warning btn-block w-100">
-                <i class="fas fa-chart-bar"></i> View Reports
-            </a>
-        </div>
-        <div class="col-md-6 col-lg-3 mb-3">
-            <a href="@Url.Action("Logout", "Account")" class="btn btn-secondary btn-block w-100">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
+        <div class="col-md-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-info-subtle text-info"><i class="fas fa-users"></i></div>
+                <p class="text-muted small mb-1">Total Users</p>
+                <h3 class="mb-0">@Model.TotalUsers</h3>
+                <small class="text-muted">Active campaigns: @Model.ActiveCampaigns</small>
+            </div>
         </div>
     </div>
 
-    <!-- Info Box -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <strong>Information:</strong> This is your admin dashboard. Use the quick actions above to manage the platform.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="row g-4">
+        <div class="col-xl-7">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 pt-4 pb-0">
+                    <h5 class="mb-1">Recent Applications</h5>
+                    <p class="text-muted small mb-0">Latest submissions requiring attention.</p>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentApplications.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Reference</th>
+                                        <th>Applicant</th>
+                                        <th>Program</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var app in Model.RecentApplications)
+                                    {
+                                        <tr>
+                                            <td><code>@(string.IsNullOrWhiteSpace(app.SubmissionReference) ? "-" : app.SubmissionReference)</code></td>
+                                            <td>@app.Applicant?.FirstName @app.Applicant?.LastName</td>
+                                            <td>@(app.Program?.Name ?? "N/A")</td>
+                                            <td><span class="badge bg-secondary">@app.Status</span></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No applications yet.</p>
+                    }
+                </div>
+                <div class="card-footer bg-white border-0 pb-4">
+                    <a href="@Url.Action("Applications")" class="btn btn-outline-primary rounded-pill px-4">Open Application Manager</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-5">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 pt-4 pb-0">
+                    <h5 class="mb-1">Recent Users</h5>
+                    <p class="text-muted small mb-0">Newest registered accounts.</p>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentUsers.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var user in Model.RecentUsers)
+                            {
+                                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold">@user.FirstName @user.LastName</div>
+                                        <small class="text-muted">@user.Email</small>
+                                    </div>
+                                    <span class="badge @(user.IsActive ? "bg-success" : "bg-danger")">@(user.IsActive ? "Active" : "Inactive")</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No users found.</p>
+                    }
+                </div>
+                <div class="card-footer bg-white border-0 pb-4">
+                    <a href="@Url.Action("Users")" class="btn btn-outline-dark rounded-pill px-4">Manage Users</a>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="mb-3">Quick Actions</h6>
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("Applications")" class="btn btn-primary">Review Applications</a>
+                        <a href="@Url.Action("Users")" class="btn btn-info text-white">User Administration</a>
+                        <a href="@Url.Action("Reports")" class="btn btn-warning">View Reports</a>
+                        <form asp-action="Logout" asp-controller="Account" method="post" class="d-grid">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-secondary">Logout</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .card {
-        transition: transform 0.2s, box-shadow 0.2s;
+    .admin-dashboard .dash-hero {
+        background: linear-gradient(120deg, #2f1e7d 0%, #4f46e5 48%, #7c3aed 100%);
+        border-radius: 18px;
+        color: #fff;
+        box-shadow: 0 18px 44px rgba(37, 24, 96, 0.25);
     }
-    
-    .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+
+    .admin-dashboard .dash-kicker {
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-size: 0.75rem;
+        opacity: 0.8;
+        margin: 0;
     }
-    
-    .btn-block {
-        display: block;
-        width: 100%;
+
+    .admin-dashboard .stat-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 1rem;
+        box-shadow: 0 6px 18px rgba(28, 22, 72, 0.08);
+        height: 100%;
+    }
+
+    .admin-dashboard .stat-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.75rem;
     }
 </style>
