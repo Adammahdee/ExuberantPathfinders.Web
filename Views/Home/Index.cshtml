@@ -7,9 +7,9 @@
 }
 
 <!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-white bg-white sticky-top border-bottom" style="z-index: 900;">
+<nav class="navbar navbar-expand-lg sticky-top site-nav">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="#" style="color: #667eea; font-size: 1.3rem;">
+        <a class="navbar-brand fw-bold" href="#">
             <i class="fas fa-lightbulb me-2"></i>EXUBERANT PATHFINDERS
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -48,8 +48,8 @@
                 @if (!SignInManager.IsSignedIn(User))
                 {
                     <li class="nav-item ms-3">
-                        <a href="@Url.Action("Login", "Account")" class="btn btn-outline-primary btn-sm me-2">Sign In</a>
-                        <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-sm">Register</a>
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-outline-primary btn-sm me-2 nav-auth-btn">Sign In</a>
+                        <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-sm nav-auth-btn">Register</a>
                     </li>
                 }
                 else
@@ -58,7 +58,7 @@
                         <span class="text-muted me-2">Welcome, @User.Identity?.Name</span>
                         <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+                            <button type="submit" class="btn btn-danger btn-sm nav-auth-btn">Logout</button>
                         </form>
                     </li>
                 }
@@ -68,40 +68,36 @@
 </nav>
 
 <!-- Hero Section -->
-<section id="home" class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-    <div class="container">
-        <div class="row align-items-center g-4">
+<section id="home" class="hero-shell py-5">
+    <div class="hero-noise"></div>
+    <div class="container hero-container">
+        <div class="row align-items-center g-4 g-xl-5">
             <div class="col-lg-6">
-                <h2 class="display-4 fw-bold mb-4" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-                    Empowering Youth Through Strategic Grants & Community Support
-                </h2>
-                <p class="lead mb-4" style="font-size: 1.125rem;">
-                    We focus on improving livelihoods and promoting socioeconomic development of local communities across Nigeria through education, entrepreneurship, and strategic partnerships.
-                </p>
-                <div class="d-flex gap-2 flex-wrap">
-                    @if (!SignInManager.IsSignedIn(User))
-                    {
-                        <a href="@Url.Action("Register", "Account")" class="btn btn-light btn-lg fw-bold">
-                            <i class="fas fa-user-plus me-2"></i>Get Started
-                        </a>
-                        <a href="#donation-section" class="btn btn-outline-light btn-lg fw-bold">
-                            <i class="fas fa-heart me-2"></i>Support Us
-                        </a>
-                    }
-                    else
-                    {
-                        <a href="@Url.Action("Index", "Applications")" class="btn btn-light btn-lg fw-bold">
-                            <i class="fas fa-file-alt me-2"></i>My Applications
-                        </a>
-                        <a href="@Url.Action("Index", "Donations")" class="btn btn-outline-light btn-lg fw-bold">
-                            <i class="fas fa-heart me-2"></i>Donate
-                        </a>
-                    }
+                <div class="hero-glass">
+                    <p class="hero-kicker mb-3">Exuberant Pathfinders Youth Initiatives</p>
+                    <h1 class="hero-title mb-4">Empowering Youth through Strategic Grants</h1>
+                    <p class="hero-copy mb-4">
+                        Building stronger communities through youth-focused grants, practical entrepreneurship support, and strategic partnerships that unlock long-term socioeconomic progress.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        @if (!SignInManager.IsSignedIn(User))
+                        {
+                            <a href="@Url.Action("Register", "Account")" class="hero-cta hero-cta-solid">Apply</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Index", "Applications")" class="hero-cta hero-cta-solid">Apply</a>
+                        }
+                        <a href="#donation-section" class="hero-cta hero-cta-outline">Donate</a>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6 text-center">
-                <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 10px; backdrop-filter: blur(10px);">
-                    <img src="/images/hero-grants.svg" alt="Grants & Donations" style="width: 100%; max-width: 400px; height: auto; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));">
+            <div class="col-lg-6">
+                <div class="hero-image-frame">
+                    <img
+                        src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1800&q=80"
+                        alt="Diverse African youth collaborating in a modern workspace"
+                        class="hero-image" />
                 </div>
             </div>
         </div>
@@ -109,31 +105,31 @@
 </section>
 
 <!-- Promo Section -->
-<section id="promo" class="py-5" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+<section id="promo" class="promo-shell py-5">
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <h2 class="display-5 fw-bold mb-4">
+                <h2 class="display-5 fw-bold mb-4 promo-title">
                     <i class="fas fa-star me-2"></i>Featured Initiative
                 </h2>
                 <h3 class="mb-3">Youth Skills & Entrepreneurship Program 2026</h3>
-                <p class="lead mb-4">
+                <p class="lead mb-4 promo-copy">
                     Transform your future through our comprehensive skills development and entrepreneurship program. Learn in-demand skills, get mentorship, and access startup funding.
                 </p>
                 <div class="d-flex gap-2 flex-wrap">
-                    <a href="@Url.Action("Index", "Applications")" class="btn btn-light btn-lg fw-bold">
+                    <a href="@Url.Action("Index", "Applications")" class="btn btn-light btn-lg fw-bold promo-cta-solid">
                         <i class="fas fa-briefcase me-2"></i>Apply Now
                     </a>
-                    <a href="#services" class="btn btn-outline-light btn-lg fw-bold">
+                    <a href="#services" class="btn btn-outline-light btn-lg fw-bold promo-cta-outline">
                         <i class="fas fa-arrow-down me-2"></i>Learn More
                     </a>
                 </div>
-                <p class="small text-white-50 mt-3">
+                <p class="small mt-3 promo-copy-muted">
                     <i class="fas fa-calendar me-1"></i> Applications open 24/7 | <i class="fas fa-target me-1"></i> 500+ spots available
                 </p>
             </div>
             <div class="col-lg-6">
-                <div class="card border-0 shadow-lg p-4" style="background: rgba(255,255,255,0.95);">
+                <div class="card border-0 shadow-lg p-4 promo-glass-card">
                     <div class="text-center mb-4">
                         <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
                             <i class="fas fa-graduation-cap"></i>
@@ -147,7 +143,7 @@
                         <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Job Placement Assistance</li>
                         <li><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Lifetime Network Access</li>
                     </ul>
-                    <a href="#donation-section" class="btn btn-primary w-100 mt-4">Support This Program</a>
+                    <a href="#donation-section" class="btn btn-primary w-100 mt-4 promo-card-btn">Support This Program</a>
                 </div>
             </div>
         </div>
@@ -516,41 +512,58 @@
 </section>
 
 <style>
+    @@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+    :root {
+        --brand-indigo: #4f46e5;
+        --brand-purple: #7c3aed;
+        --hero-text: #f8f7ff;
+        --hero-glass-bg: rgba(255, 255, 255, 0.15);
+        --hero-glass-border: rgba(255, 255, 255, 0.28);
+    }
+
+    body {
+        font-family: "Montserrat", sans-serif;
+    }
+
     /* Navigation Styles */
-    .navbar {
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    .site-nav {
+        z-index: 900;
+        background: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid rgba(124, 58, 237, 0.16);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 8px 22px rgba(25, 16, 72, 0.08);
     }
 
     .navbar-brand {
         font-size: 1.3rem !important;
-        color: #667eea !important;
+        color: var(--brand-indigo) !important;
+        letter-spacing: 0.02em;
     }
 
     .nav-link {
-        color: #333 !important;
-        font-weight: 500;
+        color: #332f56 !important;
+        font-weight: 600;
         font-size: 0.95rem;
         margin: 0 8px;
-        transition: color 0.3s ease;
+        border-radius: 999px;
+        padding: 0.45rem 0.8rem !important;
+        transition: color 0.25s ease, background-color 0.25s ease;
     }
 
     .nav-link:hover {
-        color: #667eea !important;
+        color: var(--brand-indigo) !important;
+        background: rgba(79, 70, 229, 0.08);
     }
 
     .nav-link:hover::after {
-        content: '';
-        display: block;
-        width: 100%;
-        height: 2px;
-        background: #667eea;
-        position: relative;
-        bottom: -5px;
+        content: none;
     }
 
     .dropdown-menu {
         border: none;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 26px rgba(22, 15, 61, 0.14);
         border-radius: 8px;
     }
 
@@ -568,11 +581,171 @@
         font-weight: 500;
     }
 
-    /* Section Styles */
-    .hero-section {
-        min-height: 500px;
+    .nav-auth-btn {
+        border-radius: 999px;
+        padding-left: 0.95rem;
+        padding-right: 0.95rem;
     }
 
+    /* Promo Styles */
+    .promo-shell {
+        color: #f6f5ff;
+        background: linear-gradient(128deg, #30207a 0%, #4f46e5 52%, #7c3aed 100%);
+    }
+
+    .promo-title {
+        text-shadow: 0 8px 30px rgba(18, 11, 47, 0.34);
+    }
+
+    .promo-copy {
+        color: rgba(246, 245, 255, 0.92);
+    }
+
+    .promo-copy-muted {
+        color: rgba(246, 245, 255, 0.82);
+    }
+
+    .promo-cta-solid,
+    .promo-cta-outline,
+    .promo-card-btn {
+        border-radius: 999px;
+    }
+
+    .promo-cta-solid {
+        color: #2f1e7d;
+    }
+
+    .promo-glass-card {
+        border: 1px solid rgba(255, 255, 255, 0.26);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 24px;
+        color: #2f2a4d;
+    }
+
+    .promo-glass-card .card-title {
+        color: var(--brand-indigo) !important;
+    }
+
+    .promo-glass-card li {
+        color: #433c68;
+    }
+
+    .promo-glass-card .text-muted {
+        color: #6c678f !important;
+    }
+
+    /* Hero Styles */
+    .hero-shell {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(125deg, #2d1b73 0%, var(--brand-indigo) 45%, var(--brand-purple) 100%);
+        color: var(--hero-text);
+        min-height: min(78vh, 1080px);
+    }
+
+    .hero-noise {
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.18), transparent 34%),
+            radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.14), transparent 32%);
+        pointer-events: none;
+    }
+
+    .hero-container {
+        position: relative;
+        z-index: 1;
+        max-width: 1600px;
+    }
+
+    .hero-glass {
+        background: var(--hero-glass-bg);
+        border: 1px solid var(--hero-glass-border);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 28px;
+        padding: clamp(1.5rem, 2.8vw, 3rem);
+        box-shadow: 0 22px 48px rgba(20, 13, 56, 0.28);
+    }
+
+    .hero-kicker {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: rgba(255, 255, 255, 0.86);
+        font-weight: 600;
+    }
+
+    .hero-title {
+        font-weight: 800;
+        line-height: 1.1;
+        font-size: clamp(2rem, 4.1vw, 4.35rem);
+        text-wrap: balance;
+    }
+
+    .hero-copy {
+        font-size: clamp(1rem, 1.35vw, 1.3rem);
+        line-height: 1.7;
+        max-width: 42ch;
+        color: rgba(255, 255, 255, 0.92);
+    }
+
+    .hero-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.85rem 1.8rem;
+        border-radius: 999px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .hero-cta-solid {
+        background: #ffffff;
+        color: #2f1e7d;
+        box-shadow: 0 10px 30px rgba(16, 11, 42, 0.28);
+    }
+
+    .hero-cta-outline {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        color: #ffffff;
+    }
+
+    .hero-cta:hover {
+        transform: translateY(-2px);
+    }
+
+    .hero-cta-solid:hover {
+        color: #221560;
+    }
+
+    .hero-cta-outline:hover {
+        background: #ffffff;
+        color: #2f1e7d;
+    }
+
+    .hero-image-frame {
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 25px 55px rgba(17, 9, 51, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        min-height: 440px;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-image {
+        width: 100%;
+        height: 100%;
+        min-height: 440px;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* Section Styles */
     .min-vh-50 {
         min-height: 50vh;
     }
@@ -658,6 +831,24 @@
 
     /* Responsive adjustments */
     @@media (max-width: 768px) {
+        .hero-shell {
+            min-height: auto;
+        }
+
+        .hero-glass {
+            border-radius: 20px;
+            padding: 1.25rem;
+        }
+
+        .hero-image-frame,
+        .hero-image {
+            min-height: 320px;
+        }
+
+        .hero-cta {
+            width: 100%;
+        }
+
         .nav-link {
             margin: 5px 0;
             padding: 8px 0;

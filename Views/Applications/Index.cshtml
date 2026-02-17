@@ -1,0 +1,61 @@
+@model IEnumerable<ExuberantPathfinders.Web.Models.Application>
+
+@{
+    ViewData["Title"] = "My Applications";
+}
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0">My Applications</h1>
+            <a href="@Url.Action("Create", "Applications")" class="btn btn-primary btn-sm">New Application</a>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="alert alert-info mb-0">
+                You have not submitted any applications yet.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Reference</th>
+                            <th>Title</th>
+                            <th>Program</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var app in Model)
+                        {
+                            <tr>
+                                <td>@(string.IsNullOrWhiteSpace(app.SubmissionReference) ? "-" : app.SubmissionReference)</td>
+                                <td>@app.Title</td>
+                                <td>@(app.Program?.Name ?? "N/A")</td>
+                                <td>@app.RequestedAmount.ToString("C")</td>
+                                <td><span class="badge bg-secondary">@app.Status</span></td>
+                                <td>@app.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd")</td>
+                                <td class="text-end">
+                                    @if (app.Status == ExuberantPathfinders.Web.Models.ApplicationStatus.Draft)
+                                    {
+                                        <form asp-action="Submit" asp-controller="Applications" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@app.Id" />
+                                            <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</section>
