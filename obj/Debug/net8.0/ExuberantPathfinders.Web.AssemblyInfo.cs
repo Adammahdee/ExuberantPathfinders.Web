@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ExuberantPathfinders.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a952cb003b4658e55a91e41d4d9a596e80631253")]
 [assembly: System.Reflection.AssemblyProductAttribute("ExuberantPathfinders.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ExuberantPathfinders.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

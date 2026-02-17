@@ -6,29 +6,69 @@
     ViewData["Title"] = "Exuberant Pathfinders - Youth Advancement Initiative";
 }
 
-<!-- Header/Navigation -->
-<div class="bg-white border-bottom sticky-top" style="z-index: 900;">
-    <div class="container py-2">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="h3 mb-0" style="color: #667eea; font-weight: 700;">
-                    <i class="fas fa-lightbulb me-2"></i>EXUBERANT PATHFINDERS
-                </h1>
-                <p class="text-muted small mb-0">Youth Advancement Initiative</p>
-            </div>
-            <div class="col-md-4 text-end">
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-white bg-white sticky-top border-bottom" style="z-index: 900;">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#" style="color: #667eea; font-size: 1.3rem;">
+            <i class="fas fa-lightbulb me-2"></i>EXUBERANT PATHFINDERS
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link fw-500" href="#home">HOME</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-500" href="#promo">PROMO</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-500" href="#about">ABOUT</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-500" href="#testimonials">TESTIMONIALS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-500" href="#contact">CONTACT</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle fw-500" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown">
+                        MORE
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="moreDropdown">
+                        <li><a class="dropdown-item" href="#services">Services</a></li>
+                        <li><a class="dropdown-item" href="#partners">Our Partners</a></li>
+                        <li><a class="dropdown-item" href="#team">Leadership Team</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Terms & Conditions</a></li>
+                        <li><a class="dropdown-item" href="#">Privacy Policy</a></li>
+                    </ul>
+                </li>
                 @if (!SignInManager.IsSignedIn(User))
                 {
-                    <a href="@Url.Action("Login", "Account")" class="btn btn-sm btn-outline-primary me-2">Sign In</a>
-                    <a href="@Url.Action("Register", "Account")" class="btn btn-sm btn-primary">Register</a>
+                    <li class="nav-item ms-3">
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-outline-primary btn-sm me-2">Sign In</a>
+                        <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-sm">Register</a>
+                    </li>
                 }
-            </div>
+                else
+                {
+                    <li class="nav-item ms-3">
+                        <span class="text-muted me-2">Welcome, @User.Identity?.Name</span>
+                        <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+                        </form>
+                    </li>
+                }
+            </ul>
         </div>
     </div>
-</div>
+</nav>
 
 <!-- Hero Section -->
-<section class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+<section id="home" class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
     <div class="container">
         <div class="row align-items-center g-4">
             <div class="col-lg-6">
@@ -68,8 +108,54 @@
     </div>
 </section>
 
-<!-- Mission & Vision Section -->
-<section class="py-5 bg-light">
+<!-- Promo Section -->
+<section id="promo" class="py-5" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <h2 class="display-5 fw-bold mb-4">
+                    <i class="fas fa-star me-2"></i>Featured Initiative
+                </h2>
+                <h3 class="mb-3">Youth Skills & Entrepreneurship Program 2026</h3>
+                <p class="lead mb-4">
+                    Transform your future through our comprehensive skills development and entrepreneurship program. Learn in-demand skills, get mentorship, and access startup funding.
+                </p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="@Url.Action("Index", "Applications")" class="btn btn-light btn-lg fw-bold">
+                        <i class="fas fa-briefcase me-2"></i>Apply Now
+                    </a>
+                    <a href="#services" class="btn btn-outline-light btn-lg fw-bold">
+                        <i class="fas fa-arrow-down me-2"></i>Learn More
+                    </a>
+                </div>
+                <p class="small text-white-50 mt-3">
+                    <i class="fas fa-calendar me-1"></i> Applications open 24/7 | <i class="fas fa-target me-1"></i> 500+ spots available
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg p-4" style="background: rgba(255,255,255,0.95);">
+                    <div class="text-center mb-4">
+                        <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                    </div>
+                    <h5 class="card-title text-center fw-bold" style="color: #667eea;">Program Highlights</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Skills Training (12 weeks)</li>
+                        <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Mentorship from Industry Experts</li>
+                        <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Startup Financing Up to ₦5M</li>
+                        <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Job Placement Assistance</li>
+                        <li><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Lifetime Network Access</li>
+                    </ul>
+                    <a href="#donation-section" class="btn btn-primary w-100 mt-4">Support This Program</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-5 bg-light">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -126,8 +212,8 @@
     </div>
 </section>
 
-<!-- What We Do Section -->
-<section class="py-5">
+<!-- What We Do / Services Section -->
+<section id="services" class="py-5">
     <div class="container">
         <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">WHAT WE DO</h2>
         
@@ -195,7 +281,7 @@
 </section>
 
 <!-- Testimonials Section -->
-<section class="py-5 bg-light">
+<section id="testimonials" class="py-5 bg-light">
     <div class="container">
         <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">TESTIMONIALS</h2>
         
@@ -275,7 +361,7 @@
                 
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <a href="@Url.Action("CreateDonation", "Donations")" class="btn btn-primary btn-lg mt-4">
+                    <a href="@Url.Action("Index", "Donations")" class="btn btn-primary btn-lg mt-4">
                         <i class="fas fa-donate me-2"></i>DONATE NOW
                     </a>
                 }
@@ -299,7 +385,7 @@
 </section>
 
 <!-- Team/Leadership Section -->
-<section class="py-5 bg-light">
+<section id="team" class="py-5 bg-light">
     <div class="container">
         <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">OUR LEADERSHIP TEAM</h2>
         
@@ -337,8 +423,52 @@
     </div>
 </section>
 
+<!-- Partners Section -->
+<section id="partners" class="py-5">
+    <div class="container">
+        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">OUR BENEFACTORS AND PARTNERS</h2>
+        
+        <p class="lead mb-5">
+            We work with leading organizations, government agencies, and international bodies committed to youth development and community transformation in Nigeria.
+        </p>
+        
+        <div class="row g-3 mb-5">
+            <div class="col-md-6 col-lg-3 text-center">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <h6 class="fw-bold mb-0" style="color: #667eea;">Government Agencies</h6>
+                    <p class="small text-muted mt-2">Federal entities and ministry partnerships</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <h6 class="fw-bold mb-0" style="color: #667eea;">International Organizations</h6>
+                    <p class="small text-muted mt-2">UN bodies, UNDP, UNICEF, WHO</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <h6 class="fw-bold mb-0" style="color: #667eea;">NGOs & Civil Society</h6>
+                    <p class="small text-muted mt-2">Community development networks</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <h6 class="fw-bold mb-0" style="color: #667eea;">Private Sector</h6>
+                    <p class="small text-muted mt-2">Corporate partners and sponsors</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-info">
+            <i class="fas fa-handshake me-2" style="color: #667eea;"></i>
+            <strong>Partner With Us:</strong> If your organization shares our vision of youth empowerment, we'd love to collaborate. 
+            <a href="@Url.Action("Index", "Home")" class="alert-link">Get in touch with our partnerships team.</a>
+        </div>
+    </div>
+</section>
+
 <!-- Contact Section -->
-<section class="py-5">
+<section id="contact" class="py-5">
     <div class="container">
         <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">CONTACT US</h2>
         
@@ -386,6 +516,59 @@
 </section>
 
 <style>
+    /* Navigation Styles */
+    .navbar {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .navbar-brand {
+        font-size: 1.3rem !important;
+        color: #667eea !important;
+    }
+
+    .nav-link {
+        color: #333 !important;
+        font-weight: 500;
+        font-size: 0.95rem;
+        margin: 0 8px;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #667eea !important;
+    }
+
+    .nav-link:hover::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: #667eea;
+        position: relative;
+        bottom: -5px;
+    }
+
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 8px;
+    }
+
+    .dropdown-item {
+        color: #333;
+        transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f0f4ff;
+        color: #667eea;
+    }
+
+    .fw-500 {
+        font-weight: 500;
+    }
+
+    /* Section Styles */
     .hero-section {
         min-height: 500px;
     }
@@ -441,7 +624,7 @@
         100% { background-position: 0% 50%; }
     }
 
-    /* New styles for reference site layout */
+    /* Card Styles */
     .card {
         transition: all 0.3s ease;
     }
@@ -471,6 +654,18 @@
 
     .alert-info strong {
         color: #667eea;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .nav-link {
+            margin: 5px 0;
+            padding: 8px 0;
+        }
+
+        section {
+            padding: 3rem 0 !important;
+        }
     }
 </style>
 

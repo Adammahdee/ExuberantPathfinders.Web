@@ -105,3 +105,4 @@ C:\Users\Admin\ExuberantPathfinders.Web\obj\Debug\net8.0\refint\ExuberantPathfin
 C:\Users\Admin\ExuberantPathfinders.Web\obj\Debug\net8.0\ExuberantPathfinders.Web.pdb
 C:\Users\Admin\ExuberantPathfinders.Web\obj\Debug\net8.0\ExuberantPathfinders.Web.genruntimeconfig.cache
 C:\Users\Admin\ExuberantPathfinders.Web\obj\Debug\net8.0\ref\ExuberantPathfinders.Web.dll
+C:\Users\Admin\ExuberantPathfinders.Web\obj\Debug\net8.0\ExuberantPathfinders.Web.sourcelink.json
