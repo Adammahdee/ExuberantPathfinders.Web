@@ -3,146 +3,232 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ExuberantPathfinders</title>
+    <title>@ViewData["Title"] - Exuberant Admin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
         body {
-            background-color: #f8f9fa;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, #404858 0%, #151923 56%, #11141b 100%);
+            color: #e8edf7;
         }
-        
-        .navbar {
-            background: white;
-            border-bottom: 1px solid #dee2e6;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+        .admin-shell {
+            margin: 1.25rem;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.11);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: linear-gradient(120deg, rgba(24, 30, 44, 0.85) 0%, rgba(18, 22, 34, 0.9) 100%);
+            box-shadow: 0 25px 60px rgba(4, 8, 17, 0.45);
         }
-        
+
+        .topbar {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            padding: 0.8rem 1.2rem;
+        }
+
+        .brand {
+            color: #f4f6fc;
+            font-weight: 700;
+            font-size: 1.4rem;
+            text-decoration: none;
+        }
+
+        .brand i {
+            color: #39d5c6;
+        }
+
+        .admin-user-chip {
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.06);
+            border-radius: 999px;
+            padding: 0.35rem 0.8rem;
+            color: #dce4f7;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
         .sidebar {
-            background: white;
-            border-right: 1px solid #dee2e6;
-            min-height: calc(100vh - 70px);
-            padding: 20px 0;
+            border-right: 1px solid rgba(255,255,255,0.08);
+            background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
+            min-height: calc(100vh - 88px);
+            padding: 1rem 0.75rem;
         }
-        
+
         .sidebar-menu {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-        
-        .sidebar-menu li {
-            margin: 0;
+
+        .panel-title {
+            color: #aebddb;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            font-size: 0.72rem;
+            margin: 0.25rem 0.75rem 0.75rem;
         }
-        
+
         .sidebar-menu a {
-            display: block;
-            padding: 12px 20px;
-            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            color: #c8d2e8;
             text-decoration: none;
-            transition: all 0.3s;
+            border-radius: 10px;
+            padding: 0.7rem 0.9rem;
+            margin-bottom: 0.25rem;
+            transition: all 0.2s ease;
         }
-        
+
         .sidebar-menu a:hover {
-            background-color: #f0f0f0;
-            color: #0d6efd;
-            padding-left: 25px;
+            background: rgba(68, 224, 206, 0.12);
+            color: #f0f5ff;
         }
-        
+
         .sidebar-menu a.active {
-            background-color: #e7f1ff;
-            color: #0d6efd;
-            border-left: 3px solid #0d6efd;
-            padding-left: 17px;
+            background: linear-gradient(90deg, rgba(59, 216, 199, 0.24) 0%, rgba(133, 97, 255, 0.2) 100%);
+            color: #ffffff;
+            border: 1px solid rgba(72, 231, 209, 0.34);
         }
-        
+
         .main-content {
-            padding: 20px;
+            padding: 1.25rem;
+            color: #dbe5f7;
         }
-        
-        .brand {
-            font-weight: 700;
-            color: #0d6efd;
-            font-size: 1.3rem;
+
+        .main-content .card,
+        .main-content .table,
+        .main-content .alert,
+        .main-content .list-group-item {
+            color: #dbe5f7;
+            background-color: #1a2231;
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .main-content .table-light,
+        .main-content .card-header.bg-white,
+        .main-content .card-footer.bg-white {
+            background-color: #202a3c !important;
+            color: #dbe5f7;
+            border-color: rgba(255,255,255,0.08) !important;
+        }
+
+        .main-content .text-muted,
+        .main-content small.text-muted {
+            color: #9fb0ce !important;
+        }
+
+        .main-content .form-control,
+        .main-content .form-select {
+            background: #121a28;
+            border-color: rgba(255,255,255,0.1);
+            color: #e6edf9;
+        }
+
+        .main-content .form-control::placeholder {
+            color: #8b9ab7;
+        }
+
+        .main-content .form-control:focus,
+        .main-content .form-select:focus {
+            border-color: #38d5c6;
+            box-shadow: 0 0 0 0.2rem rgba(56, 213, 198, 0.2);
+        }
+
+        @@media (max-width: 767px) {
+            .admin-shell {
+                margin: 0.5rem;
+                border-radius: 14px;
+            }
+
+            .sidebar {
+                min-height: auto;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <a class="navbar-brand brand" href="/">
-                <i class="fas fa-lightbulb"></i> ExuberantPathfinders
+    <div class="admin-shell">
+        <nav class="topbar d-flex justify-content-between align-items-center">
+            <a class="brand" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                <i class="fas fa-lightbulb me-2"></i>Admin Dashboard
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle"></i> <span id="userName">Admin</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form asp-action="Logout" asp-controller="Account" method="post" style="display:inline;">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="dropdown-item">Logout</button>
-                                </form>
-                            </li>
-                        </ul>
+
+            <div class="dropdown">
+                <a class="admin-user-chip dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle"></i>
+                    <span>@(User.Identity?.Name ?? "Admin")</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Main Site</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form asp-area="" asp-action="Logout" asp-controller="Account" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="dropdown-item">Logout</button>
+                        </form>
                     </li>
                 </ul>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <!-- Layout with Sidebar -->
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-2 sidebar d-none d-md-block">
-                <ul class="sidebar-menu">
-                    <li>
-                        <a href="@Url.Action("Index", "Dashboard")" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
-                            <i class="fas fa-home"></i> Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Applications", "Dashboard")" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Applications" ? "active" : "")">
-                            <i class="fas fa-file-alt"></i> Applications
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Users", "Dashboard")" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")">
-                            <i class="fas fa-users"></i> Users
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Reports", "Dashboard")" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Reports" ? "active" : "")">
-                            <i class="fas fa-chart-bar"></i> Reports
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="container-fluid">
+            <div class="row g-0">
+                <nav class="col-12 col-md-3 col-lg-2 sidebar">
+                    <p class="panel-title">Navigation Panel</p>
+                    <ul class="sidebar-menu">
+                        <li>
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                                <i class="fas fa-gauge-high"></i> Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Applications" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Applications" ? "active" : "")">
+                                <i class="fas fa-id-card"></i> Applicants
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Grants" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Grants" ? "active" : "")">
+                                <i class="fas fa-award"></i> Grants
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Funds" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Funds" ? "active" : "")">
+                                <i class="fas fa-wallet"></i> Funds
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Reports" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Reports" ? "active" : "")">
+                                <i class="fas fa-chart-line"></i> Reports
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Users" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")">
+                                <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Logs" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Logs" ? "active" : "")">
+                                <i class="fas fa-list-check"></i> Activity Log
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
-            <!-- Main Content -->
-            <main role="main" class="col-md-10 main-content">
-                @RenderBody()
-            </main>
+                <main class="col-md-9 col-lg-10 main-content">
+                    @RenderBody()
+                </main>
+            </div>
         </div>
+
     </div>
-
-    <!-- Footer -->
-    <footer class="py-4 bg-light border-top mt-5">
-        <div class="container-fluid text-center">
-            <small class="text-muted">
-                &copy; 2026 ExuberantPathfinders. All rights reserved.
-            </small>
-        </div>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

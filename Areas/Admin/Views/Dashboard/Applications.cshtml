@@ -1,4 +1,4 @@
-@model List<ExuberantPathfinders.Web.Models.Application>
+@model ExuberantPathfinders.Web.Areas.Admin.ViewModels.ApplicantsListViewModel
 @using ExuberantPathfinders.Web.Models
 
 @{
@@ -28,15 +28,58 @@
         </div>
     }
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h1 class="h3 mb-1">Application Management</h1>
             <p class="text-muted mb-0">Review submissions and update statuses.</p>
         </div>
-        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">Back to Dashboard</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to Dashboard</a>
     </div>
 
-    @if (Model.Any())
+    <form method="get" asp-action="Applications" class="row g-2 mb-3">
+        <div class="col-md-6 col-lg-5">
+            <input type="text" name="search" value="@Model.Search" class="form-control" placeholder="Search by reference, title, applicant, email, or program" />
+        </div>
+        <div class="col-md-3 col-lg-2">
+            <select name="status" class="form-select">
+                <option value="">All Statuses</option>
+                @foreach (var statusValue in Enum.GetValues<ApplicationStatus>())
+                {
+                    if (Model.Status == statusValue)
+                    {
+                        <option value="@statusValue" selected>@statusValue</option>
+                    }
+                    else
+                    {
+                        <option value="@statusValue">@statusValue</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-2 col-lg-2">
+            <select name="pageSize" class="form-select">
+                @foreach (var size in new[] { 5, 10, 20, 50 })
+                {
+                    if (Model.PageSize == size)
+                    {
+                        <option value="@size" selected>@size / page</option>
+                    }
+                    else
+                    {
+                        <option value="@size">@size / page</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-1 col-lg-1 d-grid">
+            <button type="submit" class="btn btn-primary">Go</button>
+        </div>
+        <div class="col-md-12 col-lg-2 d-grid">
+            <a asp-action="Applications" class="btn btn-outline-light">Reset</a>
+        </div>
+    </form>
+
+    @if (Model.Items.Any())
     {
         <div class="table-responsive">
             <table class="table table-hover align-middle">
@@ -52,7 +95,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var app in Model)
+                    @foreach (var app in Model.Items)
                     {
                         var statusClass = app.Status switch
                         {
@@ -101,12 +144,17 @@
                                     <input type="hidden" name="id" value="@app.Id" />
                                     <div class="col-5">
                                         <select name="status" class="form-select form-select-sm">
-                                            <option value="@ApplicationStatus.Draft">Draft</option>
-                                            <option value="@ApplicationStatus.Submitted">Submitted</option>
-                                            <option value="@ApplicationStatus.UnderReview">Under Review</option>
-                                            <option value="@ApplicationStatus.Approved">Approved</option>
-                                            <option value="@ApplicationStatus.Rejected">Rejected</option>
-                                            <option value="@ApplicationStatus.OnHold">On Hold</option>
+                                            @foreach (var statusValue in Enum.GetValues<ApplicationStatus>())
+                                            {
+                                                if (app.Status == statusValue)
+                                                {
+                                                    <option value="@statusValue" selected>@statusValue</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@statusValue">@statusValue</option>
+                                                }
+                                            }
                                         </select>
                                     </div>
                                     <div class="col-5">
@@ -122,11 +170,31 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <small class="text-muted">Showing page @Model.Page of @Model.TotalPages (@Model.TotalCount total records)</small>
+            <nav aria-label="Application pagination">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item @(Model.Page <= 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="Applications" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-status="@Model.Status">Previous</a>
+                    </li>
+                    @for (var p = 1; p <= Model.TotalPages; p++)
+                    {
+                        <li class="page-item @(p == Model.Page ? "active" : "")">
+                            <a class="page-link" asp-action="Applications" asp-route-page="@p" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-status="@Model.Status">@p</a>
+                        </li>
+                    }
+                    <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="Applications" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-status="@Model.Status">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     }
     else
     {
         <div class="alert alert-info mb-0">
-            No applications found.
+            No applications found for your current filter.
         </div>
     }
 </div>

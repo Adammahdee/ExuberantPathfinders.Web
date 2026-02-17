@@ -1,4 +1,4 @@
-Give@model List<ExuberantPathfinders.Web.Models.ApplicationUser>
+@model ExuberantPathfinders.Web.Areas.Admin.ViewModels.UsersListViewModel
 
 @{
     ViewData["Title"] = "Manage Users";
@@ -20,15 +20,70 @@ Give@model List<ExuberantPathfinders.Web.Models.ApplicationUser>
         </div>
     }
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h1 class="h3 mb-1">User Management</h1>
             <p class="text-muted mb-0">Activate or deactivate registered accounts.</p>
         </div>
-        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">Back to Dashboard</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to Dashboard</a>
     </div>
 
-    @if (Model.Any())
+    <form method="get" asp-action="Users" class="row g-2 mb-3">
+        <div class="col-md-6 col-lg-5">
+            <input type="text" name="search" value="@Model.Search" class="form-control" placeholder="Search by name or email" />
+        </div>
+        <div class="col-md-3 col-lg-2">
+            <select name="isActive" class="form-select">
+                @if (!Model.IsActive.HasValue)
+                {
+                    <option value="" selected>All Statuses</option>
+                }
+                else
+                {
+                    <option value="">All Statuses</option>
+                }
+                @if (Model.IsActive == true)
+                {
+                    <option value="true" selected>Active</option>
+                }
+                else
+                {
+                    <option value="true">Active</option>
+                }
+                @if (Model.IsActive == false)
+                {
+                    <option value="false" selected>Inactive</option>
+                }
+                else
+                {
+                    <option value="false">Inactive</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2 col-lg-2">
+            <select name="pageSize" class="form-select">
+                @foreach (var size in new[] { 5, 10, 20, 50 })
+                {
+                    if (Model.PageSize == size)
+                    {
+                        <option value="@size" selected>@size / page</option>
+                    }
+                    else
+                    {
+                        <option value="@size">@size / page</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-1 col-lg-1 d-grid">
+            <button type="submit" class="btn btn-primary">Go</button>
+        </div>
+        <div class="col-md-12 col-lg-2 d-grid">
+            <a asp-action="Users" class="btn btn-outline-light">Reset</a>
+        </div>
+    </form>
+
+    @if (Model.Items.Any())
     {
         <div class="table-responsive">
             <table class="table table-hover align-middle">
@@ -42,7 +97,7 @@ Give@model List<ExuberantPathfinders.Web.Models.ApplicationUser>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var user in Model)
+                    @foreach (var user in Model.Items)
                     {
                         <tr>
                             <td><strong>@user.FirstName @user.LastName</strong></td>
@@ -72,11 +127,31 @@ Give@model List<ExuberantPathfinders.Web.Models.ApplicationUser>
                 </tbody>
             </table>
         </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <small class="text-muted">Showing page @Model.Page of @Model.TotalPages (@Model.TotalCount total records)</small>
+            <nav aria-label="Users pagination">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item @(Model.Page <= 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="Users" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-isActive="@Model.IsActive">Previous</a>
+                    </li>
+                    @for (var p = 1; p <= Model.TotalPages; p++)
+                    {
+                        <li class="page-item @(p == Model.Page ? "active" : "")">
+                            <a class="page-link" asp-action="Users" asp-route-page="@p" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-isActive="@Model.IsActive">@p</a>
+                        </li>
+                    }
+                    <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="Users" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-isActive="@Model.IsActive">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     }
     else
     {
         <div class="alert alert-info mb-0">
-            No users found.
+            No users found for your current filter.
         </div>
     }
 </div>

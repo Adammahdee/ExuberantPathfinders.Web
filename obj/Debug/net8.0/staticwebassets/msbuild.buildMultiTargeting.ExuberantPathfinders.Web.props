@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\ExuberantPathfinders.Web.props" />
-</Project>

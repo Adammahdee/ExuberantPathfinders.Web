@@ -4,7 +4,7 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="container-fluid mt-4 admin-dashboard">
+<div class="container-fluid mt-2 admin-page">
     @if (TempData["AdminSuccess"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -19,186 +19,168 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
-    @if (TempData["AdminInfo"] != null)
-    {
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-            @TempData["AdminInfo"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
 
-    <div class="dash-hero p-4 p-lg-5 mb-4">
-        <div class="row align-items-center g-3">
-            <div class="col-lg-8">
-                <p class="dash-kicker mb-2">Admin Center</p>
-                <h1 class="h2 mb-2">Platform Operations Dashboard</h1>
-                <p class="mb-0 text-light-emphasis">Monitor applications, manage users, and act on platform workflows from one place.</p>
+    <div class="row g-3 mb-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card metric-teal">
+                <p class="small mb-1">Total Applicants</p>
+                <h3 class="mb-0">@Model.TotalApplications.ToString("N0")</h3>
             </div>
-            <div class="col-lg-4 text-lg-end">
-                <a href="@Url.Action("Applications")" class="btn btn-light rounded-pill px-4 me-2 mb-2 mb-lg-0">Review Queue</a>
-                <a href="@Url.Action("Reports")" class="btn btn-outline-light rounded-pill px-4">Reports</a>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card metric-purple">
+                <p class="small mb-1">Grants Awarded</p>
+                <h3 class="mb-0">&#8358;@Model.TotalDonations.ToString("N0")</h3>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card metric-orange">
+                <p class="small mb-1">Pending Applications</p>
+                <h3 class="mb-0">@Model.PendingApplications.ToString("N0")</h3>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card metric-blue">
+                <p class="small mb-1">Active Campaigns</p>
+                <h3 class="mb-0">@Model.ActiveCampaigns.ToString("N0")</h3>
             </div>
         </div>
     </div>
 
     <div class="row g-3 mb-4">
-        <div class="col-md-6 col-xl-3">
-            <div class="stat-card">
-                <div class="stat-icon bg-primary-subtle text-primary"><i class="fas fa-file-alt"></i></div>
-                <p class="text-muted small mb-1">Total Applications</p>
-                <h3 class="mb-0">@Model.TotalApplications</h3>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-3">
-            <div class="stat-card">
-                <div class="stat-icon bg-warning-subtle text-warning"><i class="fas fa-hourglass-half"></i></div>
-                <p class="text-muted small mb-1">Under Review</p>
-                <h3 class="mb-0">@Model.PendingApplications</h3>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-3">
-            <div class="stat-card">
-                <div class="stat-icon bg-success-subtle text-success"><i class="fas fa-donate"></i></div>
-                <p class="text-muted small mb-1">Completed Donations</p>
-                <h3 class="mb-0">&#8358;@Model.TotalDonations.ToString("N2")</h3>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-3">
-            <div class="stat-card">
-                <div class="stat-icon bg-info-subtle text-info"><i class="fas fa-users"></i></div>
-                <p class="text-muted small mb-1">Total Users</p>
-                <h3 class="mb-0">@Model.TotalUsers</h3>
-                <small class="text-muted">Active campaigns: @Model.ActiveCampaigns</small>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4">
-        <div class="col-xl-7">
+        <div class="col-lg-7">
             <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-0 pt-4 pb-0">
-                    <h5 class="mb-1">Recent Applications</h5>
-                    <p class="text-muted small mb-0">Latest submissions requiring attention.</p>
+                <div class="card-header bg-white border-0">
+                    <h5 class="mb-0">Recent Applications</h5>
                 </div>
-                <div class="card-body">
-                    @if (Model.RecentApplications.Any())
-                    {
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>Reference</th>
-                                        <th>Applicant</th>
-                                        <th>Program</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Reference</th>
+                                    <th>Applicant</th>
+                                    <th>Status</th>
+                                    <th>Program</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.RecentApplications.Any())
+                                {
                                     @foreach (var app in Model.RecentApplications)
                                     {
                                         <tr>
                                             <td><code>@(string.IsNullOrWhiteSpace(app.SubmissionReference) ? "-" : app.SubmissionReference)</code></td>
                                             <td>@app.Applicant?.FirstName @app.Applicant?.LastName</td>
-                                            <td>@(app.Program?.Name ?? "N/A")</td>
                                             <td><span class="badge bg-secondary">@app.Status</span></td>
+                                            <td>@(app.Program?.Name ?? "N/A")</td>
                                         </tr>
                                     }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted mb-0">No applications yet.</p>
-                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-4">No recent applications.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="card-footer bg-white border-0 pb-4">
-                    <a href="@Url.Action("Applications")" class="btn btn-outline-primary rounded-pill px-4">Open Application Manager</a>
+                <div class="card-footer bg-white border-0">
+                    <a asp-action="Applications" class="btn btn-outline-primary btn-sm">Open Applicants Module</a>
                 </div>
             </div>
         </div>
-
-        <div class="col-xl-5">
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white border-0 pt-4 pb-0">
-                    <h5 class="mb-1">Recent Users</h5>
-                    <p class="text-muted small mb-0">Newest registered accounts.</p>
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0">
+                    <h5 class="mb-0">Modules</h5>
                 </div>
                 <div class="card-body">
-                    @if (Model.RecentUsers.Any())
-                    {
-                        <ul class="list-group list-group-flush">
-                            @foreach (var user in Model.RecentUsers)
-                            {
-                                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <div class="fw-semibold">@user.FirstName @user.LastName</div>
-                                        <small class="text-muted">@user.Email</small>
-                                    </div>
-                                    <span class="badge @(user.IsActive ? "bg-success" : "bg-danger")">@(user.IsActive ? "Active" : "Inactive")</span>
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p class="text-muted mb-0">No users found.</p>
-                    }
-                </div>
-                <div class="card-footer bg-white border-0 pb-4">
-                    <a href="@Url.Action("Users")" class="btn btn-outline-dark rounded-pill px-4">Manage Users</a>
-                </div>
-            </div>
-
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h6 class="mb-3">Quick Actions</h6>
                     <div class="d-grid gap-2">
-                        <a href="@Url.Action("Applications")" class="btn btn-primary">Review Applications</a>
-                        <a href="@Url.Action("Users")" class="btn btn-info text-white">User Administration</a>
-                        <a href="@Url.Action("Reports")" class="btn btn-warning">View Reports</a>
-                        <form asp-action="Logout" asp-controller="Account" method="post" class="d-grid">
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-secondary">Logout</button>
-                        </form>
+                        <a asp-action="Applications" class="btn btn-primary"><i class="fas fa-id-card me-1"></i> Applicants</a>
+                        <a asp-action="Grants" class="btn btn-success"><i class="fas fa-award me-1"></i> Grants</a>
+                        <a asp-action="Funds" class="btn btn-info text-white"><i class="fas fa-wallet me-1"></i> Funds</a>
+                        <a asp-action="Reports" class="btn btn-warning"><i class="fas fa-chart-line me-1"></i> Reports</a>
+                        <a asp-action="Users" class="btn btn-secondary"><i class="fas fa-users me-1"></i> Users</a>
+                        <a asp-action="Logs" class="btn btn-dark"><i class="fas fa-list-check me-1"></i> Activity Log</a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+            <h5 class="mb-0">Recent Activity Log</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Resource</th>
+                            <th>Resource ID</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.RecentAuditLogs.Any())
+                        {
+                            @foreach (var log in Model.RecentAuditLogs)
+                            {
+                                <tr>
+                                    <td>@log.Id</td>
+                                    <td>@(log.User?.Email ?? "System")</td>
+                                    <td>@log.Action</td>
+                                    <td>@log.EntityType</td>
+                                    <td>@log.EntityId</td>
+                                    <td>@log.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">No audit entries yet.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .admin-dashboard .dash-hero {
-        background: linear-gradient(120deg, #2f1e7d 0%, #4f46e5 48%, #7c3aed 100%);
-        border-radius: 18px;
-        color: #fff;
-        box-shadow: 0 18px 44px rgba(37, 24, 96, 0.25);
-    }
-
-    .admin-dashboard .dash-kicker {
-        text-transform: uppercase;
-        letter-spacing: 0.14em;
-        font-size: 0.75rem;
-        opacity: 0.8;
-        margin: 0;
-    }
-
-    .admin-dashboard .stat-card {
-        background: #fff;
+    .admin-page .metric-card {
         border-radius: 14px;
         padding: 1rem;
-        box-shadow: 0 6px 18px rgba(28, 22, 72, 0.08);
-        height: 100%;
+        box-shadow: 0 10px 22px rgba(6, 8, 16, 0.25);
+        border: 1px solid rgba(255,255,255,0.12);
     }
 
-    .admin-dashboard .stat-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 0.75rem;
+    .admin-page .metric-teal {
+        background: linear-gradient(135deg, #29d7c6 0%, #3bcac5 100%);
+        color: #072725;
+    }
+
+    .admin-page .metric-purple {
+        background: linear-gradient(135deg, #8f69ff 0%, #b47cff 100%);
+        color: #1f1237;
+    }
+
+    .admin-page .metric-orange {
+        background: linear-gradient(135deg, #ffac53 0%, #ff9f4a 100%);
+        color: #3a2103;
+    }
+
+    .admin-page .metric-blue {
+        background: linear-gradient(135deg, #49a9ff 0%, #5dc0ff 100%);
+        color: #07243f;
     }
 </style>

@@ -1,0 +1,121 @@
+@model ExuberantPathfinders.Web.Areas.Admin.ViewModels.LogsListViewModel
+@using ExuberantPathfinders.Web.Models
+
+@{
+    ViewData["Title"] = "Activity Logs";
+}
+
+<div class="container-fluid mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Activity Logs</h3>
+        <small class="text-muted">@Model.TotalCount total entries</small>
+    </div>
+
+    <form method="get" asp-action="Logs" class="row g-2 mb-3">
+        <div class="col-md-5">
+            <input type="text" name="search" value="@Model.Search" class="form-control" placeholder="Search by user, entity, or payload text" />
+        </div>
+        <div class="col-md-2">
+            <select name="auditAction" class="form-select">
+                <option value="">All Actions</option>
+                @foreach (var actionValue in Enum.GetValues<AuditAction>())
+                {
+                    if (Model.AuditAction == actionValue)
+                    {
+                        <option value="@actionValue" selected>@actionValue</option>
+                    }
+                    else
+                    {
+                        <option value="@actionValue">@actionValue</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="text" name="entityType" value="@Model.EntityType" class="form-control" placeholder="Entity type" />
+        </div>
+        <div class="col-md-2">
+            <select name="pageSize" class="form-select">
+                @foreach (var size in new[] { 10, 20, 50, 100 })
+                {
+                    if (Model.PageSize == size)
+                    {
+                        <option value="@size" selected>@size / page</option>
+                    }
+                    else
+                    {
+                        <option value="@size">@size / page</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-1 d-grid">
+            <button type="submit" class="btn btn-primary">Go</button>
+        </div>
+    </form>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Entity</th>
+                            <th>Entity ID</th>
+                            <th>IP</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Items.Any())
+                        {
+                            @foreach (var log in Model.Items)
+                            {
+                                <tr>
+                                    <td>@log.Id</td>
+                                    <td>@(log.User?.Email ?? "System")</td>
+                                    <td><span class="badge bg-secondary">@log.Action</span></td>
+                                    <td>@log.EntityType</td>
+                                    <td>@log.EntityId</td>
+                                    <td>@(string.IsNullOrWhiteSpace(log.IPAddress) ? "-" : log.IPAddress)</td>
+                                    <td>@log.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">No logs available for your current filter.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="d-flex justify-content-end mt-3">
+            <nav aria-label="Logs pagination">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item @(Model.Page <= 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="Logs" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-auditAction="@Model.AuditAction" asp-route-entityType="@Model.EntityType">Previous</a>
+                    </li>
+                    @for (var p = 1; p <= Model.TotalPages; p++)
+                    {
+                        <li class="page-item @(p == Model.Page ? "active" : "")">
+                            <a class="page-link" asp-action="Logs" asp-route-page="@p" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-auditAction="@Model.AuditAction" asp-route-entityType="@Model.EntityType">@p</a>
+                        </li>
+                    }
+                    <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="Logs" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-auditAction="@Model.AuditAction" asp-route-entityType="@Model.EntityType">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+</div>

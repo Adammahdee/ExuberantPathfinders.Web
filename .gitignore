@@ -1,0 +1,22 @@
+# Build results
+artifacts/
+bin/
+obj/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.sln.iml
+
+# Dependencies
+node_modules/
+packages/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Runtime
+*.log
+*.db
