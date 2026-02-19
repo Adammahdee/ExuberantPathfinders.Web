@@ -56,16 +56,14 @@
                                 <td>@(string.IsNullOrWhiteSpace(app.SubmissionReference) ? "-" : app.SubmissionReference)</td>
                                 <td>@app.Title</td>
                                 <td>@(app.Program?.Name ?? "N/A")</td>
-                                <td>@app.RequestedAmount.ToString("C")</td>
+                                <td>@app.RequestedAmount.ToString("C", new System.Globalization.CultureInfo("en-NG"))</td>
                                 <td><span class="badge bg-secondary">@app.Status</span></td>
                                 <td>@app.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd")</td>
                                 <td class="text-end">
                                     @if (app.Status == ExuberantPathfinders.Web.Models.ApplicationStatus.Draft)
                                     {
-                                        <form asp-action="Submit" asp-controller="Applications" method="post" class="d-inline">
-                                            <input type="hidden" name="id" value="@app.Id" />
-                                            <button type="submit" class="btn btn-success btn-sm">Submit</button>
-                                        </form>
+                                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#submitModal" data-app-id="@app.Id" data-app-title="@app.Title">Submit</button>
+                                        <button type="button" class="btn btn-danger btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#deleteModal" data-app-id="@app.Id" data-app-title="@app.Title">Delete</button>
                                     }
                                 </td>
                             </tr>
@@ -76,3 +74,73 @@
         }
     </div>
 </section>
+
+<!-- Submit Confirmation Modal -->
+<div class="modal fade" id="submitModal" tabindex="-1" aria-labelledby="submitModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="submitModalLabel">Confirm Submission</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to submit the application for <strong id="modalAppTitle"></strong>? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form asp-action="Submit" asp-controller="Applications" method="post">
+                    <input type="hidden" name="id" id="modalAppId" />
+                    <button type="submit" class="btn btn-success">Confirm Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the application for <strong id="deleteModalAppTitle"></strong>? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form asp-action="Delete" asp-controller="Applications" method="post">
+                    <input type="hidden" name="id" id="deleteModalAppId" />
+                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var submitModal = document.getElementById('submitModal');
+    submitModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var appId = button.getAttribute('data-app-id');
+        var appTitle = button.getAttribute('data-app-title');
+        var modalTitleInput = submitModal.querySelector('#modalAppTitle');
+        var modalIdInput = submitModal.querySelector('#modalAppId');
+        
+        modalTitleInput.textContent = appTitle;
+        modalIdInput.value = appId;
+    });
+
+    var deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var appId = button.getAttribute('data-app-id');
+        var appTitle = button.getAttribute('data-app-title');
+        var modalTitleInput = deleteModal.querySelector('#deleteModalAppTitle');
+        var modalIdInput = deleteModal.querySelector('#deleteModalAppId');
+        
+        modalTitleInput.textContent = appTitle;
+        modalIdInput.value = appId;
+    });
+</script>

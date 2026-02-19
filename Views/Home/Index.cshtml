@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -38,6 +38,8 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="moreDropdown">
                         <li><a class="dropdown-item" href="#services">Services</a></li>
+                        <li><a class="dropdown-item" href="#procedure">Application Procedure</a></li>
+                        <li><a class="dropdown-item" href="#news">News & Stories</a></li>
                         <li><a class="dropdown-item" href="#partners">Our Partners</a></li>
                         <li><a class="dropdown-item" href="#team">Leadership Team</a></li>
                         <li><hr class="dropdown-divider"></li>
@@ -148,6 +150,161 @@
                     <a href="#donation-section" class="btn btn-primary w-100 mt-4 promo-card-btn">Support This Program</a>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- Application Procedure Section -->
+<section id="procedure" class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-6 fw-bold mb-3" style="color: #667eea;">APPLICATION PROCEDURE</h2>
+                <p class="lead text-muted">Follow these simple steps to join our program and start your journey towards success.</p>
+            </div>
+        </div>
+        <div class="row g-4 position-relative">
+            <!-- Connecting Line (Desktop) -->
+            <div class="d-none d-lg-block position-absolute top-50 start-0 w-100 translate-middle-y" style="height: 2px; background-color: #dee2e6; z-index: 0;"></div>
+            
+            <!-- Step 1 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm text-center p-4 position-relative" style="z-index: 1;">
+                    <div class="rounded-circle bg-white text-primary border border-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem; font-weight: bold; border-width: 3px !important;">1</div>
+                    <h5 class="fw-bold">Register</h5>
+                    <p class="text-muted small mb-0">Create an account and complete the online application form.</p>
+                </div>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm text-center p-4 position-relative" style="z-index: 1;">
+                    <div class="rounded-circle bg-white text-primary border border-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem; font-weight: bold; border-width: 3px !important;">2</div>
+                    <h5 class="fw-bold">Screening</h5>
+                    <p class="text-muted small mb-0">Applications are reviewed based on eligibility and potential.</p>
+                </div>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm text-center p-4 position-relative" style="z-index: 1;">
+                    <div class="rounded-circle bg-white text-primary border border-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem; font-weight: bold; border-width: 3px !important;">3</div>
+                    <h5 class="fw-bold">Training</h5>
+                    <p class="text-muted small mb-0">Selected candidates undergo intensive training sessions.</p>
+                </div>
+            </div>
+            
+            <!-- Step 4 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm text-center p-4 position-relative" style="z-index: 1;">
+                    <div class="rounded-circle bg-primary text-white border border-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem; font-weight: bold; border-width: 3px !important;">4</div>
+                    <h5 class="fw-bold">Funding</h5>
+                    <p class="text-muted small mb-0">Successful graduates receive grants and support.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            @if (!SignInManager.IsSignedIn(User))
+            {
+                <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg rounded-pill px-5">Start Application</a>
+            }
+            else
+            {
+                <a href="@Url.Action("Index", "Applications")" class="btn btn-primary btn-lg rounded-pill px-5">Start Application</a>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- News & Stories Section -->
+<section id="news" class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-6 fw-bold mb-3" style="color: #667eea;">News & Stories</h2>
+                <p class="lead text-muted">Stay updated with our latest impact stories, community achievements, and upcoming opportunities.</p>
+            </div>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <!-- Card 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 news-card">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Youth Workshop" style="height: 220px; object-fit: cover;">
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">Impact</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="small text-muted mb-2"><i class="far fa-calendar me-2"></i>Oct 15, 2025</div>
+                        <h5 class="card-title fw-bold">Empowering 500 Youth in Kano</h5>
+                        <p class="card-text text-muted small">Our recent workshop in Kano State successfully trained over 500 young individuals in digital literacy.</p>
+                        <a href="#" class="read-more-link stretched-link" data-bs-toggle="modal" data-bs-target="#newsModal1">Read More <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 news-card">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Community Outreach" style="height: 220px; object-fit: cover;">
+                        <span class="badge bg-success position-absolute top-0 end-0 m-3">Health</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="small text-muted mb-2"><i class="far fa-calendar me-2"></i>Sep 28, 2025</div>
+                        <h5 class="card-title fw-bold">Community Health Outreach</h5>
+                        <p class="card-text text-muted small">Partnering with local health workers to provide free medical checkups and sensitization on hygiene.</p>
+                        <a href="#" class="read-more-link stretched-link" data-bs-toggle="modal" data-bs-target="#newsModal2">Read More <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 news-card">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Grant Award" style="height: 220px; object-fit: cover;">
+                        <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-3">Grants</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="small text-muted mb-2"><i class="far fa-calendar me-2"></i>Aug 10, 2025</div>
+                        <h5 class="card-title fw-bold">2025 Grant Winners Announced</h5>
+                        <p class="card-text text-muted small">Congratulations to the 50 recipients of our annual business grant. We look forward to seeing your ventures grow.</p>
+                        <a href="#" class="read-more-link stretched-link" data-bs-toggle="modal" data-bs-target="#newsModal3">Read More <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 4 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 news-card">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Tech Hub Launch" style="height: 220px; object-fit: cover;">
+                        <span class="badge bg-info text-dark position-absolute top-0 end-0 m-3">Innovation</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="small text-muted mb-2"><i class="far fa-calendar me-2"></i>Jul 05, 2025</div>
+                        <h5 class="card-title fw-bold">New Tech Hub in Lagos</h5>
+                        <p class="card-text text-muted small">Launching a state-of-the-art technology hub to foster innovation and support tech startups.</p>
+                        <a href="#" class="read-more-link stretched-link">Read More <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 5 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 news-card">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Partnership Meeting" style="height: 220px; object-fit: cover;">
+                        <span class="badge bg-secondary position-absolute top-0 end-0 m-3">Partnership</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="small text-muted mb-2"><i class="far fa-calendar me-2"></i>Jun 12, 2025</div>
+                        <h5 class="card-title fw-bold">Strategic Partnership with UNDP</h5>
+                        <p class="card-text text-muted small">Collaborating with UNDP to expand our youth development programs across three new states.</p>
+                        <a href="#" class="read-more-link stretched-link">Read More <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <a asp-controller="Home" asp-action="News" class="btn btn-outline-primary btn-lg rounded-pill px-5 fw-bold">View All News</a>
         </div>
     </div>
 </section>
@@ -514,6 +671,94 @@
     </div>
 </section>
 
+<!-- Footer -->
+<footer class="footer-shell py-5 bg-light">
+    <div class="container text-center">
+        <h5 class="mb-3 fw-bold" style="color: #667eea;">Subscribe to Our Newsletter</h5>
+        <p class="text-muted mb-4">Get the latest news and updates from Exuberant Pathfinders directly to your inbox.</p>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <form action="#" method="post" class="input-group">
+                    <input type="email" class="form-control form-control-lg" placeholder="Enter your email" required>
+                    <button class="btn btn-primary" type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="social-icons my-4">
+            <a href="https://wa.me/2349078511868" target="_blank" class="social-icon" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.facebook.com/exuberant.pathfinders" target="_blank" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/exuberant_pathfinders" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p class="small text-muted mb-0">&copy; @DateTime.Now.Year Exuberant Pathfinders. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- News Modals -->
+<!-- Modal 1 -->
+<div class="modal fade" id="newsModal1" tabindex="-1" aria-labelledby="newsModal1Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newsModal1Label">Empowering 500 Youth in Kano</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&w=800&q=80" class="img-fluid rounded mb-4" alt="Youth Workshop">
+                <p>Our recent workshop in Kano State was a resounding success, empowering over 500 young individuals with critical digital literacy and entrepreneurship skills. The intensive program covered a range of topics from basic computer skills to advanced digital marketing, financial management, and business plan development.</p>
+                <p>Participants engaged in hands-on sessions, collaborative projects, and received mentorship from seasoned entrepreneurs and tech experts. The initiative aimed to bridge the skills gap and foster a culture of innovation and self-reliance among the youth in the region. We are incredibly proud of the dedication and enthusiasm shown by all participants and look forward to seeing the impactful ventures they will create.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2 -->
+<div class="modal fade" id="newsModal2" tabindex="-1" aria-labelledby="newsModal2Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newsModal2Label">Community Health Outreach</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" class="img-fluid rounded mb-4" alt="Community Outreach">
+                <p>In our commitment to holistic community development, we partnered with local health workers to conduct a comprehensive health outreach program. The initiative provided free medical checkups, essential medicines, and health education to over 1,000 residents in underserved rural communities.</p>
+                <p>A key focus was on preventative care, with sessions on hygiene, nutrition, and maternal health. This outreach is part of our broader strategy to ensure that healthy communities can thrive and pursue economic opportunities without the burden of preventable illnesses.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 3 -->
+<div class="modal fade" id="newsModal3" tabindex="-1" aria-labelledby="newsModal3Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newsModal3Label">2025 Grant Winners Announced</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80" class="img-fluid rounded mb-4" alt="Grant Award">
+                <p>We are thrilled to announce the 50 recipients of our 2025 annual business grant. After a rigorous selection process from over 2,000 applications, these exceptional young entrepreneurs have been chosen for their innovative ideas and potential for community impact.</p>
+                <p>The grants will provide crucial seed funding to help these ventures grow, create jobs, and solve local challenges. We congratulate all the winners and look forward to supporting them on their journey to success. Their stories are a testament to the incredible talent and drive of Nigeria's youth.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Back to Top Button -->
+<button type="button" class="btn btn-primary btn-lg" id="btn-back-to-top" aria-label="Back to Top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
 <style>
     @@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 
@@ -832,6 +1077,41 @@
         color: #667eea;
     }
 
+    /* Footer Styles */
+    .footer-shell {
+        border-top: 1px solid #dee2e6;
+    }
+
+    .social-icon {
+        font-size: 1.75rem;
+        margin: 0 1rem;
+        color: #6c757d;
+        transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+        display: inline-block;
+    }
+
+    .social-icon:hover {
+        transform: translateY(-4px);
+        color: var(--brand-indigo);
+    }
+
+    /* Back to Top Button */
+    #btn-back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: none;
+        z-index: 1000;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        transition: opacity 0.3s, transform 0.3s;
+        padding: 0;
+    }
+
     /* Responsive adjustments */
     @@media (max-width: 768px) {
         .hero-shell {
@@ -861,5 +1141,62 @@
             padding: 3rem 0 !important;
         }
     }
+
+    /* News Card Styles */
+    .news-card {
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .news-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .news-card .card-img-top {
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .news-card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+
+    .read-more-link {
+        color: var(--brand-indigo);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .read-more-link:hover {
+        color: var(--brand-purple);
+    }
 </style>
 
+<script>
+    // Get the button
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.addEventListener("scroll", scrollFunction);
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "flex";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+</script>
