@@ -33,7 +33,10 @@
             <h1 class="h3 mb-1">Application Management</h1>
             <p class="text-muted mb-0">Review submissions and update statuses.</p>
         </div>
-        <a asp-action="Index" class="btn btn-outline-secondary">Back to Dashboard</a>
+        <div>
+            <a asp-action="ExportApplicationsCsv" class="btn btn-success me-2"><i class="fas fa-file-csv me-1"></i> Download CSV</a>
+            <a asp-action="Index" class="btn btn-outline-secondary">Back to Dashboard</a>
+        </div>
     </div>
 
     <form method="get" asp-action="Applications" class="row g-2 mb-3">

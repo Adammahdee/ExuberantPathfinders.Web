@@ -41,8 +41,10 @@
                         <li><a class="dropdown-item" href="#partners">Our Partners</a></li>
                         <li><a class="dropdown-item" href="#team">Leadership Team</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Terms & Conditions</a></li>
-                        <li><a class="dropdown-item" href="#">Privacy Policy</a></li>
+                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Terms">Terms of Service</a></li>
+                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Privacy">Privacy Policy</a></li>
+                        <li><a class="dropdown-item" asp-controller="Home" asp-action="CommunityGuidelines">Community Guidelines</a></li>
+                        <li><a class="dropdown-item" asp-controller="Home" asp-action="ReportProblem">Report a Problem</a></li>
                     </ul>
                 </li>
                 @if (!SignInManager.IsSignedIn(User))
@@ -504,6 +506,7 @@
                             <a href="mailto:Exuberantinitiative@gmail.com" class="text-decoration-none">Exuberantinitiative@gmail.com</a>
                         </p>
                         <p class="small text-muted">Mon-Sat / 24 Hours</p>
+                        <a asp-controller="Home" asp-action="ReportProblem" class="btn btn-outline-primary btn-sm mt-2">Report a Problem</a>
                     </div>
                 </div>
             </div>

@@ -40,8 +40,14 @@ namespace ExuberantPathfinders.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Application application)
+        public async Task<IActionResult> Create(Application application, bool acceptPathfinderAgreement)
         {
+            if (!acceptPathfinderAgreement)
+            {
+                TempData["ApplicationError"] = "Please agree to the Pathfinder Agreement before saving your application.";
+                return RedirectToAction(nameof(Create));
+            }
+
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
             application.ApplicantId = userId;
             application.Status = ApplicationStatus.Draft;

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text;
 
 namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
 {
@@ -132,6 +133,22 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
                 ProgramOfficers = officerIds.ToList(),
                 FormError = TempData["GrantFormError"]?.ToString() ?? string.Empty,
                 FormSuccess = TempData["GrantFormSuccess"]?.ToString() ?? string.Empty
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateGrant()
+        {
+            var officerIds = await _userManager.GetUsersInRoleAsync("ProgramOfficer");
+            var model = new GrantManagementViewModel
+            {
+                ThematicAreas = await _context.ThematicAreas
+                    .Where(t => t.IsActive)
+                    .OrderBy(t => t.Name)
+                    .ToListAsync(),
+                ProgramOfficers = officerIds.ToList()
             };
 
             return View(model);
@@ -606,6 +623,47 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             return View(monthlyData);
         }
 
+        public IActionResult CommunityGuidelines()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> ExportApplicationsCsv()
+        {
+            var applications = await _context.Applications
+                .Include(a => a.Applicant)
+                .Include(a => a.Program)
+                .OrderByDescending(a => a.CreatedAt)
+                .ToListAsync();
+
+            var builder = new StringBuilder();
+            builder.AppendLine("Reference,Applicant,Email,Program,Amount,Status,Submitted Date");
+
+            foreach (var app in applications)
+            {
+                builder.AppendLine($"{EscapeCsv(app.SubmissionReference)},{EscapeCsv(app.Applicant?.FirstName + " " + app.Applicant?.LastName)},{EscapeCsv(app.Applicant?.Email)},{EscapeCsv(app.Program?.Name)},{app.RequestedAmount},{app.Status},{app.SubmittedAt:yyyy-MM-dd}");
+            }
+
+            return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", $"applications_{DateTime.Now:yyyyMMddHHmm}.csv");
+        }
+
+        public async Task<IActionResult> ExportUsersCsv()
+        {
+            var users = await _context.Users
+                .OrderByDescending(u => u.CreatedAt)
+                .ToListAsync();
+
+            var builder = new StringBuilder();
+            builder.AppendLine("Id,First Name,Last Name,Email,Status,Joined Date");
+
+            foreach (var user in users)
+            {
+                builder.AppendLine($"{EscapeCsv(user.Id)},{EscapeCsv(user.FirstName)},{EscapeCsv(user.LastName)},{EscapeCsv(user.Email)},{(user.IsActive ? "Active" : "Inactive")},{user.CreatedAt:yyyy-MM-dd}");
+            }
+
+            return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", $"users_{DateTime.Now:yyyyMMddHHmm}.csv");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateApplicationStatus(int id, ApplicationStatus status, string? reason)
@@ -773,6 +831,16 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
             await _auditService.LogActionAsync(userId, action, entityType, entityId, oldValues, newValues, ipAddress);
+        }
+
+        private static string EscapeCsv(string? value)
+        {
+            if (string.IsNullOrEmpty(value)) return "";
+            if (value.Contains(",") || value.Contains("\"") || value.Contains("\n"))
+            {
+                return $"\"{value.Replace("\"", "\"\"")}\"";
+            }
+            return value;
         }
     }
 }

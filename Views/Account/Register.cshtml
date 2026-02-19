@@ -45,6 +45,22 @@
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
 
+                        <div class="border rounded p-3 mb-4 bg-light">
+                            <p class="fw-semibold mb-2">The Pathfinder Agreement</p>
+                            <div class="form-check">
+                                <input asp-for="AcceptPathfinderAgreement" class="form-check-input" />
+                                <label asp-for="AcceptPathfinderAgreement" class="form-check-label">
+                                    I have read and agree to the Community Guidelines. I understand that being an Exuberant Pathfinder means leading with integrity, transparency, and a commitment to strategic community growth. I'm ready to launch.
+                                </label>
+                            </div>
+                            <span asp-validation-for="AcceptPathfinderAgreement" class="text-danger"></span>
+                            <div class="mt-2 small">
+                                <a asp-controller="Home" asp-action="Terms">View Full Terms of Service</a>
+                                &amp;
+                                <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn btn-primary w-100">Create Account</button>
                     </form>
 

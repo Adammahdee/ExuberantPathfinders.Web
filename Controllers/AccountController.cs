@@ -78,6 +78,11 @@ namespace ExuberantPathfinders.Web.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string? returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            if (!model.AcceptPathfinderAgreement)
+            {
+                ModelState.AddModelError(nameof(RegisterViewModel.AcceptPathfinderAgreement), "You must agree to the Pathfinder Agreement before creating an account.");
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
@@ -126,5 +131,6 @@ namespace ExuberantPathfinders.Web.Controllers
         public string ConfirmPassword { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public bool AcceptPathfinderAgreement { get; set; }
     }
 }

@@ -11,6 +11,12 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
                         <h1 class="h4 mb-4">Create New Application</h1>
+                        @if (TempData["ApplicationError"] != null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @TempData["ApplicationError"]
+                            </div>
+                        }
 
                         @if (!Model.Any())
                         {
@@ -47,6 +53,21 @@
                                 <div class="mb-4">
                                     <label for="RequestedAmount" class="form-label">Requested Amount</label>
                                     <input id="RequestedAmount" name="RequestedAmount" type="number" min="0" step="0.01" class="form-control" required />
+                                </div>
+
+                                <div class="border rounded p-3 mb-4 bg-light">
+                                    <p class="fw-semibold mb-2">The Pathfinder Agreement</p>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="acceptPathfinderAgreement" name="acceptPathfinderAgreement" value="true" required />
+                                        <label class="form-check-label" for="acceptPathfinderAgreement">
+                                            I have read and agree to the Community Guidelines. I understand that being an Exuberant Pathfinder means leading with integrity, transparency, and a commitment to strategic community growth. I'm ready to launch.
+                                        </label>
+                                    </div>
+                                    <div class="mt-2 small">
+                                        <a asp-controller="Home" asp-action="Terms">View Full Terms of Service</a>
+                                        &amp;
+                                        <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+                                    </div>
                                 </div>
 
                                 <div class="d-flex gap-2">
