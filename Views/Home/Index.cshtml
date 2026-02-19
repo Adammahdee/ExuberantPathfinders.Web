@@ -7,10 +7,10 @@
 }
 
 <!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg sticky-top site-nav">
+<nav class="navbar navbar-expand-lg sticky-top site-nav py-3">
     <div class="container">
         <a class="navbar-brand fw-bold" href="#">
-            <i class="fas fa-lightbulb me-2"></i>EXUBERANT PATHFINDERS
+            <i class="fas fa-lightbulb me-2 text-accent"></i><span class="text-primary-dark">EXUBERANT</span> PATHFINDERS
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -52,12 +52,18 @@
                 @if (!SignInManager.IsSignedIn(User))
                 {
                     <li class="nav-item ms-3">
-                        <a href="@Url.Action("Login", "Account")" class="btn btn-outline-primary btn-sm me-2 nav-auth-btn">Sign In</a>
-                        <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-sm nav-auth-btn">Register</a>
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-link text-decoration-none fw-600 me-2 text-primary-dark">Sign In</a>
+                        <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-sm nav-auth-btn px-4">Register</a>
                     </li>
                 }
                 else
                 {
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item ms-3">
+                            <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="btn btn-outline-primary btn-sm me-2 nav-auth-btn">Admin Dashboard</a>
+                        </li>
+                    }
                     <li class="nav-item ms-3">
                         <span class="text-muted me-2">Welcome, @User.Identity?.Name</span>
                         <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
@@ -72,13 +78,12 @@
 </nav>
 
 <!-- Hero Section -->
-<section id="home" class="hero-shell py-5">
-    <div class="hero-noise"></div>
+<section id="home" class="hero-shell position-relative overflow-hidden">
     <div class="container hero-container">
         <div class="row align-items-center g-4 g-xl-5">
             <div class="col-lg-6">
                 <div class="hero-glass">
-                    <p class="hero-kicker mb-3">Exuberant Pathfinders Youth Initiatives</p>
+                    <span class="badge bg-accent-subtle text-accent-dark mb-3 px-3 py-2 rounded-pill fw-bold">Exuberant Pathfinders Youth Initiatives</span>
                     <h1 class="hero-title mb-4">Empowering Youth through Strategic Grants</h1>
                     <p class="hero-copy mb-4">
                         Building stronger communities through youth-focused grants, practical entrepreneurship support, and strategic partnerships that unlock long-term socioeconomic progress.
@@ -86,13 +91,13 @@
                     <div class="d-flex flex-wrap gap-3">
                         @if (!SignInManager.IsSignedIn(User))
                         {
-                            <a href="@Url.Action("Register", "Account")" class="hero-cta hero-cta-solid">Apply</a>
+                            <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg hero-cta">Apply Now</a>
                         }
                         else
                         {
-                            <a href="@Url.Action("Index", "Applications")" class="hero-cta hero-cta-solid">Apply</a>
+                            <a href="@Url.Action("Index", "Applications")" class="btn btn-primary btn-lg hero-cta">Apply Now</a>
                         }
-                        <a href="#donation-section" class="hero-cta hero-cta-outline">Donate</a>
+                        <a href="#donation-section" class="btn btn-outline-primary btn-lg hero-cta">Donate</a>
                     </div>
                 </div>
             </div>
@@ -109,45 +114,45 @@
 </section>
 
 <!-- Promo Section -->
-<section id="promo" class="promo-shell py-5">
+<section id="promo" class="py-5 bg-light">
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <h2 class="display-5 fw-bold mb-4 promo-title">
-                    <i class="fas fa-star me-2"></i>Featured Initiative
+                <h2 class="display-5 fw-bold mb-4 text-primary-dark">
+                    <i class="fas fa-star me-2 text-accent"></i>Featured Initiative
                 </h2>
-                <h3 class="mb-3">Youth Skills & Entrepreneurship Program 2026</h3>
-                <p class="lead mb-4 promo-copy">
+                <h3 class="mb-3 text-secondary">Youth Skills & Entrepreneurship Program 2026</h3>
+                <p class="lead mb-4 text-muted">
                     Transform your future through our comprehensive skills development and entrepreneurship program. Learn in-demand skills, get mentorship, and access startup funding.
                 </p>
                 <div class="d-flex gap-2 flex-wrap">
-                    <a href="@Url.Action("Index", "Applications")" class="btn btn-light btn-lg fw-bold promo-cta-solid">
+                    <a href="@Url.Action("Index", "Applications")" class="btn btn-primary btn-lg fw-bold rounded-pill px-4">
                         <i class="fas fa-briefcase me-2"></i>Apply Now
                     </a>
-                    <a href="#services" class="btn btn-outline-light btn-lg fw-bold promo-cta-outline">
+                    <a href="#services" class="btn btn-outline-secondary btn-lg fw-bold rounded-pill px-4">
                         <i class="fas fa-arrow-down me-2"></i>Learn More
                     </a>
                 </div>
-                <p class="small mt-3 promo-copy-muted">
+                <p class="small mt-3 text-muted">
                     <i class="fas fa-calendar me-1"></i> Applications open 24/7 | <i class="fas fa-target me-1"></i> 500+ spots available
                 </p>
             </div>
             <div class="col-lg-6">
-                <div class="card border-0 shadow-lg p-4 promo-glass-card">
+                <div class="card border-0 shadow-card p-4 rounded-4 bg-white">
                     <div class="text-center mb-4">
-                        <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
+                        <div class="icon-circle bg-primary-subtle text-primary mx-auto mb-3">
                             <i class="fas fa-graduation-cap"></i>
                         </div>
                     </div>
-                    <h5 class="card-title text-center fw-bold" style="color: #667eea;">Program Highlights</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Skills Training (12 weeks)</li>
-                        <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Mentorship from Industry Experts</li>
-                        <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Startup Financing Up to ₦5M</li>
-                        <li class="mb-2"><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Job Placement Assistance</li>
-                        <li><i class="fas fa-check-circle me-2" style="color: #667eea;"></i>Lifetime Network Access</li>
+                    <h5 class="card-title text-center fw-bold text-primary-dark mb-4">Program Highlights</h5>
+                    <ul class="list-unstyled text-secondary">
+                        <li class="mb-3"><i class="fas fa-check-circle me-2 text-accent"></i>Skills Training (12 weeks)</li>
+                        <li class="mb-3"><i class="fas fa-check-circle me-2 text-accent"></i>Mentorship from Industry Experts</li>
+                        <li class="mb-3"><i class="fas fa-check-circle me-2 text-accent"></i>Startup Financing Up to ₦5M</li>
+                        <li class="mb-3"><i class="fas fa-check-circle me-2 text-accent"></i>Job Placement Assistance</li>
+                        <li class="mb-3"><i class="fas fa-check-circle me-2 text-accent"></i>Lifetime Network Access</li>
                     </ul>
-                    <a href="#donation-section" class="btn btn-primary w-100 mt-4 promo-card-btn">Support This Program</a>
+                    <a href="#donation-section" class="btn btn-accent w-100 mt-2 rounded-pill fw-bold">Support This Program</a>
                 </div>
             </div>
         </div>
@@ -155,50 +160,50 @@
 </section>
 
 <!-- Application Procedure Section -->
-<section id="procedure" class="py-5 bg-light">
+<section id="procedure" class="py-5 bg-white">
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-6 fw-bold mb-3" style="color: #667eea;">APPLICATION PROCEDURE</h2>
+                <h2 class="display-6 fw-bold mb-3 text-primary-dark">Application Procedure</h2>
                 <p class="lead text-muted">Follow these simple steps to join our program and start your journey towards success.</p>
             </div>
         </div>
         <div class="row g-4 position-relative">
             <!-- Connecting Line (Desktop) -->
-            <div class="d-none d-lg-block position-absolute top-50 start-0 w-100 translate-middle-y" style="height: 2px; background-color: #dee2e6; z-index: 0;"></div>
+            <div class="d-none d-lg-block position-absolute top-50 start-0 w-100 translate-middle-y" style="height: 3px; background-color: #e2e8f0; z-index: 0;"></div>
             
             <!-- Step 1 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 border-0 shadow-sm text-center p-4 position-relative" style="z-index: 1;">
-                    <div class="rounded-circle bg-white text-primary border border-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem; font-weight: bold; border-width: 3px !important;">1</div>
-                    <h5 class="fw-bold">Register</h5>
+                <div class="card h-100 border-0 shadow-hover text-center p-4 position-relative rounded-4 bg-white" style="z-index: 1;">
+                    <div class="step-circle bg-primary text-white mx-auto mb-3">1</div>
+                    <h5 class="fw-bold text-primary-dark">Register</h5>
                     <p class="text-muted small mb-0">Create an account and complete the online application form.</p>
                 </div>
             </div>
             
             <!-- Step 2 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 border-0 shadow-sm text-center p-4 position-relative" style="z-index: 1;">
-                    <div class="rounded-circle bg-white text-primary border border-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem; font-weight: bold; border-width: 3px !important;">2</div>
-                    <h5 class="fw-bold">Screening</h5>
+                <div class="card h-100 border-0 shadow-hover text-center p-4 position-relative rounded-4 bg-white" style="z-index: 1;">
+                    <div class="step-circle bg-white text-primary border border-2 border-primary mx-auto mb-3">2</div>
+                    <h5 class="fw-bold text-primary-dark">Screening</h5>
                     <p class="text-muted small mb-0">Applications are reviewed based on eligibility and potential.</p>
                 </div>
             </div>
             
             <!-- Step 3 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 border-0 shadow-sm text-center p-4 position-relative" style="z-index: 1;">
-                    <div class="rounded-circle bg-white text-primary border border-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem; font-weight: bold; border-width: 3px !important;">3</div>
-                    <h5 class="fw-bold">Training</h5>
+                <div class="card h-100 border-0 shadow-hover text-center p-4 position-relative rounded-4 bg-white" style="z-index: 1;">
+                    <div class="step-circle bg-white text-primary border border-2 border-primary mx-auto mb-3">3</div>
+                    <h5 class="fw-bold text-primary-dark">Training</h5>
                     <p class="text-muted small mb-0">Selected candidates undergo intensive training sessions.</p>
                 </div>
             </div>
             
             <!-- Step 4 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 border-0 shadow-sm text-center p-4 position-relative" style="z-index: 1;">
-                    <div class="rounded-circle bg-primary text-white border border-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem; font-weight: bold; border-width: 3px !important;">4</div>
-                    <h5 class="fw-bold">Funding</h5>
+                <div class="card h-100 border-0 shadow-hover text-center p-4 position-relative rounded-4 bg-white" style="z-index: 1;">
+                    <div class="step-circle bg-accent text-white mx-auto mb-3">4</div>
+                    <h5 class="fw-bold text-primary-dark">Funding</h5>
                     <p class="text-muted small mb-0">Successful graduates receive grants and support.</p>
                 </div>
             </div>
@@ -218,18 +223,18 @@
 </section>
 
 <!-- News & Stories Section -->
-<section id="news" class="py-5">
+<section id="news" class="py-5 bg-light">
     <div class="container">
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-6 fw-bold mb-3" style="color: #667eea;">News & Stories</h2>
+                <h2 class="display-6 fw-bold mb-3 text-primary-dark">News & Stories</h2>
                 <p class="lead text-muted">Stay updated with our latest impact stories, community achievements, and upcoming opportunities.</p>
             </div>
         </div>
         <div class="row g-4 justify-content-center">
             <!-- Card 1 -->
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 news-card">
+                <div class="card h-100 border-0 news-card rounded-4 shadow-card">
                     <div class="position-relative">
                         <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Youth Workshop" style="height: 220px; object-fit: cover;">
                         <span class="badge bg-primary position-absolute top-0 end-0 m-3">Impact</span>
@@ -244,7 +249,7 @@
             </div>
             <!-- Card 2 -->
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 news-card">
+                <div class="card h-100 border-0 news-card rounded-4 shadow-card">
                     <div class="position-relative">
                         <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Community Outreach" style="height: 220px; object-fit: cover;">
                         <span class="badge bg-success position-absolute top-0 end-0 m-3">Health</span>
@@ -259,7 +264,7 @@
             </div>
             <!-- Card 3 -->
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 news-card">
+                <div class="card h-100 border-0 news-card rounded-4 shadow-card">
                     <div class="position-relative">
                         <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Grant Award" style="height: 220px; object-fit: cover;">
                         <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-3">Grants</span>
@@ -274,7 +279,7 @@
             </div>
             <!-- Card 4 -->
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 news-card">
+                <div class="card h-100 border-0 news-card rounded-4 shadow-card">
                     <div class="position-relative">
                         <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Tech Hub Launch" style="height: 220px; object-fit: cover;">
                         <span class="badge bg-info text-dark position-absolute top-0 end-0 m-3">Innovation</span>
@@ -289,7 +294,7 @@
             </div>
             <!-- Card 5 -->
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 news-card">
+                <div class="card h-100 border-0 news-card rounded-4 shadow-card">
                     <div class="position-relative">
                         <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Partnership Meeting" style="height: 220px; object-fit: cover;">
                         <span class="badge bg-secondary position-absolute top-0 end-0 m-3">Partnership</span>
@@ -304,59 +309,59 @@
             </div>
         </div>
         <div class="text-center mt-5">
-            <a asp-controller="Home" asp-action="News" class="btn btn-outline-primary btn-lg rounded-pill px-5 fw-bold">View All News</a>
+            <a asp-controller="Home" asp-action="News" class="btn btn-outline-primary btn-lg rounded-pill px-5 fw-bold shadow-sm">View All News</a>
         </div>
     </div>
 </section>
 
 <!-- About Section -->
-<section id="about" class="py-5 bg-light">
+<section id="about" class="py-5 bg-white">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">OUR KEY AREAS OF INTERVENTIONS</h2>
+                <h2 class="display-6 fw-bold mb-5 text-primary-dark">Our Key Areas of Intervention</h2>
                 
                 <div class="row g-4">
                     <div class="col-md-6">
-                        <div class="d-flex gap-3 mb-3">
-                            <div style="flex-shrink: 0; color: #667eea;">
+                        <div class="d-flex gap-4 mb-3 p-4 rounded-4 bg-light shadow-sm h-100">
+                            <div class="text-primary flex-shrink-0">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                             <div>
-                                <h5>Socioeconomic Development</h5>
+                                <h5 class="fw-bold text-primary-dark">Socioeconomic Development</h5>
                                 <p class="text-muted mb-0">Promoting livelihood opportunities through entrepreneurship development and capacity building in rural communities.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="d-flex gap-3 mb-3">
-                            <div style="flex-shrink: 0; color: #667eea;">
+                        <div class="d-flex gap-4 mb-3 p-4 rounded-4 bg-light shadow-sm h-100">
+                            <div class="text-primary flex-shrink-0">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                             <div>
-                                <h5>Education & Skills</h5>
+                                <h5 class="fw-bold text-primary-dark">Education & Skills</h5>
                                 <p class="text-muted mb-0">Building skilled and innovative workforce through research, training and educational opportunities.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="d-flex gap-3 mb-3">
-                            <div style="flex-shrink: 0; color: #667eea;">
+                        <div class="d-flex gap-4 mb-3 p-4 rounded-4 bg-light shadow-sm h-100">
+                            <div class="text-primary flex-shrink-0">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                             <div>
-                                <h5>Social Protection</h5>
+                                <h5 class="fw-bold text-primary-dark">Social Protection</h5>
                                 <p class="text-muted mb-0">Promoting policies that support youth, education, agriculture and agro-allied skills development.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="d-flex gap-3 mb-3">
-                            <div style="flex-shrink: 0; color: #667eea;">
+                        <div class="d-flex gap-4 mb-3 p-4 rounded-4 bg-light shadow-sm h-100">
+                            <div class="text-primary flex-shrink-0">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                             <div>
-                                <h5>Leadership Development</h5>
+                                <h5 class="fw-bold text-primary-dark">Leadership Development</h5>
                                 <p class="text-muted mb-0">Building leadership capacity and enabling environment for young people across Nigeria.</p>
                             </div>
                         </div>
@@ -368,66 +373,66 @@
 </section>
 
 <!-- What We Do / Services Section -->
-<section id="services" class="py-5">
+<section id="services" class="py-5 bg-light">
     <div class="container">
-        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">WHAT WE DO</h2>
+        <h2 class="display-6 fw-bold mb-4 text-primary-dark">What We Do</h2>
         
-        <p class="lead mb-4">
+        <p class="lead mb-5 text-muted">
             Exuberant Pathfinders focuses on <strong>SEVEN (7) THEMATIC AREAS</strong> to provide service delivery and improve livelihoods of local communities across Nigeria:
         </p>
         
         <div class="row g-3 mb-4">
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 p-3 border-0 shadow-sm">
-                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                <div class="card h-100 p-4 border-0 shadow-card rounded-4 service-card">
+                    <div class="icon-box mb-3">
                         <img src="/images/theme-education.svg" alt="Education" style="width: 50px; height: 50px;">
                     </div>
-                    <h5 class="card-title fw-bold">Education</h5>
+                    <h5 class="card-title fw-bold text-primary-dark">Education</h5>
                     <p class="card-text text-muted small">Quality education and skill acquisition programs for youth development.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 p-3 border-0 shadow-sm">
-                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                <div class="card h-100 p-4 border-0 shadow-card rounded-4 service-card">
+                    <div class="icon-box mb-3">
                         <img src="/images/theme-healthcare.svg" alt="Healthcare" style="width: 50px; height: 50px;">
                     </div>
-                    <h5 class="card-title fw-bold">Healthcare</h5>
+                    <h5 class="card-title fw-bold text-primary-dark">Healthcare</h5>
                     <p class="card-text text-muted small">Community wellness and health improvement initiatives.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 p-3 border-0 shadow-sm">
-                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                <div class="card h-100 p-4 border-0 shadow-card rounded-4 service-card">
+                    <div class="icon-box mb-3">
                         <img src="/images/theme-environment.svg" alt="Environment" style="width: 50px; height: 50px;">
                     </div>
-                    <h5 class="card-title fw-bold">Climate Change</h5>
+                    <h5 class="card-title fw-bold text-primary-dark">Climate Change</h5>
                     <p class="card-text text-muted small">Sustainable and eco-friendly environmental initiatives.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 p-3 border-0 shadow-sm">
-                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
-                        <i class="fas fa-gavel fa-2x" style="color: #667eea;"></i>
+                <div class="card h-100 p-4 border-0 shadow-card rounded-4 service-card">
+                    <div class="icon-box mb-3 text-primary">
+                        <i class="fas fa-gavel fa-2x"></i>
                     </div>
-                    <h5 class="card-title fw-bold">Conflict & Justice</h5>
+                    <h5 class="card-title fw-bold text-primary-dark">Conflict & Justice</h5>
                     <p class="card-text text-muted small">Peace, security and justice promotion programs.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 p-3 border-0 shadow-sm">
-                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
-                        <i class="fas fa-city fa-2x" style="color: #667eea;"></i>
+                <div class="card h-100 p-4 border-0 shadow-card rounded-4 service-card">
+                    <div class="icon-box mb-3 text-primary">
+                        <i class="fas fa-city fa-2x"></i>
                     </div>
-                    <h5 class="card-title fw-bold">Local Governance</h5>
+                    <h5 class="card-title fw-bold text-primary-dark">Local Governance</h5>
                     <p class="card-text text-muted small">Community engagement and policy advocacy.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 p-3 border-0 shadow-sm">
-                    <div style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                <div class="card h-100 p-4 border-0 shadow-card rounded-4 service-card">
+                    <div class="icon-box mb-3">
                         <img src="/images/theme-economic.svg" alt="Economic" style="width: 50px; height: 50px;">
                     </div>
-                    <h5 class="card-title fw-bold">Economic Development</h5>
+                    <h5 class="card-title fw-bold text-primary-dark">Economic Development</h5>
                     <p class="card-text text-muted small">Entrepreneurship and social enterprise support.</p>
                 </div>
             </div>
@@ -436,19 +441,19 @@
 </section>
 
 <!-- Testimonials Section -->
-<section id="testimonials" class="py-5 bg-light">
+<section id="testimonials" class="py-5 bg-white">
     <div class="container">
-        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">TESTIMONIALS</h2>
+        <h2 class="display-6 fw-bold mb-5 text-primary-dark">Testimonials</h2>
         
         <div class="row g-4">
             <div class="col-md-6">
-                <div class="card h-100 p-4 border-0 shadow-sm">
+                <div class="card h-100 p-5 border-0 shadow-card rounded-4 bg-light">
                     <div class="d-flex align-items-center mb-3">
-                        <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 24px; margin-right: 15px;">
+                        <div class="avatar-circle bg-primary text-white me-3">
                             MA
                         </div>
                         <div>
-                            <h5 class="mb-0 fw-bold">Mohammed Ahmed</h5>
+                            <h5 class="mb-0 fw-bold text-primary-dark">Mohammed Ahmed</h5>
                             <p class="text-muted small mb-0">Local Community Leader</p>
                         </div>
                     </div>
@@ -459,13 +464,13 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card h-100 p-4 border-0 shadow-sm">
+                <div class="card h-100 p-5 border-0 shadow-card rounded-4 bg-light">
                     <div class="d-flex align-items-center mb-3">
-                        <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 24px; margin-right: 15px;">
+                        <div class="avatar-circle bg-accent text-white me-3">
                             AS
                         </div>
                         <div>
-                            <h5 class="mb-0 fw-bold">Amina Sanusi</h5>
+                            <h5 class="mb-0 fw-bold text-primary-dark">Amina Sanusi</h5>
                             <p class="text-muted small mb-0">Youth Entrepreneur</p>
                         </div>
                     </div>
@@ -480,14 +485,14 @@
 </section>
 
 <!-- Donation & Sponsorship Section -->
-<section id="donation-section" class="py-5">
+<section id="donation-section" class="py-5 bg-light">
     <div class="container">
-        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">DONATION AND SPONSORSHIP</h2>
+        <h2 class="display-6 fw-bold mb-4 text-primary-dark">Donation & Sponsorship</h2>
         
         <div class="row g-4 mb-5">
             <div class="col-lg-8">
-                <div class="alert alert-info d-flex align-items-center" role="alert">
-                    <i class="fas fa-heart me-3 fa-lg" style="color: #dc3545;"></i>
+                <div class="alert alert-primary d-flex align-items-center rounded-4 border-0 shadow-sm" role="alert">
+                    <i class="fas fa-heart me-3 fa-lg text-accent"></i>
                     <div>
                         <strong>We are grateful for your support!</strong>
                         <p class="mb-0">Your donation or sponsorship will help us achieve our mission and vision. Your contribution will make a significant impact on all seven thematic areas. <strong>No amount is too small or too big!</strong></p>
@@ -497,7 +502,7 @@
                 <h5 class="fw-bold mt-4 mb-3">Bank Transfer Details:</h5>
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <div class="card p-3 border-1">
+                        <div class="card p-4 border-0 shadow-sm rounded-4 h-100">
                             <p class="small text-muted mb-1">Dollar Account</p>
                             <p class="mb-1"><strong>Account Name:</strong> Exuberant Pathfinders Youth</p>
                             <p class="mb-1"><strong>Account Number:</strong> 0884139996</p>
@@ -505,7 +510,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card p-3 border-1">
+                        <div class="card p-4 border-0 shadow-sm rounded-4 h-100">
                             <p class="small text-muted mb-1">Naira Account</p>
                             <p class="mb-1"><strong>Account Name:</strong> Exuberant Pathfinders Youth</p>
                             <p class="mb-1"><strong>Account Number:</strong> 0734047266</p>
@@ -516,20 +521,20 @@
                 
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <a href="@Url.Action("Index", "Donations")" class="btn btn-primary btn-lg mt-4">
+                    <a href="@Url.Action("Index", "Donations")" class="btn btn-primary btn-lg mt-4 rounded-pill px-5">
                         <i class="fas fa-donate me-2"></i>DONATE NOW
                     </a>
                 }
                 else
                 {
-                    <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg mt-4">
+                    <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg mt-4 rounded-pill px-5">
                         <i class="fas fa-donate me-2"></i>DONATE NOW
                     </a>
                 }
             </div>
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm p-4 bg-light text-center">
-                    <h1 class="display-5 fw-bold" style="color: #667eea;">₦0</h1>
+                <div class="card border-0 shadow-card p-5 bg-white text-center rounded-4 h-100 justify-content-center">
+                    <h1 class="display-3 fw-bold text-primary">₦0</h1>
                     <p class="text-muted mb-3">Total Donations This Month</p>
                     <p class="lead fw-bold mb-0">Make Your Impact Today</p>
                     <p class="small text-muted">Every contribution helps us serve thousands of youth</p>
@@ -540,37 +545,37 @@
 </section>
 
 <!-- Team/Leadership Section -->
-<section id="team" class="py-5 bg-light">
+<section id="team" class="py-5 bg-white">
     <div class="container">
-        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">OUR LEADERSHIP TEAM</h2>
+        <h2 class="display-6 fw-bold mb-4 text-primary-dark">Our Leadership Team</h2>
         
         <p class="lead mb-4">Exuberant Pathfinders is led by dedicated professionals committed to youth empowerment:</p>
         
         <div class="row g-3">
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm text-center p-4">
-                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px;">
+                <div class="card h-100 border-0 shadow-hover text-center p-4 rounded-4 bg-light">
+                    <div class="avatar-circle-lg bg-primary text-white mx-auto mb-3">
                         <i class="fas fa-user-tie"></i>
                     </div>
-                    <h5 class="fw-bold">Dr. Nabila Yusuf Ahmad</h5>
+                    <h5 class="fw-bold text-primary-dark">Dr. Nabila Yusuf Ahmad</h5>
                     <p class="text-muted small">National Team Lead</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm text-center p-4">
-                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px;">
+                <div class="card h-100 border-0 shadow-hover text-center p-4 rounded-4 bg-light">
+                    <div class="avatar-circle-lg bg-accent text-white mx-auto mb-3">
                         <i class="fas fa-user-tie"></i>
                     </div>
-                    <h5 class="fw-bold">Emmanuel Adam</h5>
+                    <h5 class="fw-bold text-primary-dark">Emmanuel Adam</h5>
                     <p class="text-muted small">Deputy Team Lead</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm text-center p-4">
-                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px;">
+                <div class="card h-100 border-0 shadow-hover text-center p-4 rounded-4 bg-light">
+                    <div class="avatar-circle-lg bg-secondary text-white mx-auto mb-3">
                         <i class="fas fa-user-tie"></i>
                     </div>
-                    <h5 class="fw-bold">Yusuf Amoke & Shehu Idris</h5>
+                    <h5 class="fw-bold text-primary-dark">Yusuf Amoke & Shehu Idris</h5>
                     <p class="text-muted small">Secretary General</p>
                 </div>
             </div>
@@ -579,9 +584,9 @@
 </section>
 
 <!-- Partners Section -->
-<section id="partners" class="py-5">
+<section id="partners" class="py-5 bg-light">
     <div class="container">
-        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">OUR BENEFACTORS AND PARTNERS</h2>
+        <h2 class="display-6 fw-bold mb-4 text-primary-dark">Our Benefactors and Partners</h2>
         
         <p class="lead mb-5">
             We work with leading organizations, government agencies, and international bodies committed to youth development and community transformation in Nigeria.
@@ -589,33 +594,33 @@
         
         <div class="row g-3 mb-5">
             <div class="col-md-6 col-lg-3 text-center">
-                <div class="card h-100 border-0 shadow-sm p-4">
-                    <h6 class="fw-bold mb-0" style="color: #667eea;">Government Agencies</h6>
+                <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                    <h6 class="fw-bold mb-0 text-primary">Government Agencies</h6>
                     <p class="small text-muted mt-2">Federal entities and ministry partnerships</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 text-center">
-                <div class="card h-100 border-0 shadow-sm p-4">
-                    <h6 class="fw-bold mb-0" style="color: #667eea;">International Organizations</h6>
+                <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                    <h6 class="fw-bold mb-0 text-primary">International Organizations</h6>
                     <p class="small text-muted mt-2">UN bodies, UNDP, UNICEF, WHO</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 text-center">
-                <div class="card h-100 border-0 shadow-sm p-4">
-                    <h6 class="fw-bold mb-0" style="color: #667eea;">NGOs & Civil Society</h6>
+                <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                    <h6 class="fw-bold mb-0 text-primary">NGOs & Civil Society</h6>
                     <p class="small text-muted mt-2">Community development networks</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 text-center">
-                <div class="card h-100 border-0 shadow-sm p-4">
-                    <h6 class="fw-bold mb-0" style="color: #667eea;">Private Sector</h6>
+                <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                    <h6 class="fw-bold mb-0 text-primary">Private Sector</h6>
                     <p class="small text-muted mt-2">Corporate partners and sponsors</p>
                 </div>
             </div>
         </div>
         
-        <div class="alert alert-info">
-            <i class="fas fa-handshake me-2" style="color: #667eea;"></i>
+        <div class="alert alert-light border shadow-sm rounded-4">
+            <i class="fas fa-handshake me-2 text-primary"></i>
             <strong>Partner With Us:</strong> If your organization shares our vision of youth empowerment, we'd love to collaborate. 
             <a href="@Url.Action("Index", "Home")" class="alert-link">Get in touch with our partnerships team.</a>
         </div>
@@ -623,18 +628,18 @@
 </section>
 
 <!-- Contact Section -->
-<section id="contact" class="py-5">
+<section id="contact" class="py-5 bg-white">
     <div class="container">
-        <h2 class="display-6 fw-bold mb-4" style="color: #667eea;">CONTACT US</h2>
+        <h2 class="display-6 fw-bold mb-4 text-primary-dark">Contact Us</h2>
         
         <div class="row g-4">
             <div class="col-md-4 mb-3">
                 <div class="d-flex gap-3">
-                    <div style="flex-shrink: 0;">
-                        <i class="fas fa-map-marker-alt fa-2x" style="color: #667eea;"></i>
+                    <div class="text-primary flex-shrink-0">
+                        <i class="fas fa-map-marker-alt fa-2x"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold mb-2">Offices</h5>
+                        <h5 class="fw-bold mb-2 text-primary-dark">Offices</h5>
                         <p class="text-muted mb-1"><strong>Abuja:</strong> Ground Floor Wing D, Reinsurance Building Central Area, Abuja (F.C.T.), Nigeria</p>
                         <p class="text-muted"><strong>Kano:</strong> No 1430 Naibawa Gabas, Kano State</p>
                     </div>
@@ -642,8 +647,8 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="d-flex gap-3">
-                    <div style="flex-shrink: 0;">
-                        <i class="fas fa-phone fa-2x" style="color: #667eea;"></i>
+                    <div class="text-primary flex-shrink-0">
+                        <i class="fas fa-phone fa-2x"></i>
                     </div>
                     <div>
                         <h5 class="fw-bold mb-2">Phone</h5>
@@ -654,11 +659,11 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="d-flex gap-3">
-                    <div style="flex-shrink: 0;">
-                        <i class="fas fa-envelope fa-2x" style="color: #667eea;"></i>
+                    <div class="text-primary flex-shrink-0">
+                        <i class="fas fa-envelope fa-2x"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold mb-2">Email</h5>
+                        <h5 class="fw-bold mb-2 text-primary-dark">Email</h5>
                         <p class="text-muted mb-0">
                             <a href="mailto:Exuberantinitiative@gmail.com" class="text-decoration-none">Exuberantinitiative@gmail.com</a>
                         </p>
@@ -672,10 +677,10 @@
 </section>
 
 <!-- Footer -->
-<footer class="footer-shell py-5 bg-light">
+<footer class="footer-shell py-5 bg-dark text-white">
     <div class="container text-center">
-        <h5 class="mb-3 fw-bold" style="color: #667eea;">Subscribe to Our Newsletter</h5>
-        <p class="text-muted mb-4">Get the latest news and updates from Exuberant Pathfinders directly to your inbox.</p>
+        <h5 class="mb-3 fw-bold text-white">Subscribe to Our Newsletter</h5>
+        <p class="text-white-50 mb-4">Get the latest news and updates from Exuberant Pathfinders directly to your inbox.</p>
         <div class="row justify-content-center">
             <div class="col-lg-6">
                 <form action="#" method="post" class="input-group">
@@ -685,11 +690,11 @@
             </div>
         </div>
         <div class="social-icons my-4">
-            <a href="https://wa.me/2349078511868" target="_blank" class="social-icon" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://www.facebook.com/exuberant.pathfinders" target="_blank" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/exuberant_pathfinders" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/2349078511868" target="_blank" class="social-icon text-white-50 hover-white" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.facebook.com/exuberant.pathfinders" target="_blank" class="social-icon text-white-50 hover-white" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/exuberant_pathfinders" target="_blank" class="social-icon text-white-50 hover-white" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
-        <p class="small text-muted mb-0">&copy; @DateTime.Now.Year Exuberant Pathfinders. All Rights Reserved.</p>
+        <p class="small text-white-50 mb-0">&copy; @DateTime.Now.Year Exuberant Pathfinders. All Rights Reserved.</p>
     </div>
 </footer>
 
@@ -760,229 +765,112 @@
 </button>
 
 <style>
-    @@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+    @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
     :root {
-        --brand-indigo: #4f46e5;
-        --brand-purple: #7c3aed;
-        --hero-text: #f8f7ff;
-        --hero-glass-bg: rgba(255, 255, 255, 0.15);
-        --hero-glass-border: rgba(255, 255, 255, 0.28);
+        --brand-primary: #0E7490;
+        --brand-primary-dark: #083344;
+        --brand-accent: #F59E0B;
+        --brand-accent-hover: #d97706;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --bg-light: #f8fafc;
+        --radius-lg: 20px;
+        --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+        --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
 
     body {
-        font-family: "Montserrat", sans-serif;
+        font-family: 'Inter', sans-serif;
+        color: var(--text-main);
+        background-color: #fff;
+    }
+
+    /* Utility Classes */
+    .text-primary { color: var(--brand-primary) !important; }
+    .text-primary-dark { color: var(--brand-primary-dark) !important; }
+    .text-accent { color: var(--brand-accent) !important; }
+    .bg-primary { background-color: var(--brand-primary) !important; }
+    .bg-accent { background-color: var(--brand-accent) !important; }
+    .bg-light { background-color: var(--bg-light) !important; }
+    .rounded-4 { border-radius: var(--radius-lg) !important; }
+    .shadow-card { box-shadow: var(--shadow-card) !important; }
+    .shadow-hover:hover { box-shadow: var(--shadow-hover) !important; transform: translateY(-5px); transition: all 0.3s ease; }
+
+    .btn-primary {
+        background-color: var(--brand-primary);
+        border-color: var(--brand-primary);
+    }
+    .btn-primary:hover {
+        background-color: var(--brand-primary-dark);
+        border-color: var(--brand-primary-dark);
+    }
+    .btn-accent {
+        background-color: var(--brand-accent);
+        border-color: var(--brand-accent);
+        color: white;
+    }
+    .btn-accent:hover {
+        background-color: var(--brand-accent-hover);
+        border-color: var(--brand-accent-hover);
+        color: white;
     }
 
     /* Navigation Styles */
     .site-nav {
-        z-index: 900;
-        background: rgba(255, 255, 255, 0.9);
-        border-bottom: 1px solid rgba(124, 58, 237, 0.16);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 8px 22px rgba(25, 16, 72, 0.08);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow-soft);
     }
 
     .navbar-brand {
-        font-size: 1.3rem !important;
-        color: var(--brand-indigo) !important;
-        letter-spacing: 0.02em;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
     }
 
     .nav-link {
-        color: #332f56 !important;
+        color: var(--text-main) !important;
         font-weight: 600;
-        font-size: 0.95rem;
-        margin: 0 8px;
-        border-radius: 999px;
-        padding: 0.45rem 0.8rem !important;
-        transition: color 0.25s ease, background-color 0.25s ease;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem !important;
+        transition: color 0.2s ease;
     }
 
     .nav-link:hover {
-        color: var(--brand-indigo) !important;
-        background: rgba(79, 70, 229, 0.08);
-    }
-
-    .nav-link:hover::after {
-        content: none;
-    }
-
-    .dropdown-menu {
-        border: none;
-        box-shadow: 0 10px 26px rgba(22, 15, 61, 0.14);
-        border-radius: 8px;
-    }
-
-    .dropdown-item {
-        color: #333;
-        transition: all 0.3s ease;
-    }
-
-    .dropdown-item:hover {
-        background-color: #f0f4ff;
-        color: #667eea;
-    }
-
-    .fw-500 {
-        font-weight: 500;
-    }
-
-    .nav-auth-btn {
-        border-radius: 999px;
-        padding-left: 0.95rem;
-        padding-right: 0.95rem;
-    }
-
-    /* Promo Styles */
-    .promo-shell {
-        color: #f6f5ff;
-        background: linear-gradient(128deg, #30207a 0%, #4f46e5 52%, #7c3aed 100%);
-    }
-
-    .promo-title {
-        text-shadow: 0 8px 30px rgba(18, 11, 47, 0.34);
-    }
-
-    .promo-copy {
-        color: rgba(246, 245, 255, 0.92);
-    }
-
-    .promo-copy-muted {
-        color: rgba(246, 245, 255, 0.82);
-    }
-
-    .promo-cta-solid,
-    .promo-cta-outline,
-    .promo-card-btn {
-        border-radius: 999px;
-    }
-
-    .promo-cta-solid {
-        color: #2f1e7d;
-    }
-
-    .promo-glass-card {
-        border: 1px solid rgba(255, 255, 255, 0.26);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 24px;
-        color: #2f2a4d;
-    }
-
-    .promo-glass-card .card-title {
-        color: var(--brand-indigo) !important;
-    }
-
-    .promo-glass-card li {
-        color: #433c68;
-    }
-
-    .promo-glass-card .text-muted {
-        color: #6c678f !important;
+        color: var(--brand-primary) !important;
     }
 
     /* Hero Styles */
     .hero-shell {
-        position: relative;
-        overflow: hidden;
-        background: linear-gradient(125deg, #2d1b73 0%, var(--brand-indigo) 45%, var(--brand-purple) 100%);
-        color: var(--hero-text);
+        background: linear-gradient(rgba(14, 116, 144, 0.9), rgba(8, 51, 68, 0.9)), url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1800&q=80');
+        background-size: cover;
+        background-position: center;
+        color: white;
         min-height: min(78vh, 1080px);
-    }
-
-    .hero-noise {
-        position: absolute;
-        inset: 0;
-        background:
-            radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.18), transparent 34%),
-            radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.14), transparent 32%);
-        pointer-events: none;
-    }
-
-    .hero-container {
-        position: relative;
-        z-index: 1;
-        max-width: 1600px;
+        display: flex;
+        align-items: center;
     }
 
     .hero-glass {
-        background: var(--hero-glass-bg);
-        border: 1px solid var(--hero-glass-border);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-radius: 28px;
-        padding: clamp(1.5rem, 2.8vw, 3rem);
-        box-shadow: 0 22px 48px rgba(20, 13, 56, 0.28);
-    }
-
-    .hero-kicker {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.18em;
-        color: rgba(255, 255, 255, 0.86);
-        font-weight: 600;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-lg);
+        padding: 3rem;
     }
 
     .hero-title {
         font-weight: 800;
-        line-height: 1.1;
-        font-size: clamp(2rem, 4.1vw, 4.35rem);
-        text-wrap: balance;
-    }
-
-    .hero-copy {
-        font-size: clamp(1rem, 1.35vw, 1.3rem);
-        line-height: 1.7;
-        max-width: 42ch;
-        color: rgba(255, 255, 255, 0.92);
-    }
-
-    .hero-cta {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.85rem 1.8rem;
-        border-radius: 999px;
-        font-weight: 700;
-        text-decoration: none;
-        transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
-    }
-
-    .hero-cta-solid {
-        background: #ffffff;
-        color: #2f1e7d;
-        box-shadow: 0 10px 30px rgba(16, 11, 42, 0.28);
-    }
-
-    .hero-cta-outline {
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.8);
-        color: #ffffff;
-    }
-
-    .hero-cta:hover {
-        transform: translateY(-2px);
-    }
-
-    .hero-cta-solid:hover {
-        color: #221560;
-    }
-
-    .hero-cta-outline:hover {
-        background: #ffffff;
-        color: #2f1e7d;
+        letter-spacing: -0.03em;
     }
 
     .hero-image-frame {
-        border-radius: 28px;
+        border-radius: var(--radius-lg);
         overflow: hidden;
-        box-shadow: 0 25px 55px rgba(17, 9, 51, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: var(--shadow-card);
+        border: 4px solid rgba(255, 255, 255, 0.2);
         min-height: 440px;
-        background: rgba(255, 255, 255, 0.08);
     }
 
     .hero-image {
@@ -993,79 +881,47 @@
         display: block;
     }
 
-    /* Section Styles */
-    .min-vh-50 {
-        min-height: 50vh;
-    }
-
-    .stat-box {
-        padding: 30px 20px;
-        transition: transform 0.3s ease;
-    }
-
-    .stat-box:hover {
-        transform: translateY(-10px);
-    }
-
-    .feature-card {
-        transition: all 0.3s ease;
-        background: #f8f9fa;
-    }
-
-    .feature-card:hover {
-        transform: translateY(-5px);
-        border-color: #667eea !important;
-        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.1);
-    }
-
-    .feature-icon {
-        display: inline-flex;
+    /* Custom Elements */
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 2rem;
     }
 
-    .topic-badge {
-        transition: all 0.3s ease;
-        cursor: pointer;
+    .step-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
     }
 
-    .topic-badge:hover {
-        transform: scale(1.05);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    .avatar-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.25rem;
     }
 
-    .bg-gradient {
-        background-size: 200% 200%;
-        animation: gradient 15s ease infinite;
-    }
-
-    @@keyframes gradient {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    /* Card Styles */
-    .card {
-        transition: all 0.3s ease;
-    }
-
-    .card:hover {
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.15) !important;
-        transform: translateY(-2px);
-    }
-
-    section h2, section h5 {
-        letter-spacing: -0.5px;
-    }
-
-    a.text-decoration-none {
-        color: #667eea;
-        font-weight: 500;
-    }
-
-    a.text-decoration-none:hover {
-        color: #764ba2;
+    .avatar-circle-lg {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
     }
 
     .alert-info {
@@ -1079,20 +935,19 @@
 
     /* Footer Styles */
     .footer-shell {
-        border-top: 1px solid #dee2e6;
+        border-top: 1px solid rgba(255,255,255,0.1);
     }
 
     .social-icon {
         font-size: 1.75rem;
         margin: 0 1rem;
-        color: #6c757d;
-        transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out;
         display: inline-block;
     }
 
-    .social-icon:hover {
+    .hover-white:hover {
+        color: white !important;
         transform: translateY(-4px);
-        color: var(--brand-indigo);
     }
 
     /* Back to Top Button */
@@ -1107,7 +962,7 @@
         border-radius: 50%;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        box-shadow: var(--shadow-card);
         transition: opacity 0.3s, transform 0.3s;
         padding: 0;
     }
