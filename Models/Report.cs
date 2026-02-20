@@ -1,9 +1,12 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ExuberantPathfinders.Web.ViewModels
+namespace ExuberantPathfinders.Web.Models
 {
-    public class ReportProblemViewModel
+    public class Report
     {
+        public int Id { get; set; }
+
         [Required]
         public string Name { get; set; } = string.Empty;
 
@@ -12,10 +15,17 @@ namespace ExuberantPathfinders.Web.ViewModels
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        [Display(Name = "Issue Type")]
         public string IssueType { get; set; } = string.Empty;
 
         [Required]
         public string Message { get; set; } = string.Empty;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public bool IsResolved { get; set; }
+
+        public string? ResolutionNotes { get; set; }
+
+        public DateTime? ResolvedAt { get; set; }
     }
 }

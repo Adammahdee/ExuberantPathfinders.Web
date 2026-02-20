@@ -847,17 +847,7 @@
 <section class="py-5 bg-light">
     <div class="container text-center">
         <h3 class="fw-bold mb-4 text-primary-dark">Follow Us</h3>
-        <div class="d-flex justify-content-center gap-3">
-            <a href="https://www.facebook.com/exuberant.pathfinders" target="_blank" class="social-icon-btn facebook" aria-label="Facebook">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://www.instagram.com/exuberant_pathfinders" target="_blank" class="social-icon-btn instagram" aria-label="Instagram">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://wa.me/2349078511868" target="_blank" class="social-icon-btn whatsapp" aria-label="WhatsApp">
-                <i class="fab fa-whatsapp"></i>
-            </a>
-        </div>
+        <partial name="_SocialMediaLinks" />
     </div>
 </section>
 
@@ -1193,10 +1183,14 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         text-decoration: none;
     }
+    .social-icon-btn svg { transition: transform 0.3s ease; }
+    .social-icon-btn:hover svg { transform: scale(1.2); }
     .social-icon-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); color: white; }
     .social-icon-btn.facebook { background-color: #1877F2; }
     .social-icon-btn.instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+    .social-icon-btn.twitter { background-color: #000000; }
     .social-icon-btn.whatsapp { background-color: #25D366; }
+    .social-icon-btn.linkedin { background-color: #0077b5; }
 
     /* Back to Top Button */
     #btn-back-to-top {
