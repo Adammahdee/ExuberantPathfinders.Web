@@ -1,0 +1,24 @@
+@model ExuberantPathfinders.Web.Models.Report
+@{
+    ViewData["Title"] = "Delete Report";
+}
+
+<h1 class="h3 mb-3">Delete Report</h1>
+
+<div class="alert alert-danger">
+    Are you sure you want to delete report <strong>#@Model.Id</strong> from <strong>@Model.Name</strong>?
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <p class="mb-1"><strong>Issue Type:</strong> @Model.IssueType</p>
+        <p class="mb-1"><strong>Email:</strong> @Model.Email</p>
+        <p class="mb-0"><strong>Created:</strong> @Model.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</p>
+    </div>
+</div>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+</form>
+<a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancel</a>
