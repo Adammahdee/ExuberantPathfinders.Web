@@ -22,6 +22,16 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult News()
+    {
+        return View();
+    }
+
+    public IActionResult Services()
+    {
+        return View();
+    }
+
     public IActionResult Privacy()
     {
         return View();

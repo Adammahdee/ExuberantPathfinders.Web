@@ -37,7 +37,7 @@
                         MORE
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="moreDropdown">
-                        <li><a class="dropdown-item" href="#services">Services</a></li>
+                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Services">Services</a></li>
                         <li><a class="dropdown-item" href="#procedure">Application Procedure</a></li>
                         <li><a class="dropdown-item" href="#news">News & Stories</a></li>
                         <li><a class="dropdown-item" href="#partners">Our Partners</a></li>
@@ -129,7 +129,7 @@
                     <a href="@Url.Action("Index", "Applications")" class="btn btn-primary btn-lg fw-bold rounded-pill px-4">
                         <i class="fas fa-briefcase me-2"></i>Apply Now
                     </a>
-                    <a href="#services" class="btn btn-outline-secondary btn-lg fw-bold rounded-pill px-4">
+                    <a href="@Url.Action("Services", "Home")" class="btn btn-outline-secondary btn-lg fw-bold rounded-pill px-4">
                         <i class="fas fa-arrow-down me-2"></i>Learn More
                     </a>
                 </div>
@@ -151,6 +151,7 @@
                         <li class="mb-3"><i class="fas fa-check-circle me-2 text-accent"></i>Startup Financing Up to ₦5M</li>
                         <li class="mb-3"><i class="fas fa-check-circle me-2 text-accent"></i>Job Placement Assistance</li>
                         <li class="mb-3"><i class="fas fa-check-circle me-2 text-accent"></i>Lifetime Network Access</li>
+                        <li class="mb-3"><i class="fas fa-check-circle me-2 text-accent"></i>Strategic Youth Grants</li>
                     </ul>
                     <a href="#donation-section" class="btn btn-accent w-100 mt-2 rounded-pill fw-bold">Support This Program</a>
                 </div>
@@ -317,14 +318,76 @@
 <!-- About Section -->
 <section id="about" class="py-5 bg-white">
     <div class="container">
+        <div class="row mb-5 align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-primary-subtle text-primary mb-2">Our Mission</span>
+                <h2 class="display-6 fw-bold mb-4 text-primary-dark">Breaking the Cycle of Poverty</h2>
+                <p class="lead text-muted">
+                    Exuberant Pathfinders project seeks to <strong class="text-primary">“break the cycle of poverty by providing education, technology and economic opportunities to Youths”</strong> as a path to development for the communities they service.
+                </p>
+                <p class="text-muted">
+                    By working together across sectors to achieve a common goal, partners are more effective than they would be separately, a concept known as <strong>collective impact</strong>.
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <div class="card bg-light border-0 rounded-4 p-4">
+                    <div class="card-body">
+                        <h5 class="fw-bold text-primary-dark mb-3">Core Principles</h5>
+                        <p class="small text-muted mb-3">Successful community development initiatives and strong teams are built on the foundation of three core principles:</p>
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex mb-3">
+                                <i class="fas fa-users text-accent mt-1 me-3"></i>
+                                <div>
+                                    <strong>Community Engagement</strong>
+                                    <div class="small text-muted">Allows youth and stakeholders to participate in identifying unmet needs and finding potential solutions.</div>
+                                </div>
+                            </li>
+                            <li class="d-flex mb-3">
+                                <i class="fas fa-user-shield text-accent mt-1 me-3"></i>
+                                <div>
+                                    <strong>Leadership</strong>
+                                    <div class="small text-muted">Leaders serve as champions of an initiative and leverage ongoing support.</div>
+                                </div>
+                            </li>
+                            <li class="d-flex">
+                                <i class="fas fa-handshake text-accent mt-1 me-3"></i>
+                                <div>
+                                    <strong>Collaboration</strong>
+                                    <div class="small text-muted">Youth play an integral role in successful projects through cross-sector partnership.</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="row g-0">
+                        <div class="col-md-6 bg-primary text-white p-4 p-lg-5 d-flex flex-column justify-content-center">
+                            <h4 class="fw-bold mb-3">Educational Methodology</h4>
+                            <p class="mb-0">Focusing on the educational component of community development, including the community-wide empowerment that increased educational opportunity creates.</p>
+                        </div>
+                        <div class="col-md-6 bg-dark text-white p-4 p-lg-5 d-flex flex-column justify-content-center">
+                            <h4 class="fw-bold mb-3">Digital Methodology</h4>
+                            <p class="mb-0">Addressing the issues and challenges of the Digital divide, making affordable training and access to computers and the Internet, addressing the marginalisation of local communities that cannot connect and participate in the global Online community.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-lg-12">
-                <h2 class="display-6 fw-bold mb-5 text-primary-dark">Our Key Areas of Intervention</h2>
+                <span class="badge bg-primary-subtle text-primary mb-2">Our Focus</span>
+                <h2 class="display-6 fw-bold mb-5 text-primary-dark">Key Areas of Intervention</h2>
                 
                 <div class="row g-4">
                     <div class="col-md-6">
-                        <div class="d-flex gap-4 mb-3 p-4 rounded-4 bg-light shadow-sm h-100">
-                            <div class="text-primary flex-shrink-0">
+                        <div class="card h-100 border-0 bg-light shadow-sm p-4 rounded-4 flex-row align-items-start gap-4">
+                            <div class="text-accent flex-shrink-0">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                             <div>
@@ -334,8 +397,8 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="d-flex gap-4 mb-3 p-4 rounded-4 bg-light shadow-sm h-100">
-                            <div class="text-primary flex-shrink-0">
+                        <div class="card h-100 border-0 bg-light shadow-sm p-4 rounded-4 flex-row align-items-start gap-4">
+                            <div class="text-accent flex-shrink-0">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                             <div>
@@ -345,8 +408,8 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="d-flex gap-4 mb-3 p-4 rounded-4 bg-light shadow-sm h-100">
-                            <div class="text-primary flex-shrink-0">
+                        <div class="card h-100 border-0 bg-light shadow-sm p-4 rounded-4 flex-row align-items-start gap-4">
+                            <div class="text-accent flex-shrink-0">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                             <div>
@@ -356,8 +419,8 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="d-flex gap-4 mb-3 p-4 rounded-4 bg-light shadow-sm h-100">
-                            <div class="text-primary flex-shrink-0">
+                        <div class="card h-100 border-0 bg-light shadow-sm p-4 rounded-4 flex-row align-items-start gap-4">
+                            <div class="text-accent flex-shrink-0">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                             <div>
@@ -389,6 +452,7 @@
                     </div>
                     <h5 class="card-title fw-bold text-primary-dark">Education</h5>
                     <p class="card-text text-muted small">Quality education and skill acquisition programs for youth development.</p>
+                    <a href="@Url.Action("Services", "Home")#education" class="text-primary fw-bold text-decoration-none mt-3 d-inline-block">Learn More <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
@@ -398,6 +462,7 @@
                     </div>
                     <h5 class="card-title fw-bold text-primary-dark">Healthcare</h5>
                     <p class="card-text text-muted small">Community wellness and health improvement initiatives.</p>
+                    <a href="@Url.Action("Services", "Home")#healthcare" class="text-primary fw-bold text-decoration-none mt-3 d-inline-block">Learn More <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
@@ -407,24 +472,27 @@
                     </div>
                     <h5 class="card-title fw-bold text-primary-dark">Climate Change</h5>
                     <p class="card-text text-muted small">Sustainable and eco-friendly environmental initiatives.</p>
+                    <a href="@Url.Action("Services", "Home")#climate" class="text-primary fw-bold text-decoration-none mt-3 d-inline-block">Learn More <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 p-4 border-0 shadow-card rounded-4 service-card">
-                    <div class="icon-box mb-3 text-primary">
+                    <div class="icon-box mb-3 text-accent">
                         <i class="fas fa-gavel fa-2x"></i>
                     </div>
                     <h5 class="card-title fw-bold text-primary-dark">Conflict & Justice</h5>
                     <p class="card-text text-muted small">Peace, security and justice promotion programs.</p>
+                    <a href="@Url.Action("Services", "Home")#conflict" class="text-primary fw-bold text-decoration-none mt-3 d-inline-block">Learn More <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 p-4 border-0 shadow-card rounded-4 service-card">
-                    <div class="icon-box mb-3 text-primary">
+                    <div class="icon-box mb-3 text-accent">
                         <i class="fas fa-city fa-2x"></i>
                     </div>
                     <h5 class="card-title fw-bold text-primary-dark">Local Governance</h5>
                     <p class="card-text text-muted small">Community engagement and policy advocacy.</p>
+                    <a href="@Url.Action("Services", "Home")#governance" class="text-primary fw-bold text-decoration-none mt-3 d-inline-block">Learn More <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
@@ -434,8 +502,30 @@
                     </div>
                     <h5 class="card-title fw-bold text-primary-dark">Economic Development</h5>
                     <p class="card-text text-muted small">Entrepreneurship and social enterprise support.</p>
+                    <a href="@Url.Action("Services", "Home")#economic" class="text-primary fw-bold text-decoration-none mt-3 d-inline-block">Learn More <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 p-4 border-0 shadow-card rounded-4 service-card">
+                    <div class="icon-box mb-3 text-accent">
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                    </div>
+                    <h5 class="card-title fw-bold text-primary-dark">Strategic Youth Grants</h5>
+                    <p class="card-text text-muted small">Providing financial support and resources for youth-led community projects.</p>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <a href="@Url.Action("Index", "Applications")" class="btn btn-outline-primary btn-sm mt-3 rounded-pill fw-bold">Apply for Grant</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Register", "Account")" class="btn btn-outline-primary btn-sm mt-3 rounded-pill fw-bold">Apply for Grant</a>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            <button type="button" class="btn btn-outline-primary btn-lg rounded-pill px-5 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#volunteerModal">Join Our Team</button>
         </div>
     </div>
 </section>
@@ -478,6 +568,57 @@
                         <i class="fas fa-quote-left text-muted me-2"></i>
                         Through their skills acquisition program, I was able to start my own business. The support system and network provided has been invaluable to my success.
                     </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Success Stories Section -->
+<section id="success-stories" class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <span class="badge bg-primary-subtle text-primary mb-2">Real Impact</span>
+                <h2 class="display-6 fw-bold mb-3 text-primary-dark">Success Stories</h2>
+                <p class="lead text-muted">Meet the individuals whose lives have been transformed through our initiatives.</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                    <div class="row g-0 h-100">
+                        <div class="col-md-5">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" class="img-fluid h-100 w-100" alt="Success Story 1" style="object-fit: cover; min-height: 250px;">
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body p-4 d-flex flex-column h-100 justify-content-center">
+                                <h5 class="fw-bold text-primary-dark">From Idea to Enterprise</h5>
+                                <p class="text-muted small mb-3">Chidi utilized our startup grant to launch a sustainable agriculture business that now employs 15 youth in his village.</p>
+                                <div class="mt-auto">
+                                    <span class="text-accent fw-bold small">Agro-Allied Program</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                    <div class="row g-0 h-100">
+                        <div class="col-md-5">
+                            <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80" class="img-fluid h-100 w-100" alt="Success Story 2" style="object-fit: cover; min-height: 250px;">
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body p-4 d-flex flex-column h-100 justify-content-center">
+                                <h5 class="fw-bold text-primary-dark">Tech for Good</h5>
+                                <p class="text-muted small mb-3">After attending our digital skills workshop, Zainab developed a mobile app that connects local artisans with city markets.</p>
+                                <div class="mt-auto">
+                                    <span class="text-accent fw-bold small">Digital Skills Initiative</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -539,6 +680,32 @@
                     <p class="lead fw-bold mb-0">Make Your Impact Today</p>
                     <p class="small text-muted">Every contribution helps us serve thousands of youth</p>
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Volunteer Section -->
+<section id="volunteer" class="py-5 bg-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2">
+                <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=800&q=80" alt="Volunteers" class="img-fluid rounded-4 shadow-sm mb-4 mb-lg-0">
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <span class="badge bg-primary-subtle text-primary mb-2">Join the Movement</span>
+                <h2 class="display-6 fw-bold mb-4 text-primary-dark">Become a Volunteer</h2>
+                <p class="lead text-muted mb-4">
+                    Dedicate your time and skills to empower the next generation. Whether you're a mentor, trainer, or community organizer, your contribution matters.
+                </p>
+                <ul class="list-unstyled mb-4">
+                    <li class="mb-2"><i class="fas fa-check-circle text-accent me-2"></i> Mentor young entrepreneurs</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-accent me-2"></i> Facilitate skills training workshops</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-accent me-2"></i> Support community outreach programs</li>
+                </ul>
+                <button type="button" class="btn btn-primary btn-lg rounded-pill px-5" data-bs-toggle="modal" data-bs-target="#volunteerModal">
+                    Sign Up to Volunteer
+                </button>
             </div>
         </div>
     </div>
@@ -676,6 +843,24 @@
     </div>
 </section>
 
+<!-- Follow Us Section -->
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-4 text-primary-dark">Follow Us</h3>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="https://www.facebook.com/exuberant.pathfinders" target="_blank" class="social-icon-btn facebook" aria-label="Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.instagram.com/exuberant_pathfinders" target="_blank" class="social-icon-btn instagram" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://wa.me/2349078511868" target="_blank" class="social-icon-btn whatsapp" aria-label="WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- Footer -->
 <footer class="footer-shell py-5 bg-dark text-white">
     <div class="container text-center">
@@ -689,12 +874,7 @@
                 </form>
             </div>
         </div>
-        <div class="social-icons my-4">
-            <a href="https://wa.me/2349078511868" target="_blank" class="social-icon text-white-50 hover-white" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://www.facebook.com/exuberant.pathfinders" target="_blank" class="social-icon text-white-50 hover-white" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/exuberant_pathfinders" target="_blank" class="social-icon text-white-50 hover-white" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        </div>
-        <p class="small text-white-50 mb-0">&copy; @DateTime.Now.Year Exuberant Pathfinders. All Rights Reserved.</p>
+        <p class="small text-white-50 mb-0 mt-4">&copy; @DateTime.Now.Year Exuberant Pathfinders. All Rights Reserved.</p>
     </div>
 </footer>
 
@@ -754,6 +934,57 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Volunteer Modal -->
+<div class="modal fade" id="volunteerModal" tabindex="-1" aria-labelledby="volunteerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-primary-dark" id="volunteerModalLabel">Volunteer Sign Up</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="text-muted small mb-4">Join our team of dedicated volunteers. Please fill out the form below.</p>
+                <form>
+                    <div class="mb-3">
+                        <label for="volName" class="form-label small fw-bold">Full Name</label>
+                        <input type="text" class="form-control" id="volName" placeholder="Your Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="volEmail" class="form-label small fw-bold">Email Address</label>
+                        <input type="email" class="form-control" id="volEmail" placeholder="name@example.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="volPhone" class="form-label small fw-bold">Phone Number</label>
+                        <input type="tel" class="form-control" id="volPhone" placeholder="+234..." required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Areas of Interest</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="checkMentorship">
+                            <label class="form-check-label small" for="checkMentorship">Mentorship</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="checkTraining">
+                            <label class="form-check-label small" for="checkTraining">Skills Training</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="checkOutreach">
+                            <label class="form-check-label small" for="checkOutreach">Community Outreach</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="volMessage" class="form-label small fw-bold">Why do you want to volunteer?</label>
+                        <textarea class="form-control" id="volMessage" rows="3"></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary rounded-pill">Submit Application</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -949,6 +1180,23 @@
         color: white !important;
         transform: translateY(-4px);
     }
+
+    .social-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 1.25rem;
+        color: white;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-decoration: none;
+    }
+    .social-icon-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); color: white; }
+    .social-icon-btn.facebook { background-color: #1877F2; }
+    .social-icon-btn.instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+    .social-icon-btn.whatsapp { background-color: #25D366; }
 
     /* Back to Top Button */
     #btn-back-to-top {
