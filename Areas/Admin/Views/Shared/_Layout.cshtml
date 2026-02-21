@@ -1,3 +1,5 @@
+@using ExuberantPathfinders.Web.Constants
+@addTagHelper *, ExuberantPathfinders.Web
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -206,14 +208,19 @@
                                 <i class="fas fa-wallet"></i> Funds
                             </a>
                         </li>
-                        <li>
+                        <li asp-permission="@Permissions.Reports.View">
                             <a asp-area="Admin" asp-controller="Reports" asp-action="Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "")">
                                 <i class="fas fa-flag"></i> Problem Reports
                             </a>
                         </li>
-                        <li>
-                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Users" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")">
+                        <li asp-permission="@Permissions.Users.View">
+                            <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "active" : "")">
                                 <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                        <li asp-permission="@Permissions.Roles.View">
+                            <a asp-area="Admin" asp-controller="Roles" asp-action="Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Roles" ? "active" : "")">
+                                <i class="fas fa-user-shield"></i> Roles
                             </a>
                         </li>
                         <li>

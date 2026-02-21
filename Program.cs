@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using ExuberantPathfinders.Web.Data;
 using ExuberantPathfinders.Web.Models;
 using ExuberantPathfinders.Web.Services;
+using ExuberantPathfinders.Web.Middleware;
+using ExuberantPathfinders.Web.Constants;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +31,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireLowercase = true;
     options.SignIn.RequireConfirmedEmail = false;
     options.User.RequireUniqueEmail = true;
+    
+    // Lockout settings
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
@@ -36,9 +45,35 @@ builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IDonationService, DonationService>();
 builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IAdminRoleService, AdminRoleService>(); // Note: AdminRoleService logic is currently in controller, but good to register if extracted later.
+
+// Add Authorization Policies
+builder.Services.AddAuthorization(options =>
+{
+    // Register a policy for each permission
+    foreach (var permission in Permissions.GetAllPermissions())
+    {
+        options.AddPolicy(permission, policy => policy.RequireClaim("Permission", permission));
+    }
+    
+    // Fallback policy for Admin area
+    options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
+});
 
 // Add MVC
 builder.Services.AddControllersWithViews();
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[]
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("en-GB")
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("en-US");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 
 var app = builder.Build();
 
@@ -53,19 +88,32 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseRequestLocalization();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Check for Maintenance Mode
+app.UseMiddleware<MaintenanceMiddleware>();
+
 // Seed database on startup
 using (var scope = app.Services.CreateScope())
 {
-    var initializer = new DbInitializer(
-        scope.ServiceProvider.GetRequiredService<ApplicationDbContext>(),
-        scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>(),
-        scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>()
-    );
-    await initializer.Initialize();
+    var services = scope.ServiceProvider;
+    try
+    {
+        var initializer = new DbInitializer(
+            services.GetRequiredService<ApplicationDbContext>(),
+            services.GetRequiredService<UserManager<ApplicationUser>>(),
+            services.GetRequiredService<RoleManager<IdentityRole>>()
+        );
+        await initializer.Initialize();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
 }
 
 // Configure Routes

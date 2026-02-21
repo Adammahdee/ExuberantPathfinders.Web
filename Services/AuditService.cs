@@ -6,7 +6,7 @@ namespace ExuberantPathfinders.Web.Services
 {
     public interface IAuditService
     {
-        Task LogActionAsync(string userId, AuditAction action, string entityType, int entityId, 
+        Task LogAsync(string userId, AuditAction action, string entityType, string entityId, string description,
             object? oldValues = null, object? newValues = null, string? ipAddress = null);
     }
 
@@ -19,7 +19,7 @@ namespace ExuberantPathfinders.Web.Services
             _context = context;
         }
 
-        public async Task LogActionAsync(string userId, AuditAction action, string entityType, int entityId,
+        public async Task LogAsync(string userId, AuditAction action, string entityType, string entityId, string description,
             object? oldValues = null, object? newValues = null, string? ipAddress = null)
         {
             var auditLog = new AuditLog
@@ -28,6 +28,7 @@ namespace ExuberantPathfinders.Web.Services
                 Action = action,
                 EntityType = entityType,
                 EntityId = entityId,
+                Description = description,
                 OldValues = oldValues != null ? JsonSerializer.Serialize(oldValues) : string.Empty,
                 NewValues = newValues != null ? JsonSerializer.Serialize(newValues) : string.Empty,
                 IPAddress = ipAddress ?? string.Empty,

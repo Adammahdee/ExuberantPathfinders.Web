@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +26,14 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Reports
-        public async Task<IActionResult> Index(string searchString, string statusFilter, int? pageNumber)
+        public async Task<IActionResult> Index(string searchString, string statusFilter, DateTime? startDate, DateTime? endDate, bool showDeleted, int? pageNumber)
         {
             ViewData["CurrentFilter"] = searchString;
             ViewData["StatusFilter"] = statusFilter;
+            ViewData["StartDate"] = startDate?.ToString("yyyy-MM-dd");
+            ViewData["EndDate"] = endDate?.ToString("yyyy-MM-dd");
+            ViewData["ShowDeleted"] = showDeleted;
+
             int pageSize = 10;
             var reports = _context.Reports.AsQueryable();
 
@@ -46,6 +52,21 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
                 {
                     reports = reports.Where(r => r.IsResolved);
                 }
+            }
+
+            if (startDate.HasValue)
+            {
+                reports = reports.Where(r => r.CreatedAt >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                reports = reports.Where(r => r.CreatedAt <= endDate.Value.AddDays(1)); // Include the end date
+            }
+
+            if (!showDeleted)
+            {
+                reports = reports.Where(r => !r.IsDeleted);
             }
 
             reports = reports.OrderByDescending(r => r.CreatedAt);
@@ -170,10 +191,56 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             var report = await _context.Reports.FindAsync(id);
             if (report != null)
             {
-                _context.Reports.Remove(report);
+                // Soft delete
+                report.IsDeleted = true;
+                report.DeletedAt = DateTime.UtcNow;
+                _context.Update(report);
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        // POST: Admin/Reports/Restore/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Restore(int id)
+        {
+            var report = await _context.Reports.FindAsync(id);
+            if (report != null && report.IsDeleted)
+            {
+                report.IsDeleted = false;
+                report.DeletedAt = null;
+                _context.Update(report);
+                await _context.SaveChangesAsync();
+                TempData["ToastMessage"] = "Report restored successfully.";
+                TempData["ToastType"] = "success";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Admin/Reports/Export
+        public async Task<IActionResult> Export()
+        {
+            var reports = await _context.Reports
+                .Where(r => !r.IsDeleted)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
+
+            var builder = new StringBuilder();
+            builder.AppendLine("Id,Name,Email,IssueType,Status,CreatedDate,ResolvedDate");
+
+            foreach (var report in reports)
+            {
+                builder.AppendLine($"{report.Id}," +
+                                   $"\"{report.Name?.Replace("\"", "\"\"")}\"," +
+                                   $"\"{report.Email}\"," +
+                                   $"\"{report.IssueType}\"," +
+                                   $"{(report.IsResolved ? "Resolved" : "Pending")}," +
+                                   $"{report.CreatedAt:yyyy-MM-dd HH:mm}," +
+                                   $"{report.ResolvedAt:yyyy-MM-dd HH:mm}");
+            }
+
+            return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", $"reports_export_{DateTime.Now:yyyyMMddHHmm}.csv");
         }
     }
 }

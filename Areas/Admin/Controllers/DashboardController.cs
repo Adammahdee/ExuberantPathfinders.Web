@@ -31,15 +31,95 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var totalApplications = await _context.Applications.CountAsync();
+            var pendingApplications = await _context.Applications.Where(a => a.Status == ApplicationStatus.UnderReview).CountAsync();
+            var totalUsers = await _context.Users.CountAsync();
+            var totalGrants = await _context.Programs.CountAsync();
+            var totalFunds = await _context.Campaigns.CountAsync();
+            var activeCampaigns = await _context.Campaigns.Where(c => c.IsActive).CountAsync();
+
+            var completedDonationsQuery = _context.Donations.Where(d => d.Status == DonationStatus.Completed);
+            var totalDonations = await completedDonationsQuery.SumAsync(d => (decimal?)d.Amount) ?? 0m;
+            var completedDonationsCount = await completedDonationsQuery.CountAsync();
+
+            var approvedApplicationsQuery = _context.Applications.Where(a => a.Status == ApplicationStatus.Approved);
+            var approvedApplications = await approvedApplicationsQuery.CountAsync();
+            var fundedBeneficiaries = await approvedApplicationsQuery
+                .Select(a => a.ApplicantId)
+                .Distinct()
+                .CountAsync();
+            var approvedRequestVolume = await approvedApplicationsQuery.SumAsync(a => (decimal?)a.RequestedAmount) ?? 0m;
+
+            var submittedApplications = await _context.Applications.Where(a => a.SubmittedAt != null).CountAsync();
+            var approvalRate = submittedApplications == 0
+                ? 0m
+                : Math.Round((approvedApplications * 100m) / submittedApplications, 2);
+
+            var totalCampaignTarget = await _context.Campaigns.SumAsync(c => (decimal?)c.TargetAmount) ?? 0m;
+            var campaignGoalAttainmentRate = totalCampaignTarget == 0
+                ? 0m
+                : Math.Round((totalDonations * 100m) / totalCampaignTarget, 2);
+
+            var averageDonationAmount = completedDonationsCount == 0
+                ? 0m
+                : Math.Round(totalDonations / completedDonationsCount, 2);
+
+            var startMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1).AddMonths(-5);
+            var monthBuckets = Enumerable.Range(0, 6).Select(i => startMonth.AddMonths(i)).ToList();
+
+            var submittedByMonth = await _context.Applications
+                .Where(a => a.SubmittedAt != null && a.SubmittedAt >= startMonth)
+                .GroupBy(a => new { a.SubmittedAt!.Value.Year, a.SubmittedAt!.Value.Month })
+                .Select(g => new { g.Key.Year, g.Key.Month, Count = g.Count() })
+                .ToListAsync();
+
+            var approvedByMonth = await _context.Applications
+                .Where(a => a.Status == ApplicationStatus.Approved && a.ReviewedAt != null && a.ReviewedAt >= startMonth)
+                .GroupBy(a => new { a.ReviewedAt!.Value.Year, a.ReviewedAt!.Value.Month })
+                .Select(g => new { g.Key.Year, g.Key.Month, Count = g.Count() })
+                .ToListAsync();
+
+            var donationsByMonth = await _context.Donations
+                .Where(d => d.Status == DonationStatus.Completed && d.CompletedAt != null && d.CompletedAt >= startMonth)
+                .GroupBy(d => new { d.CompletedAt!.Value.Year, d.CompletedAt!.Value.Month })
+                .Select(g => new { g.Key.Year, g.Key.Month, Amount = g.Sum(x => x.Amount) })
+                .ToListAsync();
+
+            var submittedLookup = submittedByMonth.ToDictionary(x => $"{x.Year}-{x.Month}", x => x.Count);
+            var approvedLookup = approvedByMonth.ToDictionary(x => $"{x.Year}-{x.Month}", x => x.Count);
+            var donationLookup = donationsByMonth.ToDictionary(x => $"{x.Year}-{x.Month}", x => x.Amount);
+
             var model = new AdminDashboardViewModel
             {
-                TotalApplications = await _context.Applications.CountAsync(),
-                PendingApplications = await _context.Applications.Where(a => a.Status == ApplicationStatus.UnderReview).CountAsync(),
-                TotalDonations = await _context.Donations.Where(d => d.Status == DonationStatus.Completed).SumAsync(d => d.Amount),
-                TotalUsers = await _context.Users.CountAsync(),
-                TotalGrants = await _context.Programs.CountAsync(),
-                TotalFunds = await _context.Campaigns.CountAsync(),
-                ActiveCampaigns = await _context.Campaigns.Where(c => c.IsActive).CountAsync(),
+                TotalApplications = totalApplications,
+                PendingApplications = pendingApplications,
+                TotalDonations = totalDonations,
+                TotalUsers = totalUsers,
+                TotalGrants = totalGrants,
+                TotalFunds = totalFunds,
+                ActiveCampaigns = activeCampaigns,
+                ImpactAnalytics = new ImpactAnalyticsViewModel
+                {
+                    ApprovedApplications = approvedApplications,
+                    ApprovalRate = approvalRate,
+                    FundedBeneficiaries = fundedBeneficiaries,
+                    ApprovedRequestVolume = approvedRequestVolume,
+                    CampaignGoalAttainmentRate = campaignGoalAttainmentRate,
+                    AverageDonationAmount = averageDonationAmount,
+                    MonthlyImpact = monthBuckets
+                        .Select(month =>
+                        {
+                            var key = $"{month.Year}-{month.Month}";
+                            return new MonthlyImpactPointViewModel
+                            {
+                                Label = month.ToString("MMM yyyy"),
+                                SubmittedApplications = submittedLookup.TryGetValue(key, out var submittedCount) ? submittedCount : 0,
+                                ApprovedApplications = approvedLookup.TryGetValue(key, out var approvedCount) ? approvedCount : 0,
+                                DonationAmount = donationLookup.TryGetValue(key, out var donationAmount) ? donationAmount : 0m
+                            };
+                        })
+                        .ToList()
+                },
                 RecentApplications = await _context.Applications
                     .Include(a => a.Applicant)
                     .Include(a => a.Program)
@@ -181,7 +261,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             _context.Programs.Add(grant);
             await _context.SaveChangesAsync();
 
-            await LogAdminActionAsync(AuditAction.Create, "GrantProgram", grant.Id, null, new
+            await LogAdminActionAsync(AuditAction.Create, "GrantProgram", grant.Id.ToString(), "Created Grant", null, new
             {
                 grant.Name,
                 grant.Budget,
@@ -231,7 +311,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             grant.ProgramOfficerId = programOfficerId;
 
             await _context.SaveChangesAsync();
-            await LogAdminActionAsync(AuditAction.Update, "GrantProgram", grant.Id, old, new
+            await LogAdminActionAsync(AuditAction.Update, "GrantProgram", grant.Id.ToString(), "Updated Grant", old, new
             {
                 grant.Name,
                 grant.Description,
@@ -270,7 +350,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             var old = new { grant.Name, grant.Budget, grant.IsActive };
             _context.Programs.Remove(grant);
             await _context.SaveChangesAsync();
-            await LogAdminActionAsync(AuditAction.Delete, "GrantProgram", grant.Id, old, null);
+            await LogAdminActionAsync(AuditAction.Delete, "GrantProgram", grant.Id.ToString(), "Deleted Grant", old, null);
 
             TempData["GrantFormSuccess"] = "Grant deleted.";
             return RedirectToAction(nameof(Grants));
@@ -291,7 +371,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             grant.IsActive = !grant.IsActive;
             await _context.SaveChangesAsync();
 
-            await LogAdminActionAsync(AuditAction.Update, "GrantProgram", grant.Id, old, new { grant.IsActive });
+            await LogAdminActionAsync(AuditAction.Update, "GrantProgram", grant.Id.ToString(), "Toggled Grant Status", old, new { grant.IsActive });
             TempData["GrantFormSuccess"] = grant.IsActive ? "Grant activated." : "Grant deactivated.";
             return RedirectToAction(nameof(Grants));
         }
@@ -317,7 +397,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             grant.Budget = budget;
             await _context.SaveChangesAsync();
 
-            await LogAdminActionAsync(AuditAction.Update, "GrantProgram", grant.Id, old, new { grant.Budget });
+            await LogAdminActionAsync(AuditAction.Update, "GrantProgram", grant.Id.ToString(), "Updated Grant Budget", old, new { grant.Budget });
             TempData["GrantFormSuccess"] = "Grant budget updated.";
             return RedirectToAction(nameof(Grants));
         }
@@ -368,7 +448,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             _context.Campaigns.Add(campaign);
             await _context.SaveChangesAsync();
 
-            await LogAdminActionAsync(AuditAction.Create, "Campaign", campaign.Id, null, new
+            await LogAdminActionAsync(AuditAction.Create, "Campaign", campaign.Id.ToString(), "Created Fund", null, new
             {
                 campaign.Name,
                 campaign.TargetAmount,
@@ -416,7 +496,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             campaign.EndDate = endDate;
             await _context.SaveChangesAsync();
 
-            await LogAdminActionAsync(AuditAction.Update, "Campaign", campaign.Id, old, new
+            await LogAdminActionAsync(AuditAction.Update, "Campaign", campaign.Id.ToString(), "Updated Fund", old, new
             {
                 campaign.Name,
                 campaign.Description,
@@ -453,7 +533,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             var old = new { campaign.Name, campaign.TargetAmount, campaign.IsActive };
             _context.Campaigns.Remove(campaign);
             await _context.SaveChangesAsync();
-            await LogAdminActionAsync(AuditAction.Delete, "Campaign", campaign.Id, old, null);
+            await LogAdminActionAsync(AuditAction.Delete, "Campaign", campaign.Id.ToString(), "Deleted Fund", old, null);
 
             TempData["FundFormSuccess"] = "Campaign deleted.";
             return RedirectToAction(nameof(Funds));
@@ -474,7 +554,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             campaign.IsActive = !campaign.IsActive;
             await _context.SaveChangesAsync();
 
-            await LogAdminActionAsync(AuditAction.Update, "Campaign", campaign.Id, old, new { campaign.IsActive });
+            await LogAdminActionAsync(AuditAction.Update, "Campaign", campaign.Id.ToString(), "Toggled Fund Status", old, new { campaign.IsActive });
             TempData["FundFormSuccess"] = campaign.IsActive ? "Campaign activated." : "Campaign deactivated.";
             return RedirectToAction(nameof(Funds));
         }
@@ -500,7 +580,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             campaign.TargetAmount = targetAmount;
             await _context.SaveChangesAsync();
 
-            await LogAdminActionAsync(AuditAction.Update, "Campaign", campaign.Id, old, new { campaign.TargetAmount });
+            await LogAdminActionAsync(AuditAction.Update, "Campaign", campaign.Id.ToString(), "Updated Fund Target", old, new { campaign.TargetAmount });
             TempData["FundFormSuccess"] = "Campaign target updated.";
             return RedirectToAction(nameof(Funds));
         }
@@ -704,7 +784,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             });
 
             await _context.SaveChangesAsync();
-            await LogAdminActionAsync(AuditAction.Update, "Application", application.Id, new { previousStatus }, new { status, reason });
+            await LogAdminActionAsync(AuditAction.Update, "Application", application.Id.ToString(), "Updated Application Status", new { previousStatus }, new { status, reason });
             TempData["AdminSuccess"] = "Application status updated.";
             return RedirectToAction(nameof(Applications));
         }
@@ -732,7 +812,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             user.LastModifiedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
-            await LogAdminActionAsync(AuditAction.Update, "ApplicationUser", 0, old, new { user.IsActive, user.Id });
+            await LogAdminActionAsync(AuditAction.Update, "ApplicationUser", user.Id, "Toggled User Status", old, new { user.IsActive });
             TempData["AdminSuccess"] = user.IsActive ? "User activated." : "User deactivated.";
             return RedirectToAction(nameof(Users));
         }
@@ -826,11 +906,11 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
             return page;
         }
 
-        private async Task LogAdminActionAsync(AuditAction action, string entityType, int entityId, object? oldValues = null, object? newValues = null)
+        private async Task LogAdminActionAsync(AuditAction action, string entityType, string entityId, string description, object? oldValues = null, object? newValues = null)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
-            await _auditService.LogActionAsync(userId, action, entityType, entityId, oldValues, newValues, ipAddress);
+            await _auditService.LogAsync(userId, action, entityType, entityId, description, oldValues, newValues, ipAddress);
         }
 
         private static string EscapeCsv(string? value)

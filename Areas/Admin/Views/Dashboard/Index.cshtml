@@ -1,4 +1,5 @@
 @model ExuberantPathfinders.Web.Areas.Admin.ViewModels.AdminDashboardViewModel
+@using System.Text.Json
 
 @{
     ViewData["Title"] = "Admin Dashboard";
@@ -43,6 +44,49 @@
             <div class="metric-card metric-blue">
                 <p class="small mb-1">Active Campaigns</p>
                 <h3 class="mb-0">@Model.ActiveCampaigns.ToString("N0")</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Impact Analytics</h5>
+            <small class="text-muted">Last 6 months</small>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 mb-3">
+                <div class="col-md-6 col-xl-3">
+                    <div class="impact-stat">
+                        <p class="small text-muted mb-1">Approval Rate</p>
+                        <h4 class="mb-0">@Model.ImpactAnalytics.ApprovalRate.ToString("N2")%</h4>
+                        <small class="text-muted">@Model.ImpactAnalytics.ApprovedApplications.ToString("N0") approved</small>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <div class="impact-stat">
+                        <p class="small text-muted mb-1">Funded Beneficiaries</p>
+                        <h4 class="mb-0">@Model.ImpactAnalytics.FundedBeneficiaries.ToString("N0")</h4>
+                        <small class="text-muted">Unique approved applicants</small>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <div class="impact-stat">
+                        <p class="small text-muted mb-1">Approved Request Volume</p>
+                        <h4 class="mb-0">&#8358;@Model.ImpactAnalytics.ApprovedRequestVolume.ToString("N0")</h4>
+                        <small class="text-muted">Approved funding demand</small>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <div class="impact-stat">
+                        <p class="small text-muted mb-1">Campaign Goal Attainment</p>
+                        <h4 class="mb-0">@Model.ImpactAnalytics.CampaignGoalAttainmentRate.ToString("N2")%</h4>
+                        <small class="text-muted">Avg donation: &#8358;@Model.ImpactAnalytics.AverageDonationAmount.ToString("N0")</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="impact-chart-wrap">
+                <canvas id="impactTrendChart" height="110"></canvas>
             </div>
         </div>
     </div>
@@ -183,4 +227,81 @@
         background: linear-gradient(135deg, #49a9ff 0%, #5dc0ff 100%);
         color: #07243f;
     }
+
+    .admin-page .impact-stat {
+        border: 1px solid rgba(12, 26, 55, 0.08);
+        border-radius: 12px;
+        padding: 0.85rem;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        min-height: 100px;
+    }
+
+    .admin-page .impact-chart-wrap {
+        border: 1px solid rgba(12, 26, 55, 0.08);
+        border-radius: 12px;
+        padding: 0.75rem;
+        background: #ffffff;
+    }
 </style>
+
+@section Scripts {
+    <script>
+        const impactLabels = @Html.Raw(JsonSerializer.Serialize(Model.ImpactAnalytics.MonthlyImpact.Select(m => m.Label)));
+        const submittedSeries = @Html.Raw(JsonSerializer.Serialize(Model.ImpactAnalytics.MonthlyImpact.Select(m => m.SubmittedApplications)));
+        const approvedSeries = @Html.Raw(JsonSerializer.Serialize(Model.ImpactAnalytics.MonthlyImpact.Select(m => m.ApprovedApplications)));
+        const donationsSeries = @Html.Raw(JsonSerializer.Serialize(Model.ImpactAnalytics.MonthlyImpact.Select(m => m.DonationAmount)));
+
+        const impactCtx = document.getElementById('impactTrendChart');
+        if (impactCtx) {
+            new Chart(impactCtx, {
+                type: 'line',
+                data: {
+                    labels: impactLabels,
+                    datasets: [
+                        {
+                            label: 'Submitted',
+                            data: submittedSeries,
+                            borderColor: '#2d7ef7',
+                            backgroundColor: 'rgba(45, 126, 247, 0.12)',
+                            tension: 0.3,
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Approved',
+                            data: approvedSeries,
+                            borderColor: '#26a86f',
+                            backgroundColor: 'rgba(38, 168, 111, 0.12)',
+                            tension: 0.3,
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Donations (NGN)',
+                            data: donationsSeries,
+                            borderColor: '#f28d36',
+                            backgroundColor: 'rgba(242, 141, 54, 0.12)',
+                            tension: 0.3,
+                            borderWidth: 2,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Applications' }
+                        },
+                        y1: {
+                            beginAtZero: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: 'Donations (NGN)' }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+}

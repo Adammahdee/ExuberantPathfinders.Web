@@ -27,5 +27,9 @@ namespace ExuberantPathfinders.Web.Models
         public string? ResolutionNotes { get; set; }
 
         public DateTime? ResolvedAt { get; set; }
+
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
     }
 }

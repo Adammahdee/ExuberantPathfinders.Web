@@ -1,5 +1,10 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using ExuberantPathfinders.Web.Constants;
 using ExuberantPathfinders.Web.Models;
 
 namespace ExuberantPathfinders.Web.Data
@@ -10,7 +15,10 @@ namespace ExuberantPathfinders.Web.Data
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public DbInitializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public DbInitializer(
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
@@ -19,103 +27,88 @@ namespace ExuberantPathfinders.Web.Data
 
         public async Task Initialize()
         {
+            // Apply any pending migrations automatically
             await _context.Database.MigrateAsync();
-            await SeedRoles();
-            await SeedUsers();
-            await SeedThematicAreas();
-            await SeedPrograms();
+
+            // Seed Roles
+            await SeedRolesAsync();
+
+            // Seed Admin User
+            await SeedAdminUserAsync();
+
+            // Seed AppSettings
+            await SeedAppSettingsAsync();
         }
 
-        private async Task SeedRoles()
+        private async Task SeedRolesAsync()
         {
-            var roleNames = new[] { "Admin", "ProgramOfficer", "Donor", "Applicant" };
-            foreach (var roleName in roleNames)
+            string[] roles = { "Admin", "ProgramOfficer", "User" };
+            foreach (var role in roles)
             {
-                if (!await _roleManager.RoleExistsAsync(roleName))
+                if (!await _roleManager.RoleExistsAsync(role))
                 {
-                    await _roleManager.CreateAsync(new IdentityRole(roleName));
+                    await _roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+
+            // Seed Admin Permissions
+            var adminRole = await _roleManager.FindByNameAsync("Admin");
+            if (adminRole != null)
+            {
+                var claims = await _roleManager.GetClaimsAsync(adminRole);
+                var allPermissions = Permissions.GetAllPermissions();
+                foreach (var permission in allPermissions)
+                {
+                    if (!claims.Any(c => c.Type == "Permission" && c.Value == permission))
+                    {
+                        await _roleManager.AddClaimAsync(adminRole, new Claim("Permission", permission));
+                    }
                 }
             }
         }
 
-        private async Task SeedUsers()
+        private async Task SeedAdminUserAsync()
         {
-            // Admin user
-            if (await _userManager.FindByEmailAsync("admin@exuberant.com") == null)
+            var adminEmail = "admin@exuberantpathfinders.org";
+            var adminUser = await _userManager.FindByEmailAsync(adminEmail);
+
+            if (adminUser == null)
             {
-                var admin = new ApplicationUser
+                adminUser = new ApplicationUser
                 {
-                    UserName = "admin@exuberant.com",
-                    Email = "admin@exuberant.com",
-                    FirstName = "Admin",
-                    LastName = "User",
-                    EmailConfirmed = true
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    FirstName = "System",
+                    LastName = "Admin",
+                    EmailConfirmed = true,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow
                 };
-                var result = await _userManager.CreateAsync(admin, "Admin@123456");
+
+                var result = await _userManager.CreateAsync(adminUser, "Admin@123");
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(admin, "Admin");
-                }
-            }
-
-            // Program Officer user
-            if (await _userManager.FindByEmailAsync("officer@exuberant.com") == null)
-            {
-                var officer = new ApplicationUser
-                {
-                    UserName = "officer@exuberant.com",
-                    Email = "officer@exuberant.com",
-                    FirstName = "Program",
-                    LastName = "Officer",
-                    EmailConfirmed = true
-                };
-                var result = await _userManager.CreateAsync(officer, "Officer@123456");
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(officer, "ProgramOfficer");
+                    await _userManager.AddToRoleAsync(adminUser, "Admin");
                 }
             }
         }
 
-        private async Task SeedThematicAreas()
+        private async Task SeedAppSettingsAsync()
         {
-            if (_context.ThematicAreas.Any())
-                return;
-
-            var areas = new[]
+            if (!await _context.AppSettings.AnyAsync())
             {
-                new ThematicArea { Name = "Education", Code = "EDU", Description = "Educational programs and initiatives" },
-                new ThematicArea { Name = "Health", Code = "HEALTH", Description = "Healthcare and wellness programs" },
-                new ThematicArea { Name = "Environment", Code = "ENV", Description = "Environmental conservation programs" },
-                new ThematicArea { Name = "Community Development", Code = "COM", Description = "Community development initiatives" }
-            };
-
-            await _context.ThematicAreas.AddRangeAsync(areas);
-            await _context.SaveChangesAsync();
-        }
-
-        private async Task SeedPrograms()
-        {
-            if (_context.Programs.Any())
-                return;
-
-            var officer = await _userManager.FindByEmailAsync("officer@exuberant.com");
-            var thematicArea = await _context.ThematicAreas.FirstOrDefaultAsync();
-
-            if (officer != null && thematicArea != null)
-            {
-                var program = new GrantProgram
+                var settings = new[]
                 {
-                    Name = "Youth Scholarship Program",
-                    Description = "Providing scholarships to underprivileged youth",
-                    ThematicAreaId = thematicArea.Id,
-                    ProgramOfficerId = officer.Id,
-                    Budget = 100000,
-                    StartDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddYears(1)
+                    new AppSetting { Key = "MaintenanceMode", Value = "false", Description = "Enable to show maintenance page to non-admin users.", Group = "System" },
+                    new AppSetting { Key = "MaintenanceEndTime", Value = DateTime.UtcNow.AddHours(2).ToString("o"), Description = "Estimated completion time (ISO 8601 format).", Group = "System" },
+                    new AppSetting { Key = "AllowRegistration", Value = "true", Description = "Allow new users to register.", Group = "System" },
+                    new AppSetting { Key = "ContactEmail", Value = "info@exuberantpathfinders.org", Description = "Main contact email address.", Group = "General" },
+                    new AppSetting { Key = "SupportPhone", Value = "+234-09078511868", Description = "Support phone number.", Group = "General" },
+                    new AppSetting { Key = "HomepageBanner", Value = "true", Description = "Show promotional banner on homepage.", Group = "Banner" },
+                    new AppSetting { Key = "BannerMessage", Value = "Applications for 2026 Grants are now open!", Description = "Text to display in the homepage banner.", Group = "Banner" }
                 };
 
-                await _context.Programs.AddAsync(program);
+                await _context.AppSettings.AddRangeAsync(settings);
                 await _context.SaveChangesAsync();
             }
         }

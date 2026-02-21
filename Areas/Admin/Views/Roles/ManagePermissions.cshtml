@@ -1,0 +1,57 @@
+@model ExuberantPathfinders.Web.Areas.Admin.ViewModels.ManageRolePermissionsViewModel
+@{
+    ViewData["Title"] = "Manage Permissions";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Permissions for @Model.RoleName</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to Roles</a>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Select Permissions</h5>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="selectAll">
+                <label class="form-check-label" for="selectAll">Select All</label>
+            </div>
+        </div>
+        <div class="card-body">
+            <form asp-action="ManagePermissions" method="post">
+                <input type="hidden" asp-for="RoleId" />
+                <input type="hidden" asp-for="RoleName" />
+
+                <div class="row">
+                    @for (int i = 0; i < Model.Permissions.Count; i++)
+                    {
+                        <div class="col-md-4 mb-3">
+                            <div class="form-check">
+                                <input type="hidden" asp-for="@Model.Permissions[i].Value" />
+                                <input asp-for="@Model.Permissions[i].Selected" class="form-check-input permission-checkbox" />
+                                <label class="form-check-label" asp-for="@Model.Permissions[i].Selected">
+                                    @Model.Permissions[i].Value
+                                </label>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="mt-4 border-top pt-3">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Save Permissions</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('selectAll').addEventListener('change', function() {
+            var checkboxes = document.querySelectorAll('.permission-checkbox');
+            for (var checkbox of checkboxes) {
+                checkbox.checked = this.checked;
+            }
+        });
+    </script>
+}

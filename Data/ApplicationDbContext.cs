@@ -20,6 +20,7 @@ namespace ExuberantPathfinders.Web.Data
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<ContactMessage> ContactMessages { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<AppSetting> AppSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

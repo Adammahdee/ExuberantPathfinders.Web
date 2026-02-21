@@ -24,13 +24,4 @@ namespace ExuberantPathfinders.Web.Models
         Paystack = 0,
         Manual = 1
     }
-
-    public enum AuditAction
-    {
-        Create = 0,
-        Update = 1,
-        Delete = 2,
-        Approve = 3,
-        Reject = 4
-    }
 }

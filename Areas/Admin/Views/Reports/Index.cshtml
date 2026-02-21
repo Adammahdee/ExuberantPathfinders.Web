@@ -3,23 +3,51 @@
     ViewData["Title"] = "Problem Reports";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0">Problem Reports</h1>
-    <form asp-action="Index" method="get" class="d-flex gap-2">
-        <select name="statusFilter" class="form-select" style="width: auto;" onchange="this.form.submit()">
-            <option value="">All Statuses</option>
-            <option value="Pending" selected="@((string)ViewData["StatusFilter"] == "Pending")">Pending</option>
-            <option value="Resolved" selected="@((string)ViewData["StatusFilter"] == "Resolved")">Resolved</option>
-        </select>
-        <div class="input-group">
-            <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search email or issue..." aria-label="Search">
-            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
-            @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"] as string) || !string.IsNullOrEmpty(ViewData["StatusFilter"] as string))
-            {
-                <a asp-action="Index" class="btn btn-outline-secondary" title="Clear filters"><i class="fas fa-times"></i></a>
-            }
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Problem Reports</h1>
+        <div class="d-flex gap-2">
+            <a asp-action="Export" class="btn btn-success"><i class="fas fa-file-csv me-1"></i> Export CSV</a>
         </div>
-    </form>
+    </div>
+
+    <div class="card bg-light border-0 p-3">
+        <form asp-action="Index" method="get" class="row g-2 align-items-end">
+            <div class="col-md-2">
+                <label class="small text-muted">Status</label>
+                <select name="statusFilter" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">All Statuses</option>
+                    <option value="Pending" selected="@((ViewData["StatusFilter"] as string) == "Pending")">Pending</option>
+                    <option value="Resolved" selected="@((ViewData["StatusFilter"] as string) == "Resolved")">Resolved</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="small text-muted">Start Date</label>
+                <input type="date" name="startDate" value="@ViewData["StartDate"]" class="form-control form-select-sm" />
+            </div>
+            <div class="col-md-2">
+                <label class="small text-muted">End Date</label>
+                <input type="date" name="endDate" value="@ViewData["EndDate"]" class="form-control form-select-sm" />
+            </div>
+            <div class="col-md-3">
+                <label class="small text-muted">Search</label>
+                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control form-select-sm" placeholder="Email or issue..." />
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <div class="form-check mb-1">
+                    <input class="form-check-input" type="checkbox" name="showDeleted" value="true" id="showDeleted" checked="@((bool?)ViewData["ShowDeleted"] == true)" onchange="this.form.submit()">
+                    <label class="form-check-label small" for="showDeleted">Show Deleted</label>
+                </div>
+                <button class="btn btn-primary btn-sm w-100" type="submit"><i class="fas fa-filter"></i> Filter</button>
+            </div>
+            @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"] as string) || !string.IsNullOrEmpty(ViewData["StatusFilter"] as string) || ViewData["StartDate"] != null)
+            {
+                <div class="col-12 mt-2">
+                    <a asp-action="Index" class="text-decoration-none small text-danger"><i class="fas fa-times"></i> Clear all filters</a>
+                </div>
+            }
+        </form>
+    </div>
 </div>
 
 <div class="card">
@@ -65,8 +93,17 @@
                             </td>
                             <td>@item.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
                             <td class="text-end">
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Details</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                                @if (item.IsDeleted)
+                                {
+                                    <form asp-action="Restore" asp-route-id="@item.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-warning" title="Restore"><i class="fas fa-trash-restore"></i></button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Details</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                                }
                             </td>
                         </tr>
                     }
@@ -82,13 +119,13 @@
     <nav class="mt-3" aria-label="Reports pagination">
         <ul class="pagination mb-0">
             <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
-                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-statusFilter="@ViewData["StatusFilter"]">Previous</a>
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-statusFilter="@ViewData["StatusFilter"]" asp-route-startDate="@ViewData["StartDate"]" asp-route-endDate="@ViewData["EndDate"]" asp-route-showDeleted="@ViewData["ShowDeleted"]">Previous</a>
             </li>
             <li class="page-item disabled">
                 <span class="page-link">Page @Model.PageIndex of @Model.TotalPages</span>
             </li>
             <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
-                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-statusFilter="@ViewData["StatusFilter"]">Next</a>
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-statusFilter="@ViewData["StatusFilter"]" asp-route-startDate="@ViewData["StartDate"]" asp-route-endDate="@ViewData["EndDate"]" asp-route-showDeleted="@ViewData["ShowDeleted"]">Next</a>
             </li>
         </ul>
     </nav>
