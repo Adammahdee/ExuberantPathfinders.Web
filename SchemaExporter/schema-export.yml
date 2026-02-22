@@ -1,0 +1,57 @@
+name: 'Auto-generate DB Schema'
+
+on:
+  push:
+    branches:
+      - main # Or your primary branch name
+
+jobs:
+  build-and-export:
+    runs-on: ubuntu-latest
+
+    # A service container to run a temporary MySQL database for the job
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: 'password'
+          MYSQL_DATABASE: 'exuberant_db'
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -ppassword"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: 'Checkout repository'
+      uses: actions/checkout@v4
+
+    - name: 'Setup .NET'
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: 'Install EF Core tools'
+      run: dotnet tool install --global dotnet-ef
+
+    - name: 'Apply EF Core Migrations'
+      run: dotnet ef database update --project ./ExuberantPathfinders.Web.csproj
+      env:
+        # This overrides the connection string used by the main web project
+        ConnectionStrings__DefaultConnection: "Server=127.0.0.1;Port=3306;Database=exuberant_db;Uid=root;Pwd=password;Convert Zero Datetime=True;"
+
+    - name: 'Run Schema Exporter'
+      run: dotnet run --project ./SchemaExporter/SchemaExporter.csproj
+      env:
+        # This provides the connection string to the exporter tool
+        DB_CONNECTION_STRING: "Server=127.0.0.1;Port=3306;Database=exuberant_db;Uid=root;Pwd=password;Convert Zero Datetime=True;"
+
+    - name: 'Commit and push if changed'
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add DATABASE_SCHEMA.md DATABASE_SCHEMA_ERD.mmd
+        # The following command commits and pushes only if there are staged changes
+        git diff --staged --quiet || (git commit -m "Docs: Auto-generate database schema" && git push)

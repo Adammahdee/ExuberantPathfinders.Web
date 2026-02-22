@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,9 +10,6 @@ namespace DatabaseSchemaExporter;
 
 public class Program
 {
-    // CONFIGURATION
-    // Update this connection string to match your local or remote MySQL instance.
-    private const string ConnectionString = "Server=localhost;Database=exuberant_db;Uid=root;Pwd=password;Convert Zero Datetime=True;";
     private const string MarkdownOutputFileName = "DATABASE_SCHEMA.md";
     private const string MermaidOutputFileName = "DATABASE_SCHEMA_ERD.mmd";
 
@@ -24,9 +21,19 @@ public class Program
 
         try
         {
-            var exporter = new SchemaExporter(ConnectionString);
+            // Read connection string from environment variable, with a fallback for local development.
+            var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = "Server=localhost;Database=exuberant_db;Uid=root;Pwd=password;Convert Zero Datetime=True;";
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("[INFO] DB_CONNECTION_STRING not set. Using default for local development.");
+                Console.ResetColor();
+            }
 
-            Console.WriteLine("Connecting to database...");
+            var exporter = new SchemaExporter(connectionString);
+
+            Console.WriteLine($"Connecting to database...");
             var export = await exporter.GenerateExportAsync();
 
             string cwd = Directory.GetCurrentDirectory();
