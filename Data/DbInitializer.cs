@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using ExuberantPathfinders.Web.Constants;
 using ExuberantPathfinders.Web.Models;
+using Microsoft.Extensions.Logging;
 
 namespace ExuberantPathfinders.Web.Data
 {
@@ -14,15 +15,18 @@ namespace ExuberantPathfinders.Web.Data
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ILogger<DbInitializer> _logger;
 
         public DbInitializer(
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            ILogger<DbInitializer> logger)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _logger = logger;
         }
 
         public async Task Initialize()
@@ -47,6 +51,7 @@ namespace ExuberantPathfinders.Web.Data
             {
                 if (!await _roleManager.RoleExistsAsync(role))
                 {
+                    _logger.LogInformation("Seeding role: {Role}", role);
                     await _roleManager.CreateAsync(new IdentityRole(role));
                 }
             }
@@ -74,6 +79,8 @@ namespace ExuberantPathfinders.Web.Data
 
             if (adminUser == null)
             {
+                _logger.LogInformation("Admin user not found. Creating default admin user.");
+                
                 adminUser = new ApplicationUser
                 {
                     UserName = adminEmail,
@@ -89,7 +96,16 @@ namespace ExuberantPathfinders.Web.Data
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(adminUser, "Admin");
+                    _logger.LogInformation("Admin user created successfully.");
                 }
+                else
+                {
+                    _logger.LogError("Error creating admin user: {Errors}", string.Join(", ", result.Errors.Select(e => e.Description)));
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Admin user already exists.");
             }
         }
 

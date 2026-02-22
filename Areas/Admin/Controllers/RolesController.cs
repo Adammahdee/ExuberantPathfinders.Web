@@ -34,7 +34,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
             var result = await _adminRoleService.CreateRoleAsync(model.Name, adminId);
 
             if (result.Succeeded)
@@ -52,7 +52,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)
         {
-            var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
             var result = await _adminRoleService.DeleteRoleAsync(id, adminId);
 
             if (result.Succeeded)
@@ -80,7 +80,7 @@ namespace ExuberantPathfinders.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManagePermissions(ManageRolePermissionsViewModel model)
         {
-            var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
             
             // Extract selected permissions
             var selectedPermissions = model.Permissions

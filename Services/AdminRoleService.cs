@@ -42,8 +42,8 @@ namespace ExuberantPathfinders.Web.Services
 
             foreach (var role in roles)
             {
-                var count = (await _userManager.GetUsersInRoleAsync(role.Name)).Count;
-                viewModels.Add(new RoleViewModel { Id = role.Id, Name = role.Name, UserCount = count });
+                var count = (await _userManager.GetUsersInRoleAsync(role.Name ?? string.Empty)).Count;
+                viewModels.Add(new RoleViewModel { Id = role.Id, Name = role.Name ?? string.Empty, UserCount = count });
             }
 
             return viewModels;

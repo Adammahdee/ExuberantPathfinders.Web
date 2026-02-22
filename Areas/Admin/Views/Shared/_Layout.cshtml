@@ -172,7 +172,9 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Main Site</a></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Profile">My Profile</a></li>
                     <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a></li>
                     <li>
                         <form asp-area="" asp-action="Logout" asp-controller="Account" method="post" style="display:inline;">
                             @Html.AntiForgeryToken()

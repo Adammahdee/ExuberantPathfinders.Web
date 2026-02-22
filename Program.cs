@@ -29,7 +29,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequireUppercase = true;
     options.Password.RequireLowercase = true;
-    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedEmail = true;
     options.User.RequireUniqueEmail = true;
     
     // Lockout settings
@@ -105,7 +105,8 @@ using (var scope = app.Services.CreateScope())
         var initializer = new DbInitializer(
             services.GetRequiredService<ApplicationDbContext>(),
             services.GetRequiredService<UserManager<ApplicationUser>>(),
-            services.GetRequiredService<RoleManager<IdentityRole>>()
+            services.GetRequiredService<RoleManager<IdentityRole>>(),
+            services.GetRequiredService<ILogger<DbInitializer>>()
         );
         await initializer.Initialize();
     }
