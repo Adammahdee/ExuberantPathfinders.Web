@@ -77,4 +77,3 @@ This ensures that your database documentation is always in sync with your codeba
 
 ---
 
-*This README was generated with the assistance of Gemini Code Assist.*
