@@ -17,4 +17,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="SchemaExporter\**\*.cs" />
+    <EmbeddedResource Remove="SchemaExporter\**" />
+    <None Remove="SchemaExporter\**" />
+    <Content Remove="SchemaExporter\**" />
+  </ItemGroup>
+
 </Project>

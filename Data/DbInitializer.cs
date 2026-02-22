@@ -42,6 +42,9 @@ namespace ExuberantPathfinders.Web.Data
 
             // Seed AppSettings
             await SeedAppSettingsAsync();
+
+            // Seed sample grants/scholarships and campaigns
+            await SeedSampleFundingDataAsync();
         }
 
         private async Task SeedRolesAsync()
@@ -127,6 +130,162 @@ namespace ExuberantPathfinders.Web.Data
                 await _context.AppSettings.AddRangeAsync(settings);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        private async Task SeedSampleFundingDataAsync()
+        {
+            var adminUser = await _userManager.FindByEmailAsync("admin@exuberantpathfinders.org");
+            if (adminUser == null)
+            {
+                _logger.LogWarning("Skipping sample funding data seeding because admin user was not found.");
+                return;
+            }
+
+            var thematicAreas = await EnsureSampleThematicAreasAsync();
+
+            if (!await _context.Programs.AnyAsync())
+            {
+                var samplePrograms = new[]
+                {
+                    new GrantProgram
+                    {
+                        Name = "Community Innovation Micro-Grants",
+                        Description = "Small grants for community-led pilots that improve local resilience and livelihoods.",
+                        ThematicAreaId = thematicAreas["COMMUNITY"].Id,
+                        Budget = 150000m,
+                        StartDate = DateTime.UtcNow.Date.AddDays(-30),
+                        EndDate = DateTime.UtcNow.Date.AddMonths(6),
+                        ProgramOfficerId = adminUser.Id,
+                        IsActive = true
+                    },
+                    new GrantProgram
+                    {
+                        Name = "STEM Scholars Fellowship 2026",
+                        Description = "Scholarship support for high-performing STEM students from underserved communities.",
+                        ThematicAreaId = thematicAreas["EDU"].Id,
+                        Budget = 300000m,
+                        StartDate = DateTime.UtcNow.Date.AddDays(-14),
+                        EndDate = DateTime.UtcNow.Date.AddMonths(8),
+                        ProgramOfficerId = adminUser.Id,
+                        IsActive = true
+                    },
+                    new GrantProgram
+                    {
+                        Name = "Women in Leadership Scholarships",
+                        Description = "Scholarship grants for women pursuing postgraduate leadership and policy studies.",
+                        ThematicAreaId = thematicAreas["EDU"].Id,
+                        Budget = 220000m,
+                        StartDate = DateTime.UtcNow.Date.AddDays(-7),
+                        EndDate = DateTime.UtcNow.Date.AddMonths(9),
+                        ProgramOfficerId = adminUser.Id,
+                        IsActive = true
+                    }
+                };
+
+                await _context.Programs.AddRangeAsync(samplePrograms);
+                await _context.SaveChangesAsync();
+            }
+
+            if (!await _context.Campaigns.AnyAsync())
+            {
+                var programs = await _context.Programs
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                var microGrantProgram = programs.FirstOrDefault(p => p.Name == "Community Innovation Micro-Grants");
+                var stemScholarProgram = programs.FirstOrDefault(p => p.Name == "STEM Scholars Fellowship 2026");
+                var womenScholarProgram = programs.FirstOrDefault(p => p.Name == "Women in Leadership Scholarships");
+
+                var sampleCampaigns = new List<Campaign>();
+
+                if (microGrantProgram != null)
+                {
+                    sampleCampaigns.Add(new Campaign
+                    {
+                        Name = "Back 100 Community Projects",
+                        Description = "Fund catalytic micro-grants for neighborhood cooperatives and local innovators.",
+                        ProgramId = microGrantProgram.Id,
+                        TargetAmount = 120000m,
+                        AmountRaised = 27500m,
+                        StartDate = DateTime.UtcNow.Date.AddDays(-21),
+                        EndDate = DateTime.UtcNow.Date.AddMonths(4),
+                        IsActive = true
+                    });
+                }
+
+                if (stemScholarProgram != null)
+                {
+                    sampleCampaigns.Add(new Campaign
+                    {
+                        Name = "Sponsor a STEM Scholar",
+                        Description = "Help cover tuition, devices, and mentorship for the next cohort of STEM scholars.",
+                        ProgramId = stemScholarProgram.Id,
+                        TargetAmount = 180000m,
+                        AmountRaised = 64350m,
+                        StartDate = DateTime.UtcNow.Date.AddDays(-10),
+                        EndDate = DateTime.UtcNow.Date.AddMonths(5),
+                        IsActive = true
+                    });
+                }
+
+                if (womenScholarProgram != null)
+                {
+                    sampleCampaigns.Add(new Campaign
+                    {
+                        Name = "Advance Women Leaders Fund",
+                        Description = "Support scholarships for women entering leadership and public-impact programs.",
+                        ProgramId = womenScholarProgram.Id,
+                        TargetAmount = 140000m,
+                        AmountRaised = 21900m,
+                        StartDate = DateTime.UtcNow.Date.AddDays(-5),
+                        EndDate = DateTime.UtcNow.Date.AddMonths(6),
+                        IsActive = true
+                    });
+                }
+
+                if (sampleCampaigns.Count > 0)
+                {
+                    await _context.Campaigns.AddRangeAsync(sampleCampaigns);
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+
+        private async Task<Dictionary<string, ThematicArea>> EnsureSampleThematicAreasAsync()
+        {
+            var requiredAreas = new[]
+            {
+                new ThematicArea { Code = "EDU", Name = "Education", Description = "Programs focused on scholarships, learning, and school advancement.", IsActive = true },
+                new ThematicArea { Code = "COMMUNITY", Name = "Community Development", Description = "Programs that empower communities through innovation and local infrastructure.", IsActive = true },
+                new ThematicArea { Code = "YOUTH", Name = "Youth Empowerment", Description = "Programs that support youth leadership, employability, and civic participation.", IsActive = true }
+            };
+
+            var existingAreas = await _context.ThematicAreas.ToListAsync();
+            var byCode = existingAreas
+                .GroupBy(a => a.Code, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+            var newlyAdded = new List<ThematicArea>();
+            foreach (var area in requiredAreas)
+            {
+                if (!byCode.ContainsKey(area.Code))
+                {
+                    newlyAdded.Add(area);
+                }
+            }
+
+            if (newlyAdded.Count > 0)
+            {
+                await _context.ThematicAreas.AddRangeAsync(newlyAdded);
+                await _context.SaveChangesAsync();
+
+                existingAreas = await _context.ThematicAreas.ToListAsync();
+                byCode = existingAreas
+                    .GroupBy(a => a.Code, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+            }
+
+            return byCode;
         }
     }
 }
