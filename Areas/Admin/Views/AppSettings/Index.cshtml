@@ -1,0 +1,68 @@
+@model IEnumerable<ExuberantPathfinders.Web.Models.AppSetting>
+
+@{
+    ViewData["Title"] = "Application Settings";
+    var groupedSettings = Model.GroupBy(s => s.Group).OrderBy(g => g.Key);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>@ViewData["Title"]</h1>
+    <a asp-action="Create" class="btn btn-primary">Create New Setting</a>
+</div>
+
+@if (TempData["ToastMessage"] != null)
+{
+    <div class="alert alert-@TempData["ToastType"] alert-dismissible fade show" role="alert">
+        @TempData["ToastMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@foreach (var group in groupedSettings)
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">@group.Key Settings</h4>
+        </div>
+        <div class="card-body">
+            @foreach (var setting in group.OrderBy(s => s.Key))
+            {
+                <form asp-action="Update" method="post" class="mb-3 border-bottom pb-3">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="key" value="@setting.Key" />
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <label for="value-@setting.Key" class="form-label fw-bold">@setting.Key</label>
+                            <p class="form-text text-muted mt-0 mb-0">@setting.Description</p>
+                        </div>
+                        <div class="col-md-6">
+                            @if (setting.Key == "MaintenanceMode" || setting.Key == "AllowRegistration" || setting.Key == "HomepageBanner")
+                            {
+                                <select name="value" id="value-@setting.Key" class="form-select" onchange="this.form.submit()">
+                                    <option value="true" selected="@(setting.Value.ToLower() == "true")">Enabled</option>
+                                    <option value="false" selected="@(setting.Value.ToLower() == "false")">Disabled</option>
+                                </select>
+                            }
+                            else
+                            {
+                                <input asp-for="@setting.Value" name="value" id="value-@setting.Key" class="form-control" />
+                                <span asp-validation-for="@setting.Value" class="text-danger"></span>
+                            }
+                        </div>
+                        <div class="col-md-3 text-end d-flex gap-2 justify-content-end">
+                            @if (!(setting.Key == "MaintenanceMode" || setting.Key == "AllowRegistration" || setting.Key == "HomepageBanner"))
+                            {
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            }
+                            <a asp-action="Edit" asp-route-id="@setting.Key" class="btn btn-outline-secondary">Edit</a>
+                        </div>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
