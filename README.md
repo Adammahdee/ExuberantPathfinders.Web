@@ -33,6 +33,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 ### Installation
 
 1. **Clone the repository:**
+
    ```sh
    git clone <your-repository-url>
    cd ExuberantPathfinders.Web
@@ -41,6 +42,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 2. **Configure the database connection:**
    - Open `appsettings.Development.json`.
    - Update the `DefaultConnection` string with your MySQL server details.
+
    ```json
    "ConnectionStrings": {
      "DefaultConnection": "Server=localhost;Database=exuberant_db;Uid=root;Pwd=your_password;"
@@ -48,20 +50,24 @@ Follow these instructions to get a copy of the project up and running on your lo
    ```
 
 3. **Install EF Core Tools (if not already installed):**
+
    ```sh
    dotnet tool install --global dotnet-ef
    ```
 
 4. **Apply database migrations:**
    This command will create the database (if it doesn't exist) and apply all the tables and configurations.
+
    ```sh
    dotnet ef database update --project ExuberantPathfinders.Web.csproj
    ```
 
 5. **Run the application:**
+
    ```sh
    dotnet run --project ExuberantPathfinders.Web.csproj
    ```
+
    The application will be available at `http://localhost:5118/`.
 
 ## 📄 Automated Schema Documentation
