@@ -203,7 +203,7 @@ namespace ExuberantPathfinders.Web.Controllers
         [AllowAnonymous]
         public IActionResult ResetPassword(string? code = null)
         {
-            return code == null ? View("Error") : View();
+            return code == null ? View("Error") : View(new ResetPasswordViewModel { Code = code });
         }
 
         [HttpPost]

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ExuberantPathfinders.Web.Data;
 using ExuberantPathfinders.Web.Models;
+using System.Security.Claims;
 
 namespace ExuberantPathfinders.Web.Controllers
 {
@@ -61,11 +62,23 @@ namespace ExuberantPathfinders.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Submit(int id)
         {
-            var application = await _context.Applications.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Challenge();
+
+            var application = await _context.Applications
+                .FirstOrDefaultAsync(a => a.Id == id && a.ApplicantId == userId);
+
             if (application == null)
                 return NotFound();
+
+            if (application.Status != ApplicationStatus.Draft)
+            {
+                TempData["ApplicationError"] = "Only draft applications can be submitted.";
+                return RedirectToAction(nameof(Index));
+            }
 
             application.Status = ApplicationStatus.Submitted;
             application.SubmittedAt = DateTime.UtcNow;
@@ -74,6 +87,39 @@ namespace ExuberantPathfinders.Web.Controllers
             _context.Applications.Update(application);
             await _context.SaveChangesAsync();
 
+            TempData["ApplicationSuccess"] = "Application submitted successfully.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Challenge();
+
+            var application = await _context.Applications
+                .Include(a => a.StatusHistory)
+                .FirstOrDefaultAsync(a => a.Id == id && a.ApplicantId == userId);
+
+            if (application == null)
+                return NotFound();
+
+            if (application.Status != ApplicationStatus.Draft)
+            {
+                TempData["ApplicationError"] = "Only draft applications can be deleted.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (application.StatusHistory.Any())
+            {
+                _context.ApplicationStatusHistories.RemoveRange(application.StatusHistory);
+            }
+
+            _context.Applications.Remove(application);
+            await _context.SaveChangesAsync();
+
+            TempData["ApplicationSuccess"] = "Draft application deleted.";
             return RedirectToAction(nameof(Index));
         }
     }

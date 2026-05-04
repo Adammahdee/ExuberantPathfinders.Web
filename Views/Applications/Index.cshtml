@@ -11,6 +11,20 @@
             <a href="@Url.Action("Create", "Applications")" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold"><i class="fas fa-plus me-2"></i>New Application</a>
         </div>
 
+        @if (TempData["ApplicationSuccess"] != null)
+        {
+            <div class="alert alert-success rounded-4 border-0 shadow-sm" role="alert">
+                @TempData["ApplicationSuccess"]
+            </div>
+        }
+
+        @if (TempData["ApplicationError"] != null)
+        {
+            <div class="alert alert-danger rounded-4 border-0 shadow-sm" role="alert">
+                @TempData["ApplicationError"]
+            </div>
+        }
+
         @{
             var draftApplication = Model.FirstOrDefault(a => a.Status == ExuberantPathfinders.Web.Models.ApplicationStatus.Draft);
         }
@@ -104,6 +118,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
                 <form asp-action="Submit" asp-controller="Applications" method="post">
+                    @Html.AntiForgeryToken()
                     <input type="hidden" name="id" id="modalAppId" />
                     <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">Confirm Submit</button>
                 </form>
@@ -126,6 +141,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
                 <form asp-action="Delete" asp-controller="Applications" method="post">
+                    @Html.AntiForgeryToken()
                     <input type="hidden" name="id" id="deleteModalAppId" />
                     <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">Confirm Delete</button>
                 </form>
