@@ -32,7 +32,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedEmail = true;
     options.User.RequireUniqueEmail = true;
     
-    // Lockout settings
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
@@ -40,28 +39,39 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+// Configure authentication cookie
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.SlidingExpiration = true;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
+
 // Add Services
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IDonationService, DonationService>();
 builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IAdminRoleService, AdminRoleService>(); // Note: AdminRoleService logic is currently in controller, but good to register if extracted later.
+builder.Services.AddScoped<IAdminRoleService, AdminRoleService>();
 
 // Add Authorization Policies
 builder.Services.AddAuthorization(options =>
 {
-    // Register a policy for each permission
     foreach (var permission in Permissions.GetAllPermissions())
     {
         options.AddPolicy(permission, policy => policy.RequireClaim("Permission", permission));
     }
-    
-    // Fallback policy for Admin area
+
     options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
 });
 
 // Add MVC
 builder.Services.AddControllersWithViews();
+
+// Localization
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new[]
@@ -77,7 +87,6 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 var app = builder.Build();
 
-// HTTPS enforcement
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -90,11 +99,11 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseRequestLocalization();
 
+// Maintenance middleware moved earlier in pipeline
+app.UseMiddleware<MaintenanceMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Check for Maintenance Mode
-app.UseMiddleware<MaintenanceMiddleware>();
 
 // Seed database on startup
 using (var scope = app.Services.CreateScope())
@@ -117,7 +126,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure Routes
+// Routes
 app.MapAreaControllerRoute(
     name: "admin_route",
     areaName: "Admin",
